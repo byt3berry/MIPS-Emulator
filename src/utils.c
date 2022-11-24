@@ -157,3 +157,12 @@ void binToHex2(char nombre_binaire[]) {
 
     printf("Le nombre hexadécimal est : %s\n", nombre_hex_affiche);
 }
+
+void delLineFeed(char* string) {
+    char* temp = string;
+    while (*temp != '\n' || *temp != '\0') {
+        temp++;
+    }
+
+    *temp = '\0';
+}

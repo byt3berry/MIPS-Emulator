@@ -6,3 +6,4 @@ void copyStrings(char*, char*);
 void decToBin(int, int, char*);
 void binToHex(char*, char*);
 void binToHex2(char*);
+void delLineFeed(char*);

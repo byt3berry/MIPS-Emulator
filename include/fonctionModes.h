@@ -1,3 +1,3 @@
-void modeInteractif(void);
-void modeAutoPasAPas(char*);
-void modeAuto(char*, char*, char*);
+void modeInteractif(int*);
+void modeAutoPasAPas(char*, int*);
+void modeAuto(char*, char*, char*, int*);

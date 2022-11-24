@@ -7,9 +7,9 @@
 
 #endif
 
-void read(FILE *, FILE *, int[32]);
+void readAuto(FILE *, FILE *, FILE *, int[32]);
 
-void read(FILE *, int[32]);
+void readPas(FILE *, int[32]);
 
 void readLine(FILE *, char *, int);
 

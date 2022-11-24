@@ -15,9 +15,8 @@ void readLine(FILE *file, char *line, int size) {
     fgets(line, size, file);
 }
 
-void read(FILE *progAsembleur, FILE *fichierAssemble, int registres[32]) {
+void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal, int registres[32]) {
     while (!feof(progAsembleur)) {
-        // printf("ici\n");
         char line[50];
         readLine(progAsembleur, line, 50);
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
@@ -29,10 +28,10 @@ void read(FILE *progAsembleur, FILE *fichierAssemble, int registres[32]) {
         binToHex(instructionBin, instructionHex);
 
         write(fichierAssemble, instructionHex);
-//        printf("%s\n", outputBin);
-//        printf("%s\n", outputHex);
+        // printf("%s\n", outputBin);
+        // printf("%s\n", outputHex);
 
-//        printf("\n");
+        // printf("\n");
 
         free(instruction);
 
@@ -40,7 +39,7 @@ void read(FILE *progAsembleur, FILE *fichierAssemble, int registres[32]) {
     }
 }
 
-void read(FILE *progAsembleur, int registres[32]) {
+void readPas(FILE *progAsembleur, int registres[32]) {
     while (!feof(progAsembleur)) {
         // printf("ici\n");
         char line[50];
@@ -52,16 +51,17 @@ void read(FILE *progAsembleur, int registres[32]) {
         char instructionBin[33], instructionHex[9];
         setOutputFull(instruction, instructionBin);
         binToHex(instructionBin, instructionHex);
+        // delLineFeed(line);
         printf("%s\n", line);
         printf("%s\n", instructionHex);
 
-//        printf("%s\n", outputBin);
-//        printf("%s\n", outputHex);
+        // printf("%s\n", outputBin);
+        // printf("%s\n", outputHex);
 
         free(instruction);
 
-        char *temp;
-        scanf("%s\n", temp);
+        char temp;
+        scanf("%c", &temp);
 
         // break;
     }
@@ -82,7 +82,7 @@ void analyseLine(char *line, Instruction *instruction) {
 }
 
 void setNbParametersFromLine(Instruction *instruction) {
-    FILE *file = fopen("../data/operateursNbParametres.txt", "r");
+    FILE *file = fopen("data/operateursNbParametres.txt", "r");
     int nbParametres = -1;
 
     while (!feof(file) && nbParametres == -1) {
@@ -211,7 +211,7 @@ void setParametersOrderFromLine(Instruction *instruction) {
 }
 
 void getFormatStr(char *output, Instruction *instruction) {
-    FILE *file = fopen("../data/instructionsFormatStr.txt", "r");
+    FILE *file = fopen("data/instructionsFormatStr.txt", "r");
 
     char operateur[30];
     copyStrings(instruction->operateur, operateur);
@@ -249,7 +249,7 @@ void setOperateurFromLine(char *line, Instruction *instruction) {
 }
 
 void setOperateurFormat(Instruction *instruction) {
-    FILE *file = fopen("../data/operateursFormat2.txt", "r");
+    FILE *file = fopen("data/operateursFormat2.txt", "r");
     int formatInput = -1;
 
     while (!feof(file) && formatInput == -1) {
@@ -270,7 +270,7 @@ void setOperateurFormat(Instruction *instruction) {
 }
 
 void setOperateurOPcodeOrFunc(Instruction *instruction) {
-    FILE *file = fopen("../data/operateursOPcodeFunc3.txt", "r");
+    FILE *file = fopen("data/operateursOPcodeFunc3.txt", "r");
     int OPcodeOrFunc;
     char mot[8];
 

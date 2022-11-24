@@ -11,30 +11,35 @@
 int main(int argc, char **argv) {
     printf("Hello émulateur MIPS!\n");
 
-    FILE *file = fopen("..//tests//arithmetic2.s", "r");
+    // FILE *file = fopen("..//tests//arithmetic2.s", "r");
 
-    if (file == NULL) {
-        printf("Erreur lors de l'ouverture du fichier\n");
-        return 1;
-    }
+    // if (file == NULL) {
+    //     printf("Erreur lors de l'ouverture du fichier\n");
+    //     return 1;
+    // }
 
     int registres[32] = {0};
 
-    read(file, registres);
+    // read(file, registres);
 
     switch (argc) {
         case 1:
-            modeInteractif();
+        printf("Interactif\n");
+            modeInteractif(registres);
             break;
         case 3:
-            modeAutoPasAPas(argv[1]);
+        printf("Pas a pas\n");
+            modeAutoPasAPas(argv[1], registres);
             break;
         case 4:
-            modeAuto(argv[1], argv[2], argv[3]);
+        printf("Auto\n");
+            modeAuto(argv[1], argv[2], argv[3], registres);
             break;
         default:
             break;
     }
+
+    printf("Bye émulateur MIPS!\n");
 
     return 0;
 }
