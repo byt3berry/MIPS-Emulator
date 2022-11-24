@@ -41,3 +41,11 @@ void setParametres(Instruction *instruction, int *parametres) {
         }
     }
 }
+
+void setParametresOrder(Instruction *instruction, int *parametresOrder){
+    
+
+    for (int i = 0; i < 4; i++) {
+        instruction->parametresOrder[i] = parametresOrder[i];
+    }
+}

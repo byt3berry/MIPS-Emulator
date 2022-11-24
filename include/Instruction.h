@@ -1,7 +1,6 @@
 typedef struct {
     char* operateur;
-    int formatInput;
-    int formatOutput;
+    int format;
     char* OPcodeOrFunc;
     int nbParametres;
     int parametres[4];

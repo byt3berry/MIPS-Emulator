@@ -66,6 +66,7 @@ void binToHex(char* bin, char* hex){
 	// printf("Le nombre hexadécimal est : %s\n", hex);
 }
 
+
 void binToHex2(char nombre_binaire[]){
     int nombre_hexadecimal[8] = {};
     int position = 0;
