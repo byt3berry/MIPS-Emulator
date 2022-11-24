@@ -21,23 +21,42 @@ void read(FILE* file, int registres[32]) {
         printf("%s\n", line);
         Instruction* instruction = (Instruction*) malloc(sizeof(Instruction));
         analyseLine(line, instruction);
-        printInfos(instruction);
+        //printInfos(instruction);
+
+        char outputBin[33], outputHex[9];
+        setOutputFull(instruction, outputBin);
+        printf("%s\n", outputBin);
+        binToHex(outputBin, outputHex);
+        printf("%s\n", outputHex);
+
         printf("\n");
 
         free(instruction);
 
-        //break;
+        // break;
     }
 }
 
 void analyseLine(char* line, Instruction* instruction) {
     // on récupère l'instruction
     setOperateurFromLine(line, instruction);
+    // printInfos(instruction);
+    // printf("Operateur : %s\n", instruction->operateur);
     setOperateurFormat(instruction);
+    // printInfos(instruction);
+    // printf("Operateur : %s\n", instruction->operateur);
     setNbParametersFromLine(instruction);
+    // printInfos(instruction);
+    // printf("Operateur : %s\n", instruction->operateur);
     setParametersFromLine(line, instruction);
-    setParametersOrderFromLine(instruction);
+    // printInfos(instruction);
+    // printf("Operateur : %s\n", instruction->operateur);
     setOperateurOPcodeOrFunc(instruction);
+    // printInfos(instruction);
+    // printf("Operateur : %s\n", instruction->operateur);
+    setParametersOrderFromLine(instruction);
+    // printInfos(instruction);
+    // printf("Operateur : %s\n", instruction->operateur);
 }
 
 void setNbParametersFromLine(Instruction* instruction) {
@@ -99,7 +118,7 @@ void setParametersFromLine(char* line, Instruction* instruction) {
             break;
     }
 
-    printf("%s\n", formatInput);
+    // printf("%s\n", formatInput);
 
     char temp[8];
     int parametres[4];
@@ -162,15 +181,9 @@ void setParametersOrderFromLine(Instruction *instruction) {
         case FORMAT_4:
         case FORMAT_5:
         case FORMAT_6:
-            sscanf(formatOutput, "%d %d", &parametresOrder[0], &parametresOrder[1]);
+            sscanf(formatOutput, "%d %d %d", &parametresOrder[0], &parametresOrder[1], &parametresOrder[2]);
             break;
-        case FORMAT_7:
-        case FORMAT_8:
-        case FORMAT_9:
-        case FORMAT_10:
-        case FORMAT_11:
-        case FORMAT_12:
-        case FORMAT_13:
+        default:
             sscanf(formatOutput, "%d %d %d %d", &parametresOrder[0], &parametresOrder[1], &parametresOrder[2], &parametresOrder[3]);
             break;
     }
@@ -203,19 +216,21 @@ void getFormatStr(char* output, Instruction* instruction) {
 
 void setOperateurFromLine(char* line, Instruction* instruction){
     char operateur[8];  // stock l'adresse de début de l'opétateur
-    char* temp = operateur;
-    while (*line != ' ' && *line != '\n') { // tant qu'il n'y a pas d'espace
-        *temp = *line;
-        temp++;
-        line++;
+    char* tempOP = operateur;
+    char* tempLine = line;
+
+    while (*tempLine != ' ' && *tempLine != '\n') { // tant qu'il n'y a pas d'espace
+        *tempOP = *tempLine;
+        tempOP++;
+        tempLine++;
     }
-    *temp = '\0';
+    *tempOP = '\0';
 
     setOperateur(instruction, operateur);
 }
 
 void setOperateurFormat(Instruction* instruction) {
-    FILE * file = fopen("../data/operateursFormat.txt", "r");
+    FILE * file = fopen("../data/operateursFormat2.txt", "r");
     int formatInput = -1;
     
     while(!feof(file) && formatInput == -1) {
@@ -236,17 +251,16 @@ void setOperateurFormat(Instruction* instruction) {
 }
 
 void setOperateurOPcodeOrFunc(Instruction* instruction) {
-    FILE * file = fopen("../data/operateursOPcodeFunc2.txt", "r");
-    char OPcodeOrFunc[7];
+    FILE * file = fopen("../data/operateursOPcodeFunc3.txt", "r");
+    int OPcodeOrFunc;
     char mot[8];
 
-
-    while(!feof(file) && !!strcmp(instruction->operateur, mot)) {
+    do {
         char line[20];
 
         fgets(line, 20, file);
-        sscanf(line, "%s %s", mot, OPcodeOrFunc);
-    }
+        sscanf(line, "%s %d", mot, &OPcodeOrFunc);
+    } while(!feof(file) && strcmp(instruction->operateur, mot) != 0);
 
     fclose(file);
     setOPcodeOrFunc(instruction, OPcodeOrFunc);

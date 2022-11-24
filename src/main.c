@@ -11,13 +11,18 @@
 int main(int argc, char **argv) {
     printf("Hello émulateur MIPS!\n");
 
-    int nombre = 31;
-    int nbBits = 5;
-    char bin[nbBits];
-    decToBin(nombre, nbBits, bin);
-    //printf("%d : %s\n", nombre, bin);
+    // int nombre = 0;
+    // int nbBits = 5;
+    // char bin[nbBits+1];
+    // decToBin(nombre, nbBits, bin);
+    // printf("%d : %s\n", nombre, bin);
 
-    FILE *file = fopen("test.txt", "r");
+    // int nombre = strtol("1101", NULL, 2);
+    // int nombre2;
+    // sscanf()
+    // printf("%d\n", nombre);
+
+    FILE *file = fopen("..//tests//arithmetic2.s", "r");
 
     if (file == NULL) {
         printf("Erreur lors de l'ouverture du fichier\n");

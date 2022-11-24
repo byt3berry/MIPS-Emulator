@@ -1,7 +1,7 @@
 typedef struct {
     char *operateur;
     int format;
-    char *OPcodeOrFunc;
+    int OPcodeOrFunc;
     int nbParametres;
     int parametres[4];
     int parametresOrder[4];
@@ -11,7 +11,7 @@ void setOperateur(Instruction *, char *);
 
 void setFormat(Instruction *, int);
 
-void setOPcodeOrFunc(Instruction *, char *);
+void setOPcodeOrFunc(Instruction *, int);
 
 void setNbParametres(Instruction *, int);
 

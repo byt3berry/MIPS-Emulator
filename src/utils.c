@@ -19,6 +19,8 @@ void copyStrings(char* source, char* destination) {
         source++;
         destination++;
     }
+
+    *destination = '\0';
 }
 
 void decToBin(int dec, int nbBits, char* bin) {
@@ -40,7 +42,7 @@ void decToBin(int dec, int nbBits, char* bin) {
         bin[i] = temp[nbBits-1-i];
     }
 
-    // bin[nbBits+1] = '\0';
+    bin[nbBits] = '\0';
 }
 
 void binToHex(char* bin, char* hex){
