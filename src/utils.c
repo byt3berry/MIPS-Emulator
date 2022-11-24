@@ -72,18 +72,18 @@ void binToHex2(char nombre_binaire[]){
     char nombre_hex_affiche[8] = "";
 
     for(int i = 1; i <= 8; i++) {
-		int nombre_stock = 0;
+        int nombre_stock = 0;
         for(int j = 4; j >= 1; j--) {
             position = (4*i)- j;
 
             nombre_stock += ((nombre_binaire[position])-'0') * pow(2, j-1);
         }
 
-		nombre_hexadecimal[i-1] = nombre_stock;
+        nombre_hexadecimal[i - 1] = nombre_stock;
     }
 
     for(int i = 0; i < 8; i++){
-		switch(nombre_hexadecimal[i]){
+        switch (nombre_hexadecimal[i]) {
 
             case 0:
                 nombre_hex_affiche[i] = '0';

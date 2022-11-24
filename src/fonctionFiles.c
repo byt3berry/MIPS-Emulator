@@ -9,9 +9,6 @@
 #include "../include/utils.h"
 #endif
 
-
-// TODO: voir pour utiliser strcmp de string.h à la place de !strcmp
-
 void readLine(FILE* file, char* line, int size) {
         fgets(line, size, file);
 }
@@ -50,11 +47,12 @@ void setNbParametersFromLine(Instruction* instruction) {
     FILE * file = fopen("../data/operateursNbParametres.txt", "r");
     int nbParametres = -1;
 
+
     while(!feof(file) && nbParametres == -1) {
         char line[15];
         char mot[8];
         int temp;
-
+        
         fgets(line, 15, file);
         sscanf(line, "%s %d", mot, &temp);
 

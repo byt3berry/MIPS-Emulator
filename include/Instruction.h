@@ -1,9 +1,8 @@
 typedef struct {
-    char* operateur;
+    char operateur[8];
     int format;
-    char* OPcodeOrFunc;
+    char OPcodeOrFunc[6];
     int nbParametres;
-//    int parametre1, parametre2, parametre3, parametre4; // les registres ou immédiats
     int parametres[4];
 } Instruction;
 
@@ -12,7 +11,6 @@ void setFormat(Instruction*, int);
 void setOPcodeOrFunc(Instruction*, char*);
 void setNbParametres(Instruction*, int);
 void setParametres(Instruction*, int*);
-//void setParametres(Instruction*, int, int, int, int);
 
 void printInfos(Instruction*);
 char* fromIntToCharOPcodeFormat(int);

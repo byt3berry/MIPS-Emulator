@@ -4,8 +4,7 @@
 #include "../include/utils.h"
 #include "constantes.c"
 
-
-void printInfos(Instruction* instruction) {
+void printInfos(Instruction *instruction) {
     printf("operateur     : %s\n", instruction->operateur);
     printf("format        : %d\n", instruction->format);
     printf("OPcodeOrFunc  : %s\n", instruction->OPcodeOrFunc);
@@ -16,23 +15,23 @@ void printInfos(Instruction* instruction) {
     printf("x4            : %d\n", instruction->parametres[3]);
 }
 
-void setOperateur(Instruction* instruction, char* operateur) {
+void setOperateur(Instruction *instruction, char *operateur) {
     instruction->operateur = operateur;
 }
 
-void setFormat(Instruction* instruction, int format) {
+void setFormat(Instruction *instruction, int format) {
     instruction->format = format;
 }
 
-void setOPcodeOrFunc(Instruction* instruction, char* OPcodeOrFunc) {
+void setOPcodeOrFunc(Instruction *instruction, char *OPcodeOrFunc) {
     instruction->OPcodeOrFunc = OPcodeOrFunc;
 }
 
-void setNbParametres(Instruction* instruction, int nbParametres) {
+void setNbParametres(Instruction *instruction, int nbParametres) {
     instruction->nbParametres = nbParametres;
 }
 
-void setParametres(Instruction* instruction, int* parametres) {
+void setParametres(Instruction *instruction, int *parametres) {
     // instruction->parametres[instruction->nbParametres] = registre;
     // instruction->nbParametres++;
 
@@ -49,7 +48,7 @@ void setParametres(Instruction* instruction, int* parametres) {
     }
 }
 
-int isNext(Instruction* instruction) {
+int isNext(Instruction *instruction) {
     if (areStringsEqual(instruction->OPcodeOrFunc, "NOP\0") || areStringsEqual(instruction->OPcodeOrFunc, "SYSCALL\0")) {
         return 0;
     }
