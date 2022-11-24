@@ -33,14 +33,10 @@ void read(FILE* file, int registres[32]) {
 void analyseLine(char* line, Instruction* instruction) {
     // on récupère l'instruction
     setOperateurFromLine(line, instruction);
-    // printf("got operateur\n");
     setOperateurFormat(instruction);
-    // printf("got format\n");
-    setNbParametersFromLine(instruction);
-    setParametersFromLine(line, instruction);
-    // printf("got paramatres\n");
-    setOperateurOPcodeOrFunc(instruction);
-    // printf("got opcode\n");
+    // setNbParametersFromLine(instruction);
+    // setParametersFromLine(line, instruction);
+    // setOperateurOPcodeOrFunc(instruction);
 }
 
 void setNbParametersFromLine(Instruction* instruction) {
@@ -66,62 +62,57 @@ void setNbParametersFromLine(Instruction* instruction) {
 }
 
 void setParametersFromLine(char* line, Instruction* instruction) {
-    char format[20];
+    char formatInput[20];
 
-    switch(instruction->formatInput) {
+    switch(instruction->format) {
         case FORMAT_1:
-            copyStrings(FORMAT_1_INPUT, format);
+            copyStrings(FORMAT_1_INPUT, formatInput);
             break;
         case FORMAT_2:
-            copyStrings(FORMAT_2_INPUT, format);
+            copyStrings(FORMAT_2_INPUT, formatInput);
             break;
         case FORMAT_3:
-            copyStrings(FORMAT_3_INPUT, format);
+            copyStrings(FORMAT_3_INPUT, formatInput);
             break;
         case FORMAT_4:
-            copyStrings(FORMAT_4_INPUT, format);
+            copyStrings(FORMAT_4_INPUT, formatInput);
             break;
         case FORMAT_5:
-            copyStrings(FORMAT_5_INPUT, format);
+            copyStrings(FORMAT_5_INPUT, formatInput);
             break;
         case FORMAT_6:
-            copyStrings(FORMAT_6_INPUT, format);
+            copyStrings(FORMAT_6_INPUT, formatInput);
             break;
         case FORMAT_7:
-            copyStrings(FORMAT_7_INPUT, format);
+            copyStrings(FORMAT_7_INPUT, formatInput);
             break;
         case FORMAT_9:
-            copyStrings(FORMAT_9_INPUT, format);
+            copyStrings(FORMAT_9_INPUT, formatInput);
             break;
     }
 
-
-//    if (!strcmp(instruction->operateur, "NOP\0") || !strcmp(instruction->operateur, "SYSCALL\0")) {
-//        copyStrings(instruction->operateur, format);
-//    } else {
-//        getFormatStr(format, instruction);
-//    }
-    // *(format+1) = '\0';
-
-    printf("%s\n", format);
+    printf("%s\n", formatInput);
 
     char temp[8];
     int parametres[4];
-    sscanf(line, format, temp, &parametres[0], &parametres[1], &parametres[2], &parametres[3]);
-    // printf("%d %d %d %d\n", x1, x2, x3, x4);
+    sscanf(line, formatInput, temp, &parametres[0], &parametres[1], &parametres[2], &parametres[3]);
     setParametres(instruction, parametres);
 
-    // switch (instruction->format) {
-    //     case FORMAT_R:
-    //         setParametersFromLineR(line, instruction);
-    //         break;
-    //     case FORMAT_I:
-    //         setParametersFromLineI(line, instruction);
-    //         break;
-    //     case FORMAT_J:
-    //         setParametersFromLineJ(line, instruction);
-    //         break;
-    // }
+void setParametresOrder(Instruction *instruction) {
+    char formatOutput[15];
+
+    switch (instruction->format) {
+        case FORMAT_1:
+        case FORMAT_2:
+        case FORMAT_3:
+        case FORMAT_4:
+        case FORMAT_5:
+        case FORMAT_6:
+        case FORMAT_7:
+        case FORMAT_8:
+        case FORMAT_9:
+
+    }
 }
 
 void getFormatStr(char* output, Instruction* instruction) {
@@ -142,7 +133,6 @@ void getFormatStr(char* output, Instruction* instruction) {
             copyStrings(line, output);
             isFound = 1;
         }
-
     }
 
     fclose(file);
@@ -163,9 +153,9 @@ void setOperateurFromLine(char* line, Instruction* instruction){
 
 void setOperateurFormat(Instruction* instruction) {
     FILE * file = fopen("../data/operateursFormat.txt", "r");
-    int format = -1;
+    int formatInput = -1;
     
-    while(!feof(file) && format == -1) {
+    while(!feof(file) && formatInput == -1) {
         char line[15];
         char mot[8];
         int temp;
@@ -174,12 +164,12 @@ void setOperateurFormat(Instruction* instruction) {
         sscanf(line, "%s %d", mot, &temp);
 
         if (!strcmp(instruction->operateur, mot)) {
-            format = temp;
+            formatInput = temp;
         }
     }
 
     fclose(file);
-    setFormat(instruction, format);
+    setFormat(instruction, formatInput);
 }
 
 void setOperateurOPcodeOrFunc(Instruction* instruction) {
