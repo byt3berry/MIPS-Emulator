@@ -7,6 +7,7 @@
 void printInfos(Instruction *instruction) {
     printf("operateur     : %s\n", instruction->operateur);
     printf("formatInput   : %d\n", instruction->formatInput);
+    printf("formatOutput  : %d\n", instruction->formatOutput);
     printf("OPcodeOrFunc  : %s\n", instruction->OPcodeOrFunc);
     printf("nbParametres  : %d\n", instruction->nbParametres);
     printf("x1            : %d\n", instruction->parametres[0]);
@@ -19,8 +20,8 @@ void setOperateur(Instruction *instruction, char *operateur) {
     instruction->operateur = operateur;
 }
 
-void setFormat(Instruction *instruction, int format) {
-    instruction->formatInput = format;
+void setFormat(Instruction *instruction, int formatInput) {
+    instruction->formatInput = formatInput;
 }
 
 void setOPcodeOrFunc(Instruction *instruction, char *OPcodeOrFunc) {

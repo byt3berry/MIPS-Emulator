@@ -70,28 +70,28 @@ void setParametersFromLine(char* line, Instruction* instruction) {
 
     switch(instruction->formatInput) {
         case FORMAT_1:
-            copyStrings(FORMAT_1_STR, format);
+            copyStrings(FORMAT_1_INPUT, format);
             break;
         case FORMAT_2:
-            copyStrings(FORMAT_2_STR, format);
+            copyStrings(FORMAT_2_INPUT, format);
             break;
         case FORMAT_3:
-            copyStrings(FORMAT_3_STR, format);
+            copyStrings(FORMAT_3_INPUT, format);
             break;
         case FORMAT_4:
-            copyStrings(FORMAT_4_STR, format);
+            copyStrings(FORMAT_4_INPUT, format);
             break;
         case FORMAT_5:
-            copyStrings(FORMAT_5_STR, format);
+            copyStrings(FORMAT_5_INPUT, format);
             break;
         case FORMAT_6:
-            copyStrings(FORMAT_6_STR, format);
+            copyStrings(FORMAT_6_INPUT, format);
             break;
         case FORMAT_7:
-            copyStrings(FORMAT_7_STR, format);
+            copyStrings(FORMAT_7_INPUT, format);
             break;
-        case FORMAT_8:
-            copyStrings(FORMAT_8_STR, format);
+        case FORMAT_9:
+            copyStrings(FORMAT_9_INPUT, format);
             break;
     }
 
@@ -181,34 +181,6 @@ void setOperateurFormat(Instruction* instruction) {
     fclose(file);
     setFormat(instruction, format);
 }
-
-// void setParametersFromLineR(char* line, Instruction* instruction){
-//     char temp[8];
-//     int r1, r2, r3;
-
-//     sscanf(line, FORMAT_R_STR, temp, &r1, &r2, &r3);
-//     setParametres(instruction, r1);
-//     setParametres(instruction, r2);
-//     setParametres(instruction, r3);
-// }
-
-// void setParametersFromLineI(char* line, Instruction* instruction){
-//     char temp[8];
-//     int r1, r2, r3;
-
-//     sscanf(line, FORMAT_I_STR, temp, &r1, &r2, &r3);
-//     setParametres(instruction, r1);
-//     setParametres(instruction, r2);
-//     setParametres(instruction, r3);
-// }
-
-// void setParametersFromLineJ(char* line, Instruction* instruction){
-//     char temp[8];
-//     int r1;
-
-//     sscanf(line, FORMAT_J_STR, temp, &r1);
-//     setParametres(instruction, r1);
-// }
 
 void setOperateurOPcodeOrFunc(Instruction* instruction) {
     FILE * file = fopen("../data/operateursOPcodeFunc2.txt", "r");
