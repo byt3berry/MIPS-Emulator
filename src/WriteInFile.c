@@ -1,14 +1,12 @@
-void WriteInfile(char*){
+void WriteInfile(char* chaine){
     File* fichier;
     f = fopen("fichier.txt", "w");
 
-    if(f==NULL){
+    if(f == NULL){
         printf("ca marche pas zebi le fichier il existe pas");
         exit(1);
     }
-     else if(f==!NULL){
-        fputs(char*, fichier);
-        fclose(fichier);
-    }
-    return(0);
+
+    fputs(chaine, fichier);
+    fclose(fichier);
 }

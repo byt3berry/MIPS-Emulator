@@ -34,9 +34,10 @@ void analyseLine(char* line, Instruction* instruction) {
     // on récupère l'instruction
     setOperateurFromLine(line, instruction);
     setOperateurFormat(instruction);
-    // setNbParametersFromLine(instruction);
-    // setParametersFromLine(line, instruction);
-    // setOperateurOPcodeOrFunc(instruction);
+    setNbParametersFromLine(instruction);
+    setParametersFromLine(line, instruction);
+    setParametersOrderFromLine(instruction);
+    setOperateurOPcodeOrFunc(instruction);
 }
 
 void setNbParametersFromLine(Instruction* instruction) {
@@ -64,29 +65,36 @@ void setNbParametersFromLine(Instruction* instruction) {
 void setParametersFromLine(char* line, Instruction* instruction) {
     char formatInput[20];
 
-    switch(instruction->format) {
+    switch (instruction->format) {
         case FORMAT_1:
             copyStrings(FORMAT_1_INPUT, formatInput);
             break;
         case FORMAT_2:
+        case FORMAT_3:
             copyStrings(FORMAT_2_INPUT, formatInput);
             break;
-        case FORMAT_3:
+        case FORMAT_4:
             copyStrings(FORMAT_3_INPUT, formatInput);
             break;
-        case FORMAT_4:
+        case FORMAT_5:
+        case FORMAT_6:
             copyStrings(FORMAT_4_INPUT, formatInput);
             break;
-        case FORMAT_5:
+        case FORMAT_7:
+        case FORMAT_8:
+        case FORMAT_9:
             copyStrings(FORMAT_5_INPUT, formatInput);
             break;
-        case FORMAT_6:
+        case FORMAT_10:
             copyStrings(FORMAT_6_INPUT, formatInput);
             break;
-        case FORMAT_7:
+        case FORMAT_11:
             copyStrings(FORMAT_7_INPUT, formatInput);
             break;
-        case FORMAT_9:
+        case FORMAT_12:
+            copyStrings(FORMAT_8_INPUT, formatInput);
+            break;
+        case FORMAT_13:
             copyStrings(FORMAT_9_INPUT, formatInput);
             break;
     }
@@ -97,22 +105,77 @@ void setParametersFromLine(char* line, Instruction* instruction) {
     int parametres[4];
     sscanf(line, formatInput, temp, &parametres[0], &parametres[1], &parametres[2], &parametres[3]);
     setParametres(instruction, parametres);
+}
 
-void setParametresOrder(Instruction *instruction) {
+void setParametersOrderFromLine(Instruction *instruction) {
     char formatOutput[15];
+    int parametresOrder[4];
 
     switch (instruction->format) {
         case FORMAT_1:
+            copyStrings(FORMAT_1_OUTPUT, formatOutput);
+            break;
+        case FORMAT_2:
+            copyStrings(FORMAT_2_OUTPUT, formatOutput);
+            break;
+        case FORMAT_3:
+            copyStrings(FORMAT_3_OUTPUT, formatOutput);
+            break;
+        case FORMAT_4:
+            copyStrings(FORMAT_4_OUTPUT, formatOutput);
+            break;
+        case FORMAT_5:
+            copyStrings(FORMAT_5_OUTPUT, formatOutput);
+            break;
+        case FORMAT_6:
+            copyStrings(FORMAT_6_OUTPUT, formatOutput);
+            break;
+        case FORMAT_7:
+            copyStrings(FORMAT_7_OUTPUT, formatOutput);
+            break;
+        case FORMAT_8:
+            copyStrings(FORMAT_8_OUTPUT, formatOutput);
+            break;
+        case FORMAT_9:
+            copyStrings(FORMAT_9_OUTPUT, formatOutput);
+            break;
+        case FORMAT_10:
+            copyStrings(FORMAT_10_OUTPUT, formatOutput);
+            break;
+        case FORMAT_11:
+            copyStrings(FORMAT_11_OUTPUT, formatOutput);
+            break;
+        case FORMAT_12:
+            copyStrings(FORMAT_12_OUTPUT, formatOutput);
+            break;
+        case FORMAT_13:
+            copyStrings(FORMAT_13_OUTPUT, formatOutput);
+            break;
+    }
+
+    switch (instruction->format) {
+        case FORMAT_1:
+            sscanf(formatOutput, "%d", &parametresOrder[0]);
+            break;
         case FORMAT_2:
         case FORMAT_3:
         case FORMAT_4:
         case FORMAT_5:
         case FORMAT_6:
+            sscanf(formatOutput, "%d %d", &parametresOrder[0], &parametresOrder[1]);
+            break;
         case FORMAT_7:
         case FORMAT_8:
         case FORMAT_9:
-
+        case FORMAT_10:
+        case FORMAT_11:
+        case FORMAT_12:
+        case FORMAT_13:
+            sscanf(formatOutput, "%d %d %d %d", &parametresOrder[0], &parametresOrder[1], &parametresOrder[2], &parametresOrder[3]);
+            break;
     }
+
+    setParametresOrder(instruction, parametresOrder);
 }
 
 void getFormatStr(char* output, Instruction* instruction) {
