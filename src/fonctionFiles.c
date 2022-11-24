@@ -10,7 +10,7 @@
 #endif
 
 
-// TODO: voir pour utiliser strcmp de string.h à la place de areStringsEqual
+// TODO: voir pour utiliser strcmp de string.h à la place de !strcmp
 
 void readLine(FILE* file, char* line, int size) {
         fgets(line, size, file);
@@ -58,7 +58,7 @@ void setNbParametersFromLine(Instruction* instruction) {
         fgets(line, 15, file);
         sscanf(line, "%s %d", mot, &temp);
 
-        if (areStringsEqual(instruction->operateur, mot)) {
+        if (strcmp(instruction->operateur, mot) == 0) {
             nbParametres = temp;
         }
     }
@@ -98,7 +98,7 @@ void setParametersFromLine(char* line, Instruction* instruction) {
     }
 
 
-//    if (areStringsEqual(instruction->operateur, "NOP\0") || areStringsEqual(instruction->operateur, "SYSCALL\0")) {
+//    if (!strcmp(instruction->operateur, "NOP\0") || !strcmp(instruction->operateur, "SYSCALL\0")) {
 //        copyStrings(instruction->operateur, format);
 //    } else {
 //        getFormatStr(format, instruction);
@@ -140,7 +140,7 @@ void getFormatStr(char* output, Instruction* instruction) {
         sscanf(line, "%s %s", operateurFound, temp);
         printf("temp : %s\n", temp);
 
-        if (areStringsEqual(operateur, operateurFound)) {
+        if (!strcmp(operateur, operateurFound)) {
             copyStrings(line, output);
             isFound = 1;
         }
@@ -175,7 +175,7 @@ void setOperateurFormat(Instruction* instruction) {
         fgets(line, 15, file);
         sscanf(line, "%s %d", mot, &temp);
 
-        if (areStringsEqual(instruction->operateur, mot)) {
+        if (!strcmp(instruction->operateur, mot)) {
             format = temp;
         }
     }
@@ -218,7 +218,7 @@ void setOperateurOPcodeOrFunc(Instruction* instruction) {
     char mot[8];
 
 
-    while(!feof(file) && !areStringsEqual(instruction->operateur, mot)) {
+    while(!feof(file) && !!strcmp(instruction->operateur, mot)) {
         char line[20];
 
         fgets(line, 20, file);
