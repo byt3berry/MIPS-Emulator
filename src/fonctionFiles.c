@@ -68,7 +68,7 @@ void setNbParametersFromLine(Instruction* instruction) {
 void setParametersFromLine(char* line, Instruction* instruction) {
     char format[20];
 
-    switch(instruction->format) {
+    switch(instruction->formatInput) {
         case FORMAT_1:
             copyStrings(FORMAT_1_STR, format);
             break;

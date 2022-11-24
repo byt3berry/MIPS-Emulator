@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     int nbBits = 5;
     char bin[nbBits];
     decToBin(nombre, nbBits, bin);
-    printf("%d : %s\n", nombre, bin);
+    //printf("%d : %s\n", nombre, bin);
 
     FILE *file = fopen("test.txt", "r");
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 
     int registres[32] = {0};
 
-    //read(file, registres);
+    read(file, registres);
 
     switch (argc) {
         case 1:
