@@ -22,7 +22,7 @@ void copyStrings(char* source, char* destination) {
 }
 
 void decToBin(int dec, int nbBits, char* bin) {
-    char temp[nbBits+1];
+    char temp[nbBits];
     int i = 0;
 
     while (dec > 0) {
@@ -37,10 +37,10 @@ void decToBin(int dec, int nbBits, char* bin) {
     }
 
     for (int i = 0; i < nbBits; i++) {
-        bin[i] = temp[4-i];
+        bin[i] = temp[nbBits-1-i];
     }
 
-    bin[nbBits+1] = '\0';
+    // bin[nbBits+1] = '\0';
 }
 
 void binToHex(char* bin, char* hex){

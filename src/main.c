@@ -11,10 +11,10 @@
 int main(int argc, char **argv) {
     printf("Hello émulateur MIPS!\n");
 
-    int nombre = 10;
-    int nbBits = 6
-    char bin[nbBits+1];
-    decToBin5(nombre, nbBits, bin);
+    int nombre = 31;
+    int nbBits = 5;
+    char bin[nbBits];
+    decToBin(nombre, nbBits, bin);
     printf("%d : %s\n", nombre, bin);
 
     FILE *file = fopen("test.txt", "r");
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 
     int registres[32] = {0};
 
-    read(file, registres);
+    //read(file, registres);
 
     switch (argc) {
         case 1:
