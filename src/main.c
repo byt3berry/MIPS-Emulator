@@ -11,7 +11,10 @@
 int main(int argc, char **argv) {
     printf("Hello émulateur MIPS!\n");
 
-    conversionBinaireHexa2("11000110110001101100011011000110");
+    int nombre = 10;
+    char bin[6];
+    decToBin5(nombre, bin);
+    printf("%d : %s\n", nombre, bin);
 
     FILE *file = fopen("test.txt", "r");
 
@@ -22,7 +25,7 @@ int main(int argc, char **argv) {
 
     int registres[32] = {0};
 
-    read(file, registres);
+    //read(file, registres);
 
     switch (argc) {
         case 1:

@@ -10,9 +10,10 @@ void printInfos(Instruction* instruction) {
     printf("format        : %d\n", instruction->format);
     printf("OPcodeOrFunc  : %s\n", instruction->OPcodeOrFunc);
     printf("nbParametres  : %d\n", instruction->nbParametres);
-    printf("x1            : %d\n", (instruction->parametres)[0]);
-    printf("x2            : %d\n", (instruction->parametres)[1]);
-    printf("x3            : %d\n", (instruction->parametres)[2]);
+    printf("x1            : %d\n", instruction->parametres[0]);
+    printf("x2            : %d\n", instruction->parametres[1]);
+    printf("x3            : %d\n", instruction->parametres[2]);
+    printf("x4            : %d\n", instruction->parametres[3]);
 }
 
 void setOperateur(Instruction* instruction, char* operateur) {
@@ -21,29 +22,31 @@ void setOperateur(Instruction* instruction, char* operateur) {
 
 void setFormat(Instruction* instruction, int format) {
     instruction->format = format;
-    // switch (format) {
-    //     case FORMAT_R:
-    //         instruction->format = "R\0";
-    //         break;
-    //     case FORMAT_I:
-    //         instruction->format = "I\0";
-    //         break;
-    //     case FORMAT_J:
-    //         instruction->format = "J\0";
-    //         break;
-    // }
 }
 
 void setOPcodeOrFunc(Instruction* instruction, char* OPcodeOrFunc) {
     instruction->OPcodeOrFunc = OPcodeOrFunc;
 }
 
-void setParametres(Instruction* instruction, int registre) {
-    if (instruction->nbParametres == NULL) {
-        instruction->nbParametres = 0;
+void setNbParametres(Instruction* instruction, int nbParametres) {
+    instruction->nbParametres = nbParametres;
+}
+
+void setParametres(Instruction* instruction, int* parametres) {
+    // instruction->parametres[instruction->nbParametres] = registre;
+    // instruction->nbParametres++;
+
+//    instruction->parametre1 = x1;
+//    instruction->parametre2 = x2;
+//    instruction->parametre3 = x3;
+//    instruction->parametre4 = x4;
+    for (int i = 0; i < 4; i++) {
+        if (i < instruction->nbParametres) {
+            instruction->parametres[i] = parametres[i];
+        } else {
+            instruction->parametres[i] = 0;
+        }
     }
-    instruction->parametres[instruction->nbParametres] = registre;
-    instruction->nbParametres++;
 }
 
 int isNext(Instruction* instruction) {

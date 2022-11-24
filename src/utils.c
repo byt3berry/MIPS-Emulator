@@ -1,9 +1,9 @@
 #include "..//include//utils.h"
 
 int areStringsEqual(char* mot1, char* mot2) {
-    if ((int) *mot1 != (int) *mot2) {
+    if (*mot1 != *mot2) {
         return 0;
-    } else if ((int) *mot1 == 0 && (int) *mot2 == 0) {
+    } else if (*mot1 == '\0' && *mot2 == '\0') {
         return 1;
     } else {
         mot1++;
@@ -12,21 +12,61 @@ int areStringsEqual(char* mot1, char* mot2) {
     }
 }
 
-/*
-int areStringsEqual(char* mot1, char* mot2) {
-    while ((int) *mot1 || (int) *mot2) {
-        if (*mot1 != *mot2) {
-            return 0;
-        }
-        mot1++;
-        mot2++;
+
+void copyStrings(char* source, char* destination) {
+    while (*source != '\0') {
+        *destination = *source;
+        source++;
+        destination++;
+    }
+}
+
+void decToBin5(int dec, char* bin) {
+    char temp[6];
+    int i = 0;
+
+    while (dec > 0) {
+        temp[i] = dec % 2 + '0';
+        dec /= 2;
+        i++;
     }
 
-    return 1;
-}
-*/
+    while (i < 5) {
+        temp[i] = '0';
+        i++;
+    }
 
-void conversionBinaireHexa(char nombre_binaire[]){
+    for (int i = 0; i < 5; i++) {
+        bin[i] = temp[4-i];
+    }
+
+    bin[5] = '\0';
+}
+
+void binToHex(char* bin, char* hex){
+    int temp[8];
+    int position = 0;
+    // char nombre_hex_affiche[8] = "";
+
+    for(int i = 1; i <= 8; i++) {
+		int nombre_stock = 0;
+        for(int j = 4; j >= 1; j--) {
+            position = (4*i)- j;
+
+            nombre_stock += ((bin[position])-'0') * pow(2, j-1);
+        }
+
+		temp[i-1] = nombre_stock;
+    }
+
+    for (int i=0; i < 8; i++) {
+        sprintf(&hex[i], "%X", temp[i]);
+    }
+
+	// printf("Le nombre hexadécimal est : %s\n", hex);
+}
+
+void binToHex2(char nombre_binaire[]){
     int nombre_hexadecimal[8] = {};
     int position = 0;
     char nombre_hex_affiche[8] = "";
@@ -112,29 +152,6 @@ void conversionBinaireHexa(char nombre_binaire[]){
             default:
                 nombre_hex_affiche[i] = '!';
         }
-    }
-
-	printf("Le nombre hexadécimal est : %s\n", nombre_hex_affiche);
-}
-
-void conversionBinaireHexa2(char nombre_binaire[]){
-    int nombre_hexadecimal[8] = {};
-    int position = 0;
-    char nombre_hex_affiche[8] = "";
-
-    for(int i = 1; i <= 8; i++) {
-		int nombre_stock = 0;
-        for(int j = 4; j >= 1; j--) {
-            position = (4*i)- j;
-
-            nombre_stock += ((nombre_binaire[position])-'0') * pow(2, j-1);
-        }
-
-		nombre_hexadecimal[i-1] = nombre_stock;
-    }
-
-    for (int i=0; i < 8; i++) {
-        sprintf(&nombre_hex_affiche[i], "%X", nombre_hexadecimal[i]);
     }
 
 	printf("Le nombre hexadécimal est : %s\n", nombre_hex_affiche);
