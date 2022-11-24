@@ -11,6 +11,8 @@
 int main(int argc, char **argv) {
     printf("Hello émulateur MIPS!\n");
 
+    // test
+
     int nombre = 10;
     char bin[6];
     decToBin5(nombre, bin);
