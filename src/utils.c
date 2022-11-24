@@ -21,8 +21,8 @@ void copyStrings(char* source, char* destination) {
     }
 }
 
-void decToBin5(int dec, char* bin) {
-    char temp[6];
+void decToBin(int dec, int nbBits, char* bin) {
+    char temp[nbBits+1];
     int i = 0;
 
     while (dec > 0) {
@@ -31,16 +31,16 @@ void decToBin5(int dec, char* bin) {
         i++;
     }
 
-    while (i < 5) {
+    while (i < nbBits) {
         temp[i] = '0';
         i++;
     }
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < nbBits; i++) {
         bin[i] = temp[4-i];
     }
 
-    bin[5] = '\0';
+    bin[nbBits+1] = '\0';
 }
 
 void binToHex(char* bin, char* hex){

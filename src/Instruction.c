@@ -32,13 +32,6 @@ void setNbParametres(Instruction *instruction, int nbParametres) {
 }
 
 void setParametres(Instruction *instruction, int *parametres) {
-    // instruction->parametres[instruction->nbParametres] = registre;
-    // instruction->nbParametres++;
-
-//    instruction->parametre1 = x1;
-//    instruction->parametre2 = x2;
-//    instruction->parametre3 = x3;
-//    instruction->parametre4 = x4;
     for (int i = 0; i < 4; i++) {
         if (i < instruction->nbParametres) {
             instruction->parametres[i] = parametres[i];
@@ -46,11 +39,4 @@ void setParametres(Instruction *instruction, int *parametres) {
             instruction->parametres[i] = 0;
         }
     }
-}
-
-int isNext(Instruction *instruction) {
-    if (areStringsEqual(instruction->OPcodeOrFunc, "NOP\0") || areStringsEqual(instruction->OPcodeOrFunc, "SYSCALL\0")) {
-        return 0;
-    }
-    return 1;
 }
