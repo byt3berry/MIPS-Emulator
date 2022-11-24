@@ -4,32 +4,35 @@
 
 #ifndef _FONCTION_FILES_C_
 #define _FONCTION_FILES_C_
+
 #include "../include/fonctionFiles.h"
 #include "constantes.c"
 #include "../include/utils.h"
+
 #endif
 
-void readLine(FILE* file, char* line, int size) {
-        fgets(line, size, file);
+void readLine(FILE *file, char *line, int size) {
+    fgets(line, size, file);
 }
 
-void read(FILE* file, int registres[32]) {
-    while(!feof(file)) {
+void read(FILE *progAsembleur, FILE *fichierAssemble, int registres[32]) {
+    while (!feof(progAsembleur)) {
         // printf("ici\n");
         char line[50];
-        readLine(file, line, 50);
-        printf("%s\n", line);
-        Instruction* instruction = (Instruction*) malloc(sizeof(Instruction));
+        readLine(progAsembleur, line, 50);
+        Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
         analyseLine(line, instruction);
-        //printInfos(instruction);
+//        printInfos(instruction);
 
-        char outputBin[33], outputHex[9];
-        setOutputFull(instruction, outputBin);
-        printf("%s\n", outputBin);
-        binToHex(outputBin, outputHex);
-        printf("%s\n", outputHex);
+        char instructionBin[33], instructionHex[9];
+        setOutputFull(instruction, instructionBin);
+        binToHex(instructionBin, instructionHex);
 
-        printf("\n");
+        write(fichierAssemble, instructionHex);
+//        printf("%s\n", outputBin);
+//        printf("%s\n", outputHex);
+
+//        printf("\n");
 
         free(instruction);
 
@@ -37,38 +40,56 @@ void read(FILE* file, int registres[32]) {
     }
 }
 
-void analyseLine(char* line, Instruction* instruction) {
-    // on récupère l'instruction
-    setOperateurFromLine(line, instruction);
-    // printInfos(instruction);
-    // printf("Operateur : %s\n", instruction->operateur);
-    setOperateurFormat(instruction);
-    // printInfos(instruction);
-    // printf("Operateur : %s\n", instruction->operateur);
-    setNbParametersFromLine(instruction);
-    // printInfos(instruction);
-    // printf("Operateur : %s\n", instruction->operateur);
-    setParametersFromLine(line, instruction);
-    // printInfos(instruction);
-    // printf("Operateur : %s\n", instruction->operateur);
-    setOperateurOPcodeOrFunc(instruction);
-    // printInfos(instruction);
-    // printf("Operateur : %s\n", instruction->operateur);
-    setParametersOrderFromLine(instruction);
-    // printInfos(instruction);
-    // printf("Operateur : %s\n", instruction->operateur);
+void read(FILE *progAsembleur, int registres[32]) {
+    while (!feof(progAsembleur)) {
+        // printf("ici\n");
+        char line[50];
+        readLine(progAsembleur, line, 50);
+        Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
+        analyseLine(line, instruction);
+        //printInfos(instruction);
+
+        char instructionBin[33], instructionHex[9];
+        setOutputFull(instruction, instructionBin);
+        binToHex(instructionBin, instructionHex);
+        printf("%s\n", line);
+        printf("%s\n", instructionHex);
+
+//        printf("%s\n", outputBin);
+//        printf("%s\n", outputHex);
+
+        free(instruction);
+
+        char *temp;
+        scanf("%s\n", temp);
+
+        // break;
+    }
 }
 
-void setNbParametersFromLine(Instruction* instruction) {
-    FILE * file = fopen("../data/operateursNbParametres.txt", "r");
+void write(FILE *file, char *instructionHex) {
+    fprintf(file, "%s\n", instructionHex);
+}
+
+void analyseLine(char *line, Instruction *instruction) {
+    // on récupère l'instruction
+    setOperateurFromLine(line, instruction);
+    setOperateurFormat(instruction);
+    setNbParametersFromLine(instruction);
+    setParametersFromLine(line, instruction);
+    setOperateurOPcodeOrFunc(instruction);
+    setParametersOrderFromLine(instruction);
+}
+
+void setNbParametersFromLine(Instruction *instruction) {
+    FILE *file = fopen("../data/operateursNbParametres.txt", "r");
     int nbParametres = -1;
 
-
-    while(!feof(file) && nbParametres == -1) {
+    while (!feof(file) && nbParametres == -1) {
         char line[15];
         char mot[8];
         int temp;
-        
+
         fgets(line, 15, file);
         sscanf(line, "%s %d", mot, &temp);
 
@@ -81,7 +102,7 @@ void setNbParametersFromLine(Instruction* instruction) {
     setNbParametres(instruction, nbParametres);
 }
 
-void setParametersFromLine(char* line, Instruction* instruction) {
+void setParametersFromLine(char *line, Instruction *instruction) {
     char formatInput[20];
 
     switch (instruction->format) {
@@ -117,8 +138,6 @@ void setParametersFromLine(char* line, Instruction* instruction) {
             copyStrings(FORMAT_9_INPUT, formatInput);
             break;
     }
-
-    // printf("%s\n", formatInput);
 
     char temp[8];
     int parametres[4];
@@ -191,8 +210,8 @@ void setParametersOrderFromLine(Instruction *instruction) {
     setParametresOrder(instruction, parametresOrder);
 }
 
-void getFormatStr(char* output, Instruction* instruction) {
-    FILE * file = fopen("../data/instructionsFormatStr.txt", "r");
+void getFormatStr(char *output, Instruction *instruction) {
+    FILE *file = fopen("../data/instructionsFormatStr.txt", "r");
 
     char operateur[30];
     copyStrings(instruction->operateur, operateur);
@@ -214,10 +233,10 @@ void getFormatStr(char* output, Instruction* instruction) {
     fclose(file);
 }
 
-void setOperateurFromLine(char* line, Instruction* instruction){
+void setOperateurFromLine(char *line, Instruction *instruction) {
     char operateur[8];  // stock l'adresse de début de l'opétateur
-    char* tempOP = operateur;
-    char* tempLine = line;
+    char *tempOP = operateur;
+    char *tempLine = line;
 
     while (*tempLine != ' ' && *tempLine != '\n') { // tant qu'il n'y a pas d'espace
         *tempOP = *tempLine;
@@ -229,11 +248,11 @@ void setOperateurFromLine(char* line, Instruction* instruction){
     setOperateur(instruction, operateur);
 }
 
-void setOperateurFormat(Instruction* instruction) {
-    FILE * file = fopen("../data/operateursFormat2.txt", "r");
+void setOperateurFormat(Instruction *instruction) {
+    FILE *file = fopen("../data/operateursFormat2.txt", "r");
     int formatInput = -1;
-    
-    while(!feof(file) && formatInput == -1) {
+
+    while (!feof(file) && formatInput == -1) {
         char line[15];
         char mot[8];
         int temp;
@@ -250,8 +269,8 @@ void setOperateurFormat(Instruction* instruction) {
     setFormat(instruction, formatInput);
 }
 
-void setOperateurOPcodeOrFunc(Instruction* instruction) {
-    FILE * file = fopen("../data/operateursOPcodeFunc3.txt", "r");
+void setOperateurOPcodeOrFunc(Instruction *instruction) {
+    FILE *file = fopen("../data/operateursOPcodeFunc3.txt", "r");
     int OPcodeOrFunc;
     char mot[8];
 
@@ -260,7 +279,7 @@ void setOperateurOPcodeOrFunc(Instruction* instruction) {
 
         fgets(line, 20, file);
         sscanf(line, "%s %d", mot, &OPcodeOrFunc);
-    } while(!feof(file) && strcmp(instruction->operateur, mot) != 0);
+    } while (!feof(file) && strcmp(instruction->operateur, mot) != 0);
 
     fclose(file);
     setOPcodeOrFunc(instruction, OPcodeOrFunc);

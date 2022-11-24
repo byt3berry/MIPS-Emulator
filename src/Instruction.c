@@ -43,9 +43,7 @@ void setParametres(Instruction *instruction, int *parametres) {
     }
 }
 
-void setParametresOrder(Instruction *instruction, int *parametresOrder){
-
-
+void setParametresOrder(Instruction *instruction, int *parametresOrder) {
     for (int i = 0; i < 4; i++) {
         instruction->parametresOrder[i] = parametresOrder[i];
     }
@@ -63,28 +61,14 @@ void setOutputR(Instruction *instruction, char *output) {
         }
     }
 
-    // printf("x1     : %d\n", parametres[0]);
-    // printf("x2     : %d\n", parametres[1]);
-    // printf("x3     : %d\n", parametres[2]);
-    // printf("x4     : %d\n", parametres[3]);
-
     char OPcode[7], func[7], x1[6], x2[6], x3[6], x4[6];
 
-    // copyStrings(instruction->OPcodeOrFunc, func);
-    // strcpy(func, instruction->OPcodeOrFunc);
     decToBin(0, 6, OPcode);
     decToBin(instruction->OPcodeOrFunc, 6, func);
     decToBin(parametres[0], 5, x1);
     decToBin(parametres[1], 5, x2);
     decToBin(parametres[2], 5, x3);
     decToBin(parametres[3], 5, x4);
-
-    // printf("OPcode : %sf\n", OPcode);
-    // printf("func   : %sf\n", func);
-    // printf("x1     : %sf\n", x1);
-    // printf("x2     : %sf\n", x2);
-    // printf("x3     : %sf\n", x3);
-    // printf("x4     : %sf\n", x4);
 
     sprintf(output, "%s%s%s%s%s%s", OPcode, x1, x2, x3, x4, func);
 }
@@ -93,7 +77,6 @@ void setOutputI(Instruction *instruction, char *output) {
     int parametres[3];
 
     for (int i = 0; i < 3; i++) {
-        // printf("%d ", i);
         int index = instruction->parametresOrder[i];
         if (index == 0) {
             parametres[i] = 0;
