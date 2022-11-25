@@ -11,6 +11,8 @@
 
 #endif
 
+// TODO: stocker les formats d'entrée et de sortie des instructions dans la structure Instruction
+
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
     fgets(line, size, file);
 

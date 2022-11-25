@@ -22,27 +22,64 @@ date: 18/10/2022
 * Comment avez-vous choisi de programmer l'analyse de texte (dont la lecture
 des opérandes entières) ?
 
-[Nous allons récuperer ligne par ligne les instructions dans le fichier assembleur en analysant le code ASCII de chaque caractère. Nous allons détecter le code décimal 10 qui correspond au saut de ligne pour détecter la fin de l'instruction et pour pouvoir exploiter les instructions.]
+[Nous récupérons chaque ligne une par une, si le premier caractère de la ligne 
+est un "#" (commentaire) ou un saut de ligne (ligne vide), on ignore la ligne.
+Ensuite, à partir de cette ligne nous récupérons l'opérateur ("ADD", "SUB", 
+"J", ...), son format (qui sert à savoir le nombre de paramètres à récupérer, 
+l'ordre dans lequel il faut les récupérer dans la ligne et les écrire dans le 
+code hexadécimal), le nombre de paramètres, les paramètres, l'OPcode (pour les 
+types I et J) ou le func (pour le type R), et enfin l'ordre des paramètres.
+Toutes ces informations sont stockées dans une structure "Instruction". Pour 
+finir, le code hexadécimal qui sera affiché dans la console ou stocké dans un 
+fichier est créé puis utilisé.]
 
 * Avez-vous vu des motifs récurrents émerger ? Avez-vous "factorisé" ces motifs
 pour éviter de les répéter ? Si non, serait-ce difficile ?
 
-[COMPLÉTER ICI]
+[On remarque plusieurs types de récurrence. Premièrement il existe trois 
+catégories d'instruction, la catégorie R ("Register type"), I ("Immediate type") 
+et J ("Jump type"),chaque catégorie possède son propre format codage binaire.
+Ensuite on trouve 8 façons différentes d'écrire une instruction 
+(ex : "%s $%d, %d($%d)", "%s $%d, $%d, %d", ...), chacune de ces façons facilite
+la récupération des paramètres pour chaque ligne. Enfin on trouve 13 ordres 
+de paramètres, c'est à dire l'ordre dans lequel les paramètres vont être écrits 
+dans le codage binaire de l'instruction (ex : pour ADDI : premier sortie = deuxième entré,
+deuxième sortie = premier entré, troisième sortie = troisième entrée). Sans 
+factoriser les instructions parmis ces motifs, il faudrait prendre chaque 
+instruction au cas par cas pour récupérer ses paramètres et générer le codage 
+binaire.]
 
 * Comment avez-vous procédé pour écrire les tests ? Étes-vous confiant·e·s que
 toutes les instructions gérées sont couvertes ? 
 
-[COMPLÉTER ICI]
+[Le premier fichier de test comporte une ligne par instruction, ainsi chaque 
+instruction est testée, le deuxième fichier test les limites du code : 
+nombre trop grands, utilisations de registre à la place d'immédiat et inversement, 
+tentative de modification du registre $zero. Nous avons utilisé les fichiers tests 
+pour vérifier que chaque instruction renvoyais les bons codes binaires, nous avons 
+en plus utilisé un programme permettant d'assembler du code MIPS pour vérifier que 
+nos codes binaires étaient justes. De plus, si le code détècte un problème dans une 
+instruction (ex : opération qui n'existe pas, registre à la place d'immédiat ou 
+inversement, ...), l'instruction est remplacée par l'instruction NOP qui ne fait 
+rien. Le code s'est révélé fonctionnel lorque nous l'avons mit à l'épreuve de nos 
+tests.]
 
 * Quelle a été votre expérience avec l'utilisation et la compréhension de la
 documentation (ie. des annexes) ?
 
-[Belle expérience]
+[L'annexe 1 est très clair et explique bien les différents formats d'instruction
+R, I et J ainsi que l'utilisation et l'appel des registres. L'annexe 2 à été utile 
+pour récupérer les valeurs des OPcode et func, mais aussi pour identifier les formats 
+d'entrée des paramètres dans les instructions et de sortie des paramètres dans les 
+codages binaires. Cette annexe nous a aussi servi pour comprendre les opérations 
+que faisait chaque instruction, même si quelques explications sont compliquées à 
+comprendre pour les non iniciés (ex : pour LUI : GPR[rt] <-- immediate || 0^16), 
+internet à été très utile quant à la compréhension de ces notations.]
 
 * Cochez (en remplaçant `[ ]` par `[x]`) si vous avez :
-  - [ ] Implémenté la traduction pour des instructions de toutes les catéories
+  - [x] Implémenté la traduction pour des instructions de toutes les catéories
       (calcul, comparaisons, sauts, HI/LO, mémoire)
-  - [ ] Implémenté la traduction pour toutes les instructions de l'annexe 2
+  - [x] Implémenté la traduction pour toutes les instructions de l'annexe 2
   - [ ] Pris en compte les cas particuliers : valeurs négatives, hors limites,
       noms d'instructions ou opérandes invalides...
 
