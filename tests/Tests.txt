@@ -1,0 +1,17 @@
+main: 
+ADDI $0, $0, 14      #on ajoute 14 au registre 0          
+ADDI $1, $1, 27      #on ajoute 27 au registre 1          
+ADD $2, $1, $0       #on fait 27+14 et on met le result dans le reg 2   
+SUB $3, $1, $0       #on fait 27-14 et on met le result dans le reg 3
+MULT $3, $2          #on multiplie le contenu des reg 2 et reg 3 (le resultat est sur 64 bits)
+MFHI $4              #on met les 32 bits de poids fort dans le reg 4
+MFLO $5              #on met les 32 bits de poids faible dans le reg 5
+DIV $0, $1           #on divise le contenu du reg 0 par celui du reg 1 (le resultat est sur 64 bits: 32 bits de poids fort -> resultat
+                     et 32 bits de poids faible -> reste)
+MFHI $6              #on met les 32 bits de poids fort dans le reg 6
+MFLO $7              #on met les 32 bits de poids faible dans le reg 7
+SLT $8, $4, $5       #le reg 8 est mis à 1 si le contenu du reg 4 est plus petit que le contenu du reg 5, sinon il est mis à 0
+AND $9, $6, $7       #on combine bit à bit le contenu des reg 6 et 7 selon l'opération logique AND et on le place ds le reg 9
+OR $10, $8, $6       #on combine bit à bit le contenu des reg 8 et 6 selon l'opération logique OR et on le met ds le reg 10
+LW $11, 2($8)        #ON PLACE LE CONTENU DU REG 8 + 2 DANS LE REGISTRE 11 SA GRAND MERE LA PUTE
+SW $10, 4($8)        #ON PLACE LE CONTENU DU REG 10 DANS LE REGISTRE 8 + 4
