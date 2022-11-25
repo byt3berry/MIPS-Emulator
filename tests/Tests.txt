@@ -1,20 +1,19 @@
 
-ADDI $1, $1, 14      #on ajoute 14 au registre 0          
-ADDI $2, $2, 27      #on ajoute 27 au registre 1          
-ADD $3, $2, $1       #on fait 27+14 et on met le result dans le reg 2   
-SUB $4, $2, $1       #on fait 27-14 et on met le result dans le reg 3
-MULT $4, $3          #on multiplie le contenu des reg 2 et reg 3 (le resultat est sur 64 bits)
-MFHI $5              #on met les 32 bits de poids fort dans le reg 4
-MFLO $6              #on met les 32 bits de poids faible dans le reg 5
-DIV $1, $2           #on divise le contenu du reg 0 par celui du reg 1 (le resultat est sur 64 bits: 32 bits de poids fort -> resultat
-                     et 32 bits de poids faible -> reste)
-MFHI $7              #on met les 32 bits de poids fort dans le reg 6
-MFLO $8              #on met les 32 bits de poids faible dans le reg 7
-SLT $9, $5, $6       #le reg 8 est mis à 1 si le contenu du reg 4 est plus petit que le contenu du reg 5, sinon il est mis à 0
-AND $10, $7, $8      #on combine bit à bit le contenu des reg 6 et 7 selon l'opération logique AND et on le place ds le reg 9
-OR $11, $9, $7       #on combine bit à bit le contenu des reg 8 et 6 selon l'opération logique OR et on le met ds le reg 10
-LW $12, 2($9)        #ON PLACE LE CONTENU DU REG 8 + 2 DANS LE REGISTRE 11 SA GRAND MERE LA PUTE
-SW $11, 4($9)        #ON PLACE LE CONTENU DU REG 10 DANS LE REGISTRE 8 + 4
+ADDI $1, $1, 14
+ADDI $2, $2, 27
+ADD $3, $2, $1
+SUB $4, $2, $1
+MULT $4, $3
+MFHI $5
+MFLO $6
+DIV $1, $2
+MFHI $7
+MFLO $8
+SLT $9, $5, $6
+AND $10, $7, $8
+OR $11, $9, $7
+LW $12, 2($9)
+SW $11, 4($9)
 
 
 EXPECTED ASSEMBLY en binaire
@@ -34,6 +33,23 @@ EXPECTED ASSEMBLY en binaire
 10001101001011000000000000000010
 10101101001010110000000000000100
 
+EXPECTED ASSEMBLY en hexa
+
+2021000E
+2021001B
+00620820
+00820822
+00830018
+00002810
+00003012
+0022001A
+00003810
+00004012
+0125302A
+01474024
+01693825
+8D2C0002
+AD2B0004
 
 
 
