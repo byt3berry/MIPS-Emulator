@@ -13,10 +13,10 @@
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
     fgets(line, size, file);
-    printf("%d %d\n", *line, line[0]);
+    // printf("%s\n", line);
 
     /* Checking if the line is a comment or empty. */
-    if (line[0] == '#' || line[0] == '\n' || line[0] == '\0') {
+    if (line[0] == '#' || line[0] == '\n') {
         printf("%c %d\n", line[0], line[0]);
         return 0;
     }
@@ -108,40 +108,61 @@ void setNbParametersFromLine(Instruction *instruction) {
 
 void setParametersFromLine(char *line, Instruction *instruction) {
     char formatInput[20];
+    int format = instruction->format;
 
-    switch (instruction->format) {
-        case FORMAT_1:
+    if (format == FORMAT_1) {
             copyStrings(FORMAT_1_INPUT, formatInput);
-            break;
-        case FORMAT_2:
-        case FORMAT_3:
+    } else if (FORMAT_2 <= format || format <= FORMAT_3) {
             copyStrings(FORMAT_2_INPUT, formatInput);
-            break;
-        case FORMAT_4:
+    } else if (format == FORMAT_4) {
             copyStrings(FORMAT_3_INPUT, formatInput);
-            break;
-        case FORMAT_5:
-        case FORMAT_6:
+    } else if (FORMAT_5 <= format || format <= FORMAT_6) {
             copyStrings(FORMAT_4_INPUT, formatInput);
-            break;
-        case FORMAT_7:
-        case FORMAT_8:
-        case FORMAT_9:
+    } else if (FORMAT_7 <= format || format <= FORMAT_9) {
             copyStrings(FORMAT_5_INPUT, formatInput);
-            break;
-        case FORMAT_10:
+    } else if (format == FORMAT_10) {
             copyStrings(FORMAT_6_INPUT, formatInput);
-            break;
-        case FORMAT_11:
+    } else if (format == FORMAT_11) {
             copyStrings(FORMAT_7_INPUT, formatInput);
-            break;
-        case FORMAT_12:
+    } else if (format == FORMAT_12) {
             copyStrings(FORMAT_8_INPUT, formatInput);
-            break;
-        case FORMAT_13:
+    } else if (format == FORMAT_13){
             copyStrings(FORMAT_9_INPUT, formatInput);
-            break;
     }
+
+    // switch (instruction->format) {
+    //     case FORMAT_1:
+    //         copyStrings(FORMAT_1_INPUT, formatInput);
+    //         break;
+    //     case FORMAT_2:
+    //     case FORMAT_3:
+    //         copyStrings(FORMAT_2_INPUT, formatInput);
+    //         break;
+    //     case FORMAT_4:
+    //         copyStrings(FORMAT_3_INPUT, formatInput);
+    //         break;
+    //     case FORMAT_5:
+    //     case FORMAT_6:
+    //         copyStrings(FORMAT_4_INPUT, formatInput);
+    //         break;
+    //     case FORMAT_7:
+    //     case FORMAT_8:
+    //     case FORMAT_9:
+    //         copyStrings(FORMAT_5_INPUT, formatInput);
+    //         break;
+    //     case FORMAT_10:
+    //         copyStrings(FORMAT_6_INPUT, formatInput);
+    //         break;
+    //     case FORMAT_11:
+    //         copyStrings(FORMAT_7_INPUT, formatInput);
+    //         break;
+    //     case FORMAT_12:
+    //         copyStrings(FORMAT_8_INPUT, formatInput);
+    //         break;
+    //     case FORMAT_13:
+    //         copyStrings(FORMAT_9_INPUT, formatInput);
+    //         break;
+    // }
 
     char temp[8];
     int parametres[4];
