@@ -18,15 +18,16 @@
 #define FORMAT_12 12
 #define FORMAT_13 13
 
-#define FORMAT_1_INPUT "%s %d"                // from FORMAT 1 to 1
-#define FORMAT_2_INPUT "%s $%d, $%d, %d"      // from FORMAT 2 to 3
-#define FORMAT_3_INPUT "%s $%d, %d($%d)"      // from FORMAT 4 to 4
-#define FORMAT_4_INPUT "%s $%d, %d"           // from FORMAT 5 to 6
-#define FORMAT_5_INPUT "%s $%d, $%d, $%d"     // from FORMAT 7 to 9
-#define FORMAT_6_INPUT "%s $%d, $%d"          // from FORMAT 10 to 10
-#define FORMAT_7_INPUT "%s $%d"               // from FORMAT 11 to 11
-#define FORMAT_8_INPUT "%s $%d"               // from FORMAT 12 to 12
-#define FORMAT_9_INPUT "%s"                   // from FORMAT 13 to 13
+#define FORMAT_1_INPUT "%s %d"                 // from FORMAT 1 to 1
+#define FORMAT_2_INPUT "%s $%d, $%d, %d"       // from FORMAT 2 to 3
+#define FORMAT_3_INPUT "%s $%d, %d($%d)"       // from FORMAT 4 to 4
+#define FORMAT_4_INPUT "%s $%d, %d"            // from FORMAT 5 to 6
+#define FORMAT_5_INPUT "%s $%d, $%d, $%d"      // from FORMAT 7 to 8
+#define FORMAT_6_INPUT "%s $%d, $%d, %d"       // from FORMAT 9 to 9
+#define FORMAT_7_INPUT "%s $%d, $%d"           // from FORMAT 10 to 10
+#define FORMAT_8_INPUT "%s $%d"                // from FORMAT 11 to 11
+#define FORMAT_9_INPUT "%s $%d"                // from FORMAT 12 to 12
+#define FORMAT_10_INPUT "%s"                   // from FORMAT 13 to 13
 
 #define FORMAT_1_OUTPUT "1"                   // FORMAT 1
 #define FORMAT_2_OUTPUT "2 1 3"               // FORMAT 2

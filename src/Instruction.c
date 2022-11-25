@@ -5,6 +5,15 @@
 #include "../include/utils.h"
 #include "constantes.c"
 
+// void initInstruction(Instruction *instruction) {
+//     strcpy(instruction->operateur, "\0");
+//     instruction->format = -1;
+//     instruction->OPcodeOrFunc = -1;
+//     instruction->nbParametres = -1;
+//     instruction->parametres = {0};
+//     instruction->parametresOrder = {0};
+// }
+
 void printInfos(Instruction *instruction) {
     printf("operateur     : %s\n", instruction->operateur);
     printf("format        : %d\n", instruction->format);
@@ -19,7 +28,6 @@ void printInfos(Instruction *instruction) {
 
 void setOperateur(Instruction *instruction, char *operateur) {
     strcpy(instruction->operateur, operateur);
-    // instruction->operateur = operateur;
 }
 
 void setFormat(Instruction *instruction, int format) {
@@ -94,6 +102,11 @@ void setOutputI(Instruction *instruction, char *output) {
     decToBin(parametres[1], 5, x2);
     decToBin(parametres[2], 16, x3);
 
+    // printf("%s\n", x1);
+    // printf("%s\n", x2);
+    // printf("%s\n", x3);
+
+
     sprintf(output, "%s%s%s%s", OPcode, x1, x2, x3);
 }
 
@@ -114,6 +127,8 @@ void setOutputFull(Instruction *instruction, char *output) {
         case FORMAT_2:
         case FORMAT_3:
         case FORMAT_4:
+        case FORMAT_5:
+        case FORMAT_6:
             // printf("     2");
             setOutputI(instruction, output);
             break;

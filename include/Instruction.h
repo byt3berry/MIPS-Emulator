@@ -7,6 +7,8 @@ typedef struct {
     int parametresOrder[4];
 } Instruction;
 
+void initInstruction(Instruction *);
+
 void setOperateur(Instruction *, char *);
 
 void setFormat(Instruction *, int);

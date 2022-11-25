@@ -179,20 +179,22 @@ void setParametersFromLine(char *line, Instruction *instruction) {
             break;
         case FORMAT_7:
         case FORMAT_8:
-        case FORMAT_9:
             copyStrings(FORMAT_5_INPUT, formatInput);
             break;
-        case FORMAT_10:
+        case FORMAT_9:
             copyStrings(FORMAT_6_INPUT, formatInput);
             break;
-        case FORMAT_11:
+        case FORMAT_10:
             copyStrings(FORMAT_7_INPUT, formatInput);
             break;
-        case FORMAT_12:
+        case FORMAT_11:
             copyStrings(FORMAT_8_INPUT, formatInput);
             break;
-        case FORMAT_13:
+        case FORMAT_12:
             copyStrings(FORMAT_9_INPUT, formatInput);
+            break;
+        case FORMAT_13:
+            copyStrings(FORMAT_10_INPUT, formatInput);
             break;
     }
 
