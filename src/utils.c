@@ -1,4 +1,5 @@
 #include "..//include//utils.h"
+#include <string.h>
 
 int areStringsEqual(char *mot1, char *mot2) {
     if (*mot1 != *mot2) {
@@ -159,10 +160,14 @@ void binToHex2(char nombre_binaire[]) {
 }
 
 void delLineFeed(char* string) {
-    char* temp = string;
-    while (*temp != '\n' || *temp != '\0') {
-        temp++;
-    }
+    int i = strcspn(string, "\n");
+    string[i] = '\0';
+}
 
-    *temp = '\0';
+void toUpperCase(char* string) {
+    for (int i = 0; string[i] != '\0'; i++) {
+        if ('a' <= string[i] && string[i] <= 'z') {
+            string[i] -= 32;
+        }
+    }
 }

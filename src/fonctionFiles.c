@@ -11,29 +11,37 @@
 
 #endif
 
-void readLine(FILE *file, char *line, int size) {
+int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
     fgets(line, size, file);
+    printf("%d %d\n", *line, line[0]);
+
+    /* Checking if the line is a comment or empty. */
+    if (line[0] == '#' || line[0] == '\n' || line[0] == '\0') {
+        printf("%c %d\n", line[0], line[0]);
+        return 0;
+    }
+
+    delLineFeed(line);
+    analyseLine(line, instruction);
+    getOutput(instruction, instructionHex);
+
+    return 1;
 }
 
 void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal, int registres[32]) {
     while (!feof(progAsembleur)) {
-        char line[50];
-        readLine(progAsembleur, line, 50);
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
-        analyseLine(line, instruction);
-//        printInfos(instruction);
 
-        char instructionBin[33], instructionHex[9];
-        setOutputFull(instruction, instructionBin);
-        binToHex(instructionBin, instructionHex);
+        char instructionHex[9], line[50];
+        int x = readLine(progAsembleur, 50, line, instruction, instructionHex);
 
-        write(fichierAssemble, instructionHex);
-        // printf("%s\n", outputBin);
-        // printf("%s\n", outputHex);
-
-        // printf("\n");
+        if (!x) {
+            continue;
+        }
 
         free(instruction);
+
+        write(fichierAssemble, instructionHex);
 
         // break;
     }
@@ -41,24 +49,20 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal, in
 
 void readPas(FILE *progAsembleur, int registres[32]) {
     while (!feof(progAsembleur)) {
-        // printf("ici\n");
-        char line[50];
-        readLine(progAsembleur, line, 50);
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
-        analyseLine(line, instruction);
-        //printInfos(instruction);
 
-        char instructionBin[33], instructionHex[9];
-        setOutputFull(instruction, instructionBin);
-        binToHex(instructionBin, instructionHex);
-        // delLineFeed(line);
-        printf("%s\n", line);
-        printf("%s\n", instructionHex);
+        char instructionHex[9], line[50];
 
-        // printf("%s\n", outputBin);
-        // printf("%s\n", outputHex);
+        int x = readLine(progAsembleur, 50, line, instruction, instructionHex);
+
+        if (!x) {
+            continue;
+        }
 
         free(instruction);
+
+        printf("%s\n", line);
+        printf("%s\n", instructionHex);
 
         char temp;
         scanf("%c", &temp);
@@ -72,7 +76,7 @@ void write(FILE *file, char *instructionHex) {
 }
 
 void analyseLine(char *line, Instruction *instruction) {
-    // on récupère l'instruction
+    // on récupère toutes les infos de l'instruction
     setOperateurFromLine(line, instruction);
     setOperateurFormat(instruction);
     setNbParametersFromLine(instruction);
@@ -244,6 +248,8 @@ void setOperateurFromLine(char *line, Instruction *instruction) {
         tempLine++;
     }
     *tempOP = '\0';
+
+    toUpperCase(operateur);
 
     setOperateur(instruction, operateur);
 }

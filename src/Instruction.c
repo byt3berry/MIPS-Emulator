@@ -119,3 +119,9 @@ void setOutputFull(Instruction *instruction, char *output) {
             break;
     }
 }
+
+void getOutput(Instruction* instruction, char *output) {
+    char instructionBin[33];
+    setOutputFull(instruction, instructionBin);
+    binToHex(instructionBin, output);
+}

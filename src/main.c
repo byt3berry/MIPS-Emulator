@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include "..//include//fonctionModes.h"
 #include "..//include//fonctionInstructions.h"
 #include "..//include//fonctionFiles.h"
@@ -11,12 +12,9 @@
 int main(int argc, char **argv) {
     printf("Hello émulateur MIPS!\n");
 
-    // FILE *file = fopen("..//tests//arithmetic2.s", "r");
-
-    // if (file == NULL) {
-    //     printf("Erreur lors de l'ouverture du fichier\n");
-    //     return 1;
-    // }
+    char chaine[15] = "abcdef1234";
+    toUpperCase(chaine);
+    printf("%s\n", chaine);
 
     int registres[32] = {0};
 

@@ -30,8 +30,6 @@ void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichie
         exit(1);
     }
 
-    printf("On va lire\n");
-
     readAuto(progAssembleur, fichierAssemble, fichierFinal, registres);
 
     fclose(progAssembleur);

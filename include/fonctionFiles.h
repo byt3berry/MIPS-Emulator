@@ -11,7 +11,7 @@ void readAuto(FILE *, FILE *, FILE *, int[32]);
 
 void readPas(FILE *, int[32]);
 
-void readLine(FILE *, char *, int);
+int readLine(FILE *, int, char *, Instruction *, char *);
 
 void write(FILE *, char *);
 
