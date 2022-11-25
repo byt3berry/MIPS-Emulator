@@ -1,8 +1,8 @@
 
 ADDI $1, $1, 14      #on ajoute 14 au registre 0          
 ADDI $2, $2, 27      #on ajoute 27 au registre 1          
-ADD $3, $2, $0       #on fait 27+14 et on met le result dans le reg 2   
-SUB $4, $2, $0       #on fait 27-14 et on met le result dans le reg 3
+ADD $3, $2, $1       #on fait 27+14 et on met le result dans le reg 2   
+SUB $4, $2, $1       #on fait 27-14 et on met le result dans le reg 3
 MULT $4, $3          #on multiplie le contenu des reg 2 et reg 3 (le resultat est sur 64 bits)
 MFHI $5              #on met les 32 bits de poids fort dans le reg 4
 MFLO $6              #on met les 32 bits de poids faible dans le reg 5
@@ -11,7 +11,30 @@ DIV $1, $2           #on divise le contenu du reg 0 par celui du reg 1 (le resul
 MFHI $7              #on met les 32 bits de poids fort dans le reg 6
 MFLO $8              #on met les 32 bits de poids faible dans le reg 7
 SLT $9, $5, $6       #le reg 8 est mis à 1 si le contenu du reg 4 est plus petit que le contenu du reg 5, sinon il est mis à 0
-AND $10, $7, $8       #on combine bit à bit le contenu des reg 6 et 7 selon l'opération logique AND et on le place ds le reg 9
+AND $10, $7, $8      #on combine bit à bit le contenu des reg 6 et 7 selon l'opération logique AND et on le place ds le reg 9
 OR $11, $9, $7       #on combine bit à bit le contenu des reg 8 et 6 selon l'opération logique OR et on le met ds le reg 10
 LW $12, 2($9)        #ON PLACE LE CONTENU DU REG 8 + 2 DANS LE REGISTRE 11 SA GRAND MERE LA PUTE
 SW $11, 4($9)        #ON PLACE LE CONTENU DU REG 10 DANS LE REGISTRE 8 + 4
+
+
+EXPECTED ASSEMBLY en binaire
+00100000001000010000000000001110
+00100000001000010000000000011011
+00000000011000100000100000100000
+00000000100000100000100000100010
+00000000100000110000000000011000
+00000000000000000010100000010000
+00000000000000000011000000010010
+00000000001000100000000000011010
+00000000000000000011100000010000
+00000000000000000100000000010010
+00000001001001010011000000101010
+00000001010001110100000000100100
+00000001011010010011100000100101
+10001101001011000000000000000010
+10101101001010110000000000000100
+
+
+
+
+
