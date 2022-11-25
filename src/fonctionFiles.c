@@ -13,17 +13,18 @@
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
     fgets(line, size, file);
-    // printf("%s\n", line);
+    // printf("ligne : %s\n", line);
 
     /* Checking if the line is a comment or empty. */
     if (line[0] == '#' || line[0] == '\n') {
-        printf("%c %d\n", line[0], line[0]);
         return 0;
     }
 
     delLineFeed(line);
     analyseLine(line, instruction);
+    // printf("icii\n");
     getOutput(instruction, instructionHex);
+    // printf("iciii\n");
 
     return 1;
 }
@@ -33,9 +34,9 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal, in
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
 
         char instructionHex[9], line[50];
-        int x = readLine(progAsembleur, 50, line, instruction, instructionHex);
+        int resultat = readLine(progAsembleur, 50, line, instruction, instructionHex);
 
-        if (!x) {
+        if (!resultat) {
             continue;
         }
 
@@ -52,10 +53,9 @@ void readPas(FILE *progAsembleur, int registres[32]) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
 
         char instructionHex[9], line[50];
+        int resultat = readLine(progAsembleur, 50, line, instruction, instructionHex);
 
-        int x = readLine(progAsembleur, 50, line, instruction, instructionHex);
-
-        if (!x) {
+        if (!resultat) {
             continue;
         }
 
@@ -78,11 +78,17 @@ void write(FILE *file, char *instructionHex) {
 void analyseLine(char *line, Instruction *instruction) {
     // on récupère toutes les infos de l'instruction
     setOperateurFromLine(line, instruction);
+    // printInfos(instruction);
     setOperateurFormat(instruction);
+    // printInfos(instruction);
     setNbParametersFromLine(instruction);
+    // // printInfos(instruction);
     setParametersFromLine(line, instruction);
+    // // printInfos(instruction);
     setOperateurOPcodeOrFunc(instruction);
+    // // printInfos(instruction);
     setParametersOrderFromLine(instruction);
+    // printInfos(instruction);
 }
 
 void setNbParametersFromLine(Instruction *instruction) {
@@ -108,61 +114,61 @@ void setNbParametersFromLine(Instruction *instruction) {
 
 void setParametersFromLine(char *line, Instruction *instruction) {
     char formatInput[20];
-    int format = instruction->format;
+    // int format = instruction->format;
 
-    if (format == FORMAT_1) {
-            copyStrings(FORMAT_1_INPUT, formatInput);
-    } else if (FORMAT_2 <= format || format <= FORMAT_3) {
-            copyStrings(FORMAT_2_INPUT, formatInput);
-    } else if (format == FORMAT_4) {
-            copyStrings(FORMAT_3_INPUT, formatInput);
-    } else if (FORMAT_5 <= format || format <= FORMAT_6) {
-            copyStrings(FORMAT_4_INPUT, formatInput);
-    } else if (FORMAT_7 <= format || format <= FORMAT_9) {
-            copyStrings(FORMAT_5_INPUT, formatInput);
-    } else if (format == FORMAT_10) {
-            copyStrings(FORMAT_6_INPUT, formatInput);
-    } else if (format == FORMAT_11) {
-            copyStrings(FORMAT_7_INPUT, formatInput);
-    } else if (format == FORMAT_12) {
-            copyStrings(FORMAT_8_INPUT, formatInput);
-    } else if (format == FORMAT_13){
-            copyStrings(FORMAT_9_INPUT, formatInput);
-    }
-
-    // switch (instruction->format) {
-    //     case FORMAT_1:
+    // if (format == FORMAT_1) {
     //         copyStrings(FORMAT_1_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_2:
-    //     case FORMAT_3:
+    // } else if (FORMAT_2 <= format || format <= FORMAT_3) {
     //         copyStrings(FORMAT_2_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_4:
+    // } else if (format == FORMAT_4) {
     //         copyStrings(FORMAT_3_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_5:
-    //     case FORMAT_6:
+    // } else if (FORMAT_5 <= format || format <= FORMAT_6) {
     //         copyStrings(FORMAT_4_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_7:
-    //     case FORMAT_8:
-    //     case FORMAT_9:
+    // } else if (FORMAT_7 <= format || format <= FORMAT_9) {
     //         copyStrings(FORMAT_5_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_10:
+    // } else if (format == FORMAT_10) {
     //         copyStrings(FORMAT_6_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_11:
+    // } else if (format == FORMAT_11) {
     //         copyStrings(FORMAT_7_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_12:
+    // } else if (format == FORMAT_12) {
     //         copyStrings(FORMAT_8_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_13:
+    // } else if (format == FORMAT_13){
     //         copyStrings(FORMAT_9_INPUT, formatInput);
-    //         break;
     // }
+
+    switch (instruction->format) {
+        case FORMAT_1:
+            copyStrings(FORMAT_1_INPUT, formatInput);
+            break;
+        case FORMAT_2:
+        case FORMAT_3:
+            copyStrings(FORMAT_2_INPUT, formatInput);
+            break;
+        case FORMAT_4:
+            copyStrings(FORMAT_3_INPUT, formatInput);
+            break;
+        case FORMAT_5:
+        case FORMAT_6:
+            copyStrings(FORMAT_4_INPUT, formatInput);
+            break;
+        case FORMAT_7:
+        case FORMAT_8:
+        case FORMAT_9:
+            copyStrings(FORMAT_5_INPUT, formatInput);
+            break;
+        case FORMAT_10:
+            copyStrings(FORMAT_6_INPUT, formatInput);
+            break;
+        case FORMAT_11:
+            copyStrings(FORMAT_7_INPUT, formatInput);
+            break;
+        case FORMAT_12:
+            copyStrings(FORMAT_8_INPUT, formatInput);
+            break;
+        case FORMAT_13:
+            copyStrings(FORMAT_9_INPUT, formatInput);
+            break;
+    }
 
     char temp[8];
     int parametres[4];
@@ -276,10 +282,12 @@ void setOperateurFromLine(char *line, Instruction *instruction) {
 }
 
 void setOperateurFormat(Instruction *instruction) {
-    FILE *file = fopen("data/operateursFormat2.txt", "r");
-    int formatInput = -1;
+    FILE *file = fopen("data//operateursFormat2.txt", "r");
+    int format = -1;
+    // printf("%s,\n", instruction->operateur);
 
-    while (!feof(file) && formatInput == -1) {
+
+    while (!feof(file) && format == -1) {
         char line[15];
         char mot[8];
         int temp;
@@ -287,13 +295,13 @@ void setOperateurFormat(Instruction *instruction) {
         fgets(line, 15, file);
         sscanf(line, "%s %d", mot, &temp);
 
-        if (!strcmp(instruction->operateur, mot)) {
-            formatInput = temp;
+        if (strcmp(instruction->operateur, mot) == 0) {
+            format = temp;
         }
     }
 
     fclose(file);
-    setFormat(instruction, formatInput);
+    setFormat(instruction, format);
 }
 
 void setOperateurOPcodeOrFunc(Instruction *instruction) {

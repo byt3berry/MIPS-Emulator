@@ -12,9 +12,9 @@
 int main(int argc, char **argv) {
     printf("Hello émulateur MIPS!\n");
 
-    // char chaine[15] = "abcdef1234";
-    // toUpperCase(chaine);
-    // printf("%s\n", chaine);
+    char chaine[15] = "abcdef1234";
+    toUpperCase(chaine);
+    printf("%s\n", chaine);
 
     int registres[32] = {0};
 

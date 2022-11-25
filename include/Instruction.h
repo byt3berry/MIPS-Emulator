@@ -1,5 +1,5 @@
 typedef struct {
-    char *operateur;
+    char operateur[8];
     int format;
     int OPcodeOrFunc;
     int nbParametres;

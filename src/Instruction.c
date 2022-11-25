@@ -18,7 +18,8 @@ void printInfos(Instruction *instruction) {
 }
 
 void setOperateur(Instruction *instruction, char *operateur) {
-    instruction->operateur = operateur;
+    strcpy(instruction->operateur, operateur);
+    // instruction->operateur = operateur;
 }
 
 void setFormat(Instruction *instruction, int format) {
@@ -107,14 +108,17 @@ void setOutputJ(Instruction *instruction, char *output) {
 void setOutputFull(Instruction *instruction, char *output) {
     switch (instruction->format) {
         case FORMAT_1:
+            // printf("     1");
             setOutputJ(instruction, output);
             break;
         case FORMAT_2:
         case FORMAT_3:
         case FORMAT_4:
+            // printf("     2");
             setOutputI(instruction, output);
             break;
         default:
+            // printf("     3");
             setOutputR(instruction, output);
             break;
     }
@@ -122,6 +126,9 @@ void setOutputFull(Instruction *instruction, char *output) {
 
 void getOutput(Instruction* instruction, char *output) {
     char instructionBin[33];
+    // printf("    1\n");
     setOutputFull(instruction, instructionBin);
+    // printf("    2\n");
     binToHex(instructionBin, output);
+    // printf("    3\n");
 }
