@@ -13,8 +13,6 @@ void readPas(FILE *, int[32]);
 
 int readLine(FILE *, int, char *, Instruction *, char *);
 
-void write(FILE *, char *);
-
 void analyseLine(char *, Instruction *);
 
 void setOperateurFromLine(char *, Instruction *);
@@ -34,5 +32,3 @@ void setParametersOrderFromLine(Instruction *);
 int getValueFromRegister(int registres[32], char *registre);
 
 int setValueToRegister();
-
-void getFormatStr(char *, Instruction *);

@@ -7,7 +7,7 @@ SRC_C := $(wildcard src/*.c)
 
 # Tapez "make" pour compiler le programme et produire "emul-mips".
 
-$(MAIN): $(SRC_C) $(SRC_H)
+$(MAIN): $(SRC_C)
 	gcc $^ -o $@ -Wall -Wextra -O2 -I$(INC_DIR) -lm
 
 # Tapez "make test-cli" pour tester si vous gérez bien le mode automatique de
