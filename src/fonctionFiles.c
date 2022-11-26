@@ -12,6 +12,7 @@
 #endif
 
 // TODO: stocker les formats d'entrée et de sortie des instructions dans la structure Instruction
+// TODO: remplacer de do-while de setOperateurOPcodeOrFunc par un while
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
     fgets(line, size, file);
@@ -200,9 +201,15 @@ void setParametersFromLine(char *line, Instruction *instruction) {
             break;
     }
 
-    char temp[8];
+    char temp[8], x1[5], x2[5], x3[5], x4[5];
     int parametres[4];
-    sscanf(line, formatInput, temp, &parametres[0], &parametres[1], &parametres[2], &parametres[3]);
+    sscanf(line, formatInput, temp, x1, x2, x3, x4);
+
+    isRegisterMnemonic(x1, parametres[0]);
+    isRegisterMnemonic(x2, parametres[1]);
+    isRegisterMnemonic(x3, parametres[2]);
+    isRegisterMnemonic(x4, parametres[3]);
+
     setParametres(instruction, parametres);
 }
 
@@ -277,4 +284,31 @@ void setParametersOrderFromLine(Instruction *instruction) {
     }
 
     setParametresOrder(instruction, parametresOrder);
+}
+
+void fromMnemonicToNumber(char *x, int *parametre) {  // si on a un mnémonique de registre et non un registre, on récupère le numéro du registre
+    FILE *file = fopen("data/registres.txt", "r");
+    char mot[5];
+    int i = -1;
+
+    while (!feof(file) && strcmp(x, mot) != 0) {
+        i++;
+
+        char line[5];
+
+        fgets(line, 5, file);
+        sscanf(line, "%s", mot);
+    }
+
+    fclose(file);
+    
+    *parametre = i;
+}
+
+void isRegisterMnemonic(char *x, int *parametre) {
+    if ('0' <= x[0] && x[0] <= '9') {  // si le registre commence par un chiffre, ce n'est pas un mnémonique
+        sscanf("%d", parametre);
+    } else {
+        fromMnemonicToNumber(x, parametre);
+    }
 }

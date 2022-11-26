@@ -32,3 +32,7 @@ void setParametersOrderFromLine(Instruction *);
 int getValueFromRegister(int registres[32], char *registre);
 
 int setValueToRegister();
+
+void fromMnemonicToNumber(char *, int *);
+
+void isRegisterMnemonic(char *, int *);
