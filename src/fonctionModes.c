@@ -9,10 +9,10 @@
 
 #endif
 
-void modeInteractif(int* registres) {
+void modeInteractif(int *registres) {
 }
 
-void modeAutoPasAPas(char *nomProgAssembleur, int* registres) {
+void modeAutoPasAPas(char *nomProgAssembleur, int *registres) {
     FILE *progAssembleur = fopen(nomProgAssembleur, "r");
 
     readPas(progAssembleur, registres);
@@ -20,7 +20,7 @@ void modeAutoPasAPas(char *nomProgAssembleur, int* registres) {
     fclose(progAssembleur);
 }
 
-void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichierFinal, int* registres) {
+void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichierFinal, int *registres) {
     FILE *progAssembleur = fopen(nomProgAssembleur, "r");
     FILE *fichierAssemble = fopen(nomFichierAssemble, "w");
     FILE *fichierFinal = fopen(nomFichierFinal, "w");

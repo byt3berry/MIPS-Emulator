@@ -159,12 +159,12 @@ void binToHex2(char nombre_binaire[]) {
     printf("Le nombre hexadécimal est : %s\n", nombre_hex_affiche);
 }
 
-void delLineFeed(char* string) {
+void delLineFeed(char *string) {
     int i = strcspn(string, "\n");
     string[i] = '\0';
 }
 
-void toUpperCase(char* string) {
+void toUpperCase(char *string) {
     for (int i = 0; string[i] != '\0'; i++) {
         if ('a' <= string[i] && string[i] <= 'z') {
             string[i] -= 32;

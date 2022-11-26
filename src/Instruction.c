@@ -139,11 +139,8 @@ void setOutputFull(Instruction *instruction, char *output) {
     }
 }
 
-void getOutput(Instruction* instruction, char *output) {
+void getOutput(Instruction *instruction, char *output) {
     char instructionBin[33];
-    // printf("    1\n");
     setOutputFull(instruction, instructionBin);
-    // printf("    2\n");
     binToHex(instructionBin, output);
-    // printf("    3\n");
 }

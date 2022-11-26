@@ -22,15 +22,15 @@ int main(int argc, char **argv) {
 
     switch (argc) {
         case 1:
-        printf("Interactif\n");
+            printf("Interactif\n");
             modeInteractif(registres);
             break;
         case 3:
-        printf("Pas a pas\n");
+            printf("Pas a pas\n");
             modeAutoPasAPas(argv[1], registres);
             break;
         case 4:
-        printf("Auto\n");
+            printf("Auto\n");
             modeAuto(argv[1], argv[2], argv[3], registres);
             break;
         default:
