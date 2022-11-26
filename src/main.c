@@ -12,9 +12,20 @@
 int main(int argc, char **argv) {
     printf("Hello émulateur MIPS!\n");
 
-    char chaine[15] = "abcdef1234";
-    toUpperCase(chaine);
-    printf("%s\n", chaine);
+    // char string[8] = "Bonjour\0";
+    // char ch = 'o';
+
+    // for (int i = 0; string[i] != '\0'; i++) {
+    //     if (string[i] == ch) {
+    //         string[i] = ' ';
+    //     }
+    // }
+
+    char x1[4], x2[4];
+
+    sscanf("ADD SUB", "%s %s", x1, x2);
+
+    printf("%s %s\n", x1, x2);
 
     int registres[32] = {0};
 

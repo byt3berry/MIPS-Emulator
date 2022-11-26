@@ -1,4 +1,4 @@
-typedef struct {
+typedef struct Instruction{
     char operateur[8];
     int format;
     int OPcodeOrFunc;
@@ -6,8 +6,6 @@ typedef struct {
     int parametres[4];
     int parametresOrder[4];
 } Instruction;
-
-void initInstruction(Instruction *);
 
 void setOperateur(Instruction *, char *);
 
@@ -29,6 +27,6 @@ void setOutputI(Instruction *, char *);
 
 void setOutputJ(Instruction *, char *);
 
-void setOutput(Instruction *);
+void getOutput(Instruction *, char *);
 
 void printInfos(Instruction *);

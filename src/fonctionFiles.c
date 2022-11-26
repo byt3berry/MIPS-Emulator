@@ -12,12 +12,15 @@
 #endif
 
 // TODO: stocker les formats d'entrée et de sortie des instructions dans la structure Instruction
+// TODO: implémenter la distinction entre les mnémoniques de registres et les registres
+// TODO: ranger les fonctions dans des fichiers spécifiques
+// TODO: savoir s'il faut implémenter les mnémoniques
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
-    fgets(line, size, file);
+    char* checkError = fgets(line, size, file);
 
     /* Checking if the line is a comment or empty. */
-    if (line[0] == '#' || line[0] == '\n') {
+    if (checkError == NULL || checkError[0] == '#' || checkError[0] == '\n') {
         return 0;
     }
 
@@ -28,7 +31,7 @@ int readLine(FILE *file, int size, char *line, Instruction *instruction, char *i
     return 1;
 }
 
-void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal, int registres[32]) {
+void readAuto(FILE *progAsembleur, FILE *fichierAssemble, int registres[32]) {
     while (!feof(progAsembleur)) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
 
@@ -42,8 +45,6 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal, in
         free(instruction);
 
         fprintf(fichierAssemble, "%s\n", instructionHex);
-
-        // break;
     }
 }
 
@@ -65,8 +66,6 @@ void readPas(FILE *progAsembleur, int registres[32]) {
 
         char temp;
         scanf("%c", &temp);
-
-        // break;
     }
 }
 
@@ -142,67 +141,40 @@ void setNbParametersFromLine(Instruction *instruction) {
 
 void setParametersFromLine(char *line, Instruction *instruction) {
     char formatInput[20];
-    // int format = instruction->format;
+    int format = instruction->format;
 
-    // if (format == FORMAT_1) {
-    //         copyStrings(FORMAT_1_INPUT, formatInput);
-    // } else if (FORMAT_2 <= format || format <= FORMAT_3) {
-    //         copyStrings(FORMAT_2_INPUT, formatInput);
-    // } else if (format == FORMAT_4) {
-    //         copyStrings(FORMAT_3_INPUT, formatInput);
-    // } else if (FORMAT_5 <= format || format <= FORMAT_6) {
-    //         copyStrings(FORMAT_4_INPUT, formatInput);
-    // } else if (FORMAT_7 <= format || format <= FORMAT_9) {
-    //         copyStrings(FORMAT_5_INPUT, formatInput);
-    // } else if (format == FORMAT_10) {
-    //         copyStrings(FORMAT_6_INPUT, formatInput);
-    // } else if (format == FORMAT_11) {
-    //         copyStrings(FORMAT_7_INPUT, formatInput);
-    // } else if (format == FORMAT_12) {
-    //         copyStrings(FORMAT_8_INPUT, formatInput);
-    // } else if (format == FORMAT_13){
-    //         copyStrings(FORMAT_9_INPUT, formatInput);
-    // }
-
-    switch (instruction->format) {
-        case FORMAT_1:
+    if (format == FORMAT_1) {
             copyStrings(FORMAT_1_INPUT, formatInput);
-            break;
-        case FORMAT_2:
-        case FORMAT_3:
+    } else if (FORMAT_2 <= format && format <= FORMAT_3) {
             copyStrings(FORMAT_2_INPUT, formatInput);
-            break;
-        case FORMAT_4:
+    } else if (format == FORMAT_4) {
             copyStrings(FORMAT_3_INPUT, formatInput);
-            break;
-        case FORMAT_5:
-        case FORMAT_6:
+    } else if (FORMAT_5 <= format && format <= FORMAT_6) {
             copyStrings(FORMAT_4_INPUT, formatInput);
-            break;
-        case FORMAT_7:
-        case FORMAT_8:
+    } else if (FORMAT_7 <= format && format <= FORMAT_8) {
             copyStrings(FORMAT_5_INPUT, formatInput);
-            break;
-        case FORMAT_9:
+    }else if (format == FORMAT_9) {
             copyStrings(FORMAT_6_INPUT, formatInput);
-            break;
-        case FORMAT_10:
+    } else if (format == FORMAT_10) {
             copyStrings(FORMAT_7_INPUT, formatInput);
-            break;
-        case FORMAT_11:
+    } else if (format == FORMAT_11) {
             copyStrings(FORMAT_8_INPUT, formatInput);
-            break;
-        case FORMAT_12:
+    } else if (format == FORMAT_12) {
             copyStrings(FORMAT_9_INPUT, formatInput);
-            break;
-        case FORMAT_13:
+    } else if (format == FORMAT_13){
             copyStrings(FORMAT_10_INPUT, formatInput);
-            break;
     }
 
-    char temp[8], x1[5], x1[5], x1[5], x1[5], x1[5];
+    char temp[8];
     int parametres[4];
-    sscanf(line, formatInput, temp, &parametres[0], &parametres[1], &parametres[2], &parametres[3]);
+    /*
+    Dans les types I, J, et R les instructions recoivent au maximum 3 paramètres
+    Dans le type R, le code binaire contient 4 paramètres : rd, rs, rt et sa
+    Mais un des 4 sera nul (le paramètre dépend de l'instruction)
+    On ne donne donc pas de valeur à parametre[3] qui sera forcément nul
+    */
+
+    sscanf(line, formatInput, temp, &parametres[0], &parametres[1], &parametres[2]);
     setParametres(instruction, parametres);
 }
 

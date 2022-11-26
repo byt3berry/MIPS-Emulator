@@ -161,8 +161,10 @@ void binToHex2(char nombre_binaire[]) {
 
 void delLineFeed(char *string) {
     int i = strcspn(string, "\n");
-    string[i] = '\0';
+    string[i] = ' ';
 }
+
+
 
 void toUpperCase(char *string) {
     for (int i = 0; string[i] != '\0'; i++) {

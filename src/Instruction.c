@@ -5,15 +5,6 @@
 #include "../include/utils.h"
 #include "constantes.c"
 
-// void initInstruction(Instruction *instruction) {
-//     strcpy(instruction->operateur, "\0");
-//     instruction->format = -1;
-//     instruction->OPcodeOrFunc = -1;
-//     instruction->nbParametres = -1;
-//     instruction->parametres = {0};
-//     instruction->parametresOrder = {0};
-// }
-
 void printInfos(Instruction *instruction) {
     printf("operateur     : %s\n", instruction->operateur);
     printf("format        : %d\n", instruction->format);
@@ -70,14 +61,15 @@ void setOutputR(Instruction *instruction, char *output) {
         }
     }
 
-    char OPcode[7], func[7], x1[6], x2[6], x3[6], x4[6];
+    char OPcode[OPCODE_FUNC_SIZE+1], func[OPCODE_FUNC_SIZE+1];
+    char x1[REGISTER_SIZE+1], x2[REGISTER_SIZE+1], x3[REGISTER_SIZE+1], x4[REGISTER_SIZE+1];
 
-    decToBin(0, 6, OPcode);
-    decToBin(instruction->OPcodeOrFunc, 6, func);
-    decToBin(parametres[0], 5, x1);
-    decToBin(parametres[1], 5, x2);
-    decToBin(parametres[2], 5, x3);
-    decToBin(parametres[3], 5, x4);
+    decToBin(0, OPCODE_FUNC_SIZE, OPcode);
+    decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, func);
+    decToBin(parametres[0], REGISTER_SIZE, x1);
+    decToBin(parametres[1], REGISTER_SIZE, x2);
+    decToBin(parametres[2], REGISTER_SIZE, x3);
+    decToBin(parametres[3], REGISTER_SIZE, x4);
 
     sprintf(output, "%s%s%s%s%s%s", OPcode, x1, x2, x3, x4, func);
 }
@@ -96,51 +88,41 @@ void setOutputI(Instruction *instruction, char *output) {
         }
     }
 
-    char OPcode[7], x1[6], x2[6], x3[17];
-    decToBin(instruction->OPcodeOrFunc, 6, OPcode);
-    decToBin(parametres[0], 5, x1);
-    decToBin(parametres[1], 5, x2);
-    decToBin(parametres[2], 16, x3);
+    char OPcode[OPCODE_FUNC_SIZE+1];
+    char x1[REGISTER_SIZE+1], x2[REGISTER_SIZE+1], x3[I_IMMEDIATE_SIZE+1];
 
-    // printf("%s\n", x1);
-    // printf("%s\n", x2);
-    // printf("%s\n", x3);
-
+    decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, OPcode);
+    decToBin(parametres[0], REGISTER_SIZE, x1);
+    decToBin(parametres[1], REGISTER_SIZE, x2);
+    decToBin(parametres[2], I_IMMEDIATE_SIZE, x3);
 
     sprintf(output, "%s%s%s%s", OPcode, x1, x2, x3);
 }
 
 void setOutputJ(Instruction *instruction, char *output) {
-    char OPcode[7], x[27];
-    decToBin(instruction->parametres[0], 26, x);
-    decToBin(instruction->OPcodeOrFunc, 6, OPcode);
+    char OPcode[OPCODE_FUNC_SIZE];
+    char x[J_TARGET_SIZE+1];
+
+    decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, OPcode);
+    decToBin(instruction->parametres[0], J_TARGET_SIZE, x);
 
     sprintf(output, "%s%s", OPcode, x);
 }
 
 void setOutputFull(Instruction *instruction, char *output) {
-    switch (instruction->format) {
-        case FORMAT_1:
-            // printf("     1");
-            setOutputJ(instruction, output);
-            break;
-        case FORMAT_2:
-        case FORMAT_3:
-        case FORMAT_4:
-        case FORMAT_5:
-        case FORMAT_6:
-            // printf("     2");
-            setOutputI(instruction, output);
-            break;
-        default:
-            // printf("     3");
-            setOutputR(instruction, output);
-            break;
+    int format = instruction->format;
+
+    if (format == FORMAT_1) {
+        setOutputJ(instruction, output);
+    } else if (FORMAT_2 <= format && format <= FORMAT_6) {
+        setOutputI(instruction, output);
+    } else {
+        setOutputR(instruction, output);
     }
 }
 
 void getOutput(Instruction *instruction, char *output) {
-    char instructionBin[33];
+    char instructionBin[BINARY_CODE_SIZE+1];
     setOutputFull(instruction, instructionBin);
     binToHex(instructionBin, output);
 }

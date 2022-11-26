@@ -7,7 +7,7 @@
 
 #endif
 
-void readAuto(FILE *, FILE *, FILE *, int[32]);
+void readAuto(FILE *, FILE *, int[32]);
 
 void readPas(FILE *, int[32]);
 
@@ -29,10 +29,12 @@ void setParametersFromLine(char *, Instruction *);
 
 void setParametersOrderFromLine(Instruction *);
 
-int getValueFromRegister(int registres[32], char *registre);
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * P A S  E N C O R E  I M P L E M E N T E * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-int setValueToRegister();
+void setValueToRegister(int, int);  // int1 est le numero du registre, int2 est le nombre à stocker
 
-void fromMnemonicToNumber(char *, int *);
+void getValueFromRegister(int, int *);  // int est le numero du registre, int* est l'adresse dans laquelle stocker le nombre
 
-void isRegisterMnemonic(char *, int *);
+void writeFinalStateRegisters(FILE *, int *);  // int* sont les registres
