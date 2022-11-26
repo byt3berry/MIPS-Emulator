@@ -12,7 +12,6 @@
 #endif
 
 // TODO: stocker les formats d'entrée et de sortie des instructions dans la structure Instruction
-// TODO: remplacer de do-while de setOperateurOPcodeOrFunc par un while
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
     fgets(line, size, file);
@@ -143,75 +142,67 @@ void setNbParametersFromLine(Instruction *instruction) {
 
 void setParametersFromLine(char *line, Instruction *instruction) {
     char formatInput[20];
-    int format = instruction->format;
+    // int format = instruction->format;
 
-    if (format == FORMAT_1) {
-            copyStrings(FORMAT_1_INPUT, formatInput);
-    } else if (FORMAT_2 <= format && format <= FORMAT_3) {
-            copyStrings(FORMAT_2_INPUT, formatInput);
-    } else if (format == FORMAT_4) {
-            copyStrings(FORMAT_3_INPUT, formatInput);
-    } else if (FORMAT_5 <= format && format <= FORMAT_6) {
-            copyStrings(FORMAT_4_INPUT, formatInput);
-    } else if (FORMAT_7 <= format && format <= FORMAT_8) {
-            copyStrings(FORMAT_5_INPUT, formatInput);
-    } else if (format == FORMAT_9) {
-            copyStrings(FORMAT_6_INPUT, formatInput);
-    } else if (format == FORMAT_10) {
-            copyStrings(FORMAT_7_INPUT, formatInput);
-    } else if (format == FORMAT_11) {
-            copyStrings(FORMAT_8_INPUT, formatInput);
-    } else if (format == FORMAT_12) {
-            copyStrings(FORMAT_9_INPUT, formatInput);
-    } else if (format == FORMAT_13) {
-            copyStrings(FORMAT_10_INPUT, formatInput);
-    }
-
-    // switch (format) {
-    //     case FORMAT_1:
+    // if (format == FORMAT_1) {
     //         copyStrings(FORMAT_1_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_2:
-    //     case FORMAT_3:
+    // } else if (FORMAT_2 <= format || format <= FORMAT_3) {
     //         copyStrings(FORMAT_2_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_4:
+    // } else if (format == FORMAT_4) {
     //         copyStrings(FORMAT_3_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_5:
-    //     case FORMAT_6:
+    // } else if (FORMAT_5 <= format || format <= FORMAT_6) {
     //         copyStrings(FORMAT_4_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_7:
-    //     case FORMAT_8:
+    // } else if (FORMAT_7 <= format || format <= FORMAT_9) {
     //         copyStrings(FORMAT_5_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_9:
+    // } else if (format == FORMAT_10) {
     //         copyStrings(FORMAT_6_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_10:
+    // } else if (format == FORMAT_11) {
     //         copyStrings(FORMAT_7_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_11:
+    // } else if (format == FORMAT_12) {
     //         copyStrings(FORMAT_8_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_12:
+    // } else if (format == FORMAT_13){
     //         copyStrings(FORMAT_9_INPUT, formatInput);
-    //         break;
-    //     case FORMAT_13:
-    //         copyStrings(FORMAT_10_INPUT, formatInput);
-    //         break;
     // }
 
-    char temp[8], x1[5], x2[5], x3[5], x4[5];
+    switch (instruction->format) {
+        case FORMAT_1:
+            copyStrings(FORMAT_1_INPUT, formatInput);
+            break;
+        case FORMAT_2:
+        case FORMAT_3:
+            copyStrings(FORMAT_2_INPUT, formatInput);
+            break;
+        case FORMAT_4:
+            copyStrings(FORMAT_3_INPUT, formatInput);
+            break;
+        case FORMAT_5:
+        case FORMAT_6:
+            copyStrings(FORMAT_4_INPUT, formatInput);
+            break;
+        case FORMAT_7:
+        case FORMAT_8:
+            copyStrings(FORMAT_5_INPUT, formatInput);
+            break;
+        case FORMAT_9:
+            copyStrings(FORMAT_6_INPUT, formatInput);
+            break;
+        case FORMAT_10:
+            copyStrings(FORMAT_7_INPUT, formatInput);
+            break;
+        case FORMAT_11:
+            copyStrings(FORMAT_8_INPUT, formatInput);
+            break;
+        case FORMAT_12:
+            copyStrings(FORMAT_9_INPUT, formatInput);
+            break;
+        case FORMAT_13:
+            copyStrings(FORMAT_10_INPUT, formatInput);
+            break;
+    }
+
+    char temp[8], x1[5], x1[5], x1[5], x1[5], x1[5];
     int parametres[4];
-    sscanf(line, formatInput, temp, x1, x2, x3, x4);
-
-    isRegisterMnemonic(x1, parametres[0]);
-    isRegisterMnemonic(x2, parametres[1]);
-    isRegisterMnemonic(x3, parametres[2]);
-    isRegisterMnemonic(x4, parametres[3]);
-
+    sscanf(line, formatInput, temp, &parametres[0], &parametres[1], &parametres[2], &parametres[3]);
     setParametres(instruction, parametres);
 }
 
@@ -286,31 +277,4 @@ void setParametersOrderFromLine(Instruction *instruction) {
     }
 
     setParametresOrder(instruction, parametresOrder);
-}
-
-void fromMnemonicToNumber(char *x, int *parametre) {  // si on a un mnémonique de registre et non un registre, on récupère le numéro du registre
-    FILE *file = fopen("data/registres.txt", "r");
-    char mot[5];
-    int i = -1;
-
-    while (!feof(file) && strcmp(x, mot) != 0) {
-        i++;
-
-        char line[5];
-
-        fgets(line, 5, file);
-        sscanf(line, "%s", mot);
-    }
-
-    fclose(file);
-    
-    *parametre = i;
-}
-
-void isRegisterMnemonic(char *x, int *parametre) {
-    if ('0' <= x[0] && x[0] <= '9') {  // si le registre commence par un chiffre, ce n'est pas un mnémonique
-        sscanf("%d", parametre);
-    } else {
-        fromMnemonicToNumber(x, parametre);
-    }
 }
