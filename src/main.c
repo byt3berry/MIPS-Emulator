@@ -21,11 +21,11 @@ int main(int argc, char **argv) {
     //     }
     // }
 
-    char x1[4], x2[4];
+    char instr[8], x1[4], x2[4], x3[4];
 
-    sscanf("ADD SUB", "%s %s", x1, x2);
+    sscanf("ADDI $5 5($6)", "%s $%s %s($%s)", instr, x1, x2, x3);
 
-    printf("%s %s\n", x1, x2);
+    printf("%s %s %s %s\n", instr, x1, x2, x3);
 
     int registres[32] = {0};
 

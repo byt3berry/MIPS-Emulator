@@ -65,7 +65,7 @@ void readPas(FILE *progAsembleur, int registres[32]) {
         printf("%s\n", instructionHex);
 
         char temp;
-        scanf("%c", &temp);
+        temp = scanf("%c", &temp);
     }
 }
 
@@ -73,7 +73,7 @@ void analyseLine(char *line, Instruction *instruction) {
     // on récupère toutes les infos de l'instruction
     setOperateurFromLine(line, instruction);
     setOperateurFormat(instruction);
-    setNbParametersFromLine(instruction);
+    // setNbParametersFromLine(instruction);
     setParametersFromLine(line, instruction);
     setOperateurOPcodeOrFunc(instruction);
     setParametersOrderFromLine(instruction);
@@ -106,7 +106,12 @@ void setOperateurFormat(Instruction *instruction) {
         char mot[8];
         int temp;
 
-        fgets(line, 15, file);
+        char* checkError = fgets(line, 15, file);
+
+        if (checkError == NULL) {
+            continue;
+        }
+
         sscanf(line, "%s %d", mot, &temp);
 
         if (strcmp(instruction->operateur, mot) == 0) {
@@ -174,7 +179,8 @@ void setParametersFromLine(char *line, Instruction *instruction) {
     On ne donne donc pas de valeur à parametre[3] qui sera forcément nul
     */
 
-    sscanf(line, formatInput, temp, &parametres[0], &parametres[1], &parametres[2]);
+    int nbParametres = sscanf(line, formatInput, temp, &parametres[0], &parametres[1], &parametres[2]);
+    setNbParametres(instruction, nbParametres-1);
     setParametres(instruction, parametres);
 }
 
@@ -186,7 +192,12 @@ void setOperateurOPcodeOrFunc(Instruction *instruction) {
     do {
         char line[20];
 
-        fgets(line, 20, file);
+        char * checkError = fgets(line, 20, file);
+
+        if (checkError == NULL) {
+            continue;
+        }
+        
         sscanf(line, "%s %d", mot, &OPcodeOrFunc);
     } while (!feof(file) && strcmp(instruction->operateur, mot) != 0);
 
