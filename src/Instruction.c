@@ -9,12 +9,13 @@ void printInfos(Instruction *instruction) {
     printf("operateur     : %s\n", instruction->operateur);
     printf("format        : %d\n", instruction->format);
     printf("OPcodeOrFunc  : %d\n", instruction->OPcodeOrFunc);
-    printf("nbParametres  : %d\n", instruction->nbParametres);
-    printf("Ordre         : %d %d %d %d\n", instruction->parametresOrder[0], instruction->parametresOrder[1], instruction->parametresOrder[2], instruction->parametresOrder[3]);
-    printf("x1            : %d\n", instruction->parametres[0]);
-    printf("x2            : %d\n", instruction->parametres[1]);
-    printf("x3            : %d\n", instruction->parametres[2]);
-    printf("x4            : %d\n", instruction->parametres[3]);
+    printf("nbParameters  : %d\n", instruction->nbParameters);
+    printf("Ordre         : %d %d %d %d\n", instruction->parametersOrder[0], instruction->parametersOrder[1], instruction->parametersOrder[2], instruction->parametersOrder[3]);
+    printf("x1            : %d\n", instruction->parameters[0]);
+    printf("x2            : %d\n", instruction->parameters[1]);
+    printf("x3            : %d\n", instruction->parameters[2]);
+    printf("x4            : %d\n", instruction->parameters[3]);
+    printf("error         : %d\n", instruction->error);
 }
 
 void setOperateur(Instruction *instruction, char *operateur) {
@@ -29,35 +30,35 @@ void setOPcodeOrFunc(Instruction *instruction, int OPcodeOrFunc) {
     instruction->OPcodeOrFunc = OPcodeOrFunc;
 }
 
-void setNbParametres(Instruction *instruction, int nbParametres) {
-    instruction->nbParametres = nbParametres;
+void setNbParameters(Instruction *instruction, int nbParameters) {
+    instruction->nbParameters = nbParameters;
 }
 
-void setParametres(Instruction *instruction, int *parametres) {
+void setParameters(Instruction *instruction, int *parameters) {
     for (int i = 0; i < 4; i++) {
-        if (i < instruction->nbParametres) {
-            instruction->parametres[i] = parametres[i];
+        if (i < instruction->nbParameters) {
+            instruction->parameters[i] = parameters[i];
         } else {
-            instruction->parametres[i] = 0;
+            instruction->parameters[i] = 0;
         }
     }
 }
 
-void setParametresOrder(Instruction *instruction, int *parametresOrder) {
+void setParametersOrder(Instruction *instruction, int *parametersOrder) {
     for (int i = 0; i < 4; i++) {
-        instruction->parametresOrder[i] = parametresOrder[i];
+        instruction->parametersOrder[i] = parametersOrder[i];
     }
 }
 
 void setOutputR(Instruction *instruction, char *output) {
-    int parametres[4];
+    int parameters[4];
 
     for (int i = 0; i < 4; i++) {
-        int index = instruction->parametresOrder[i];
+        int index = instruction->parametersOrder[i];
         if (index == 0) {
-            parametres[i] = 0;
+            parameters[i] = 0;
         } else {
-            parametres[i] = instruction->parametres[index - 1];
+            parameters[i] = instruction->parameters[index - 1];
         }
     }
 
@@ -66,25 +67,25 @@ void setOutputR(Instruction *instruction, char *output) {
 
     decToBin(0, OPCODE_FUNC_SIZE, OPcode);
     decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, func);
-    decToBin(parametres[0], REGISTER_SIZE, x1);
-    decToBin(parametres[1], REGISTER_SIZE, x2);
-    decToBin(parametres[2], REGISTER_SIZE, x3);
-    decToBin(parametres[3], REGISTER_SIZE, x4);
+    decToBin(parameters[0], REGISTER_SIZE, x1);
+    decToBin(parameters[1], REGISTER_SIZE, x2);
+    decToBin(parameters[2], REGISTER_SIZE, x3);
+    decToBin(parameters[3], REGISTER_SIZE, x4);
 
     sprintf(output, "%s%s%s%s%s%s", OPcode, x1, x2, x3, x4, func);
 }
 
 void setOutputI(Instruction *instruction, char *output) {
-    int parametres[3];
+    int parameters[3];
 
     for (int i = 0; i < 3; i++) {
-        int index = instruction->parametresOrder[i];
+        int index = instruction->parametersOrder[i];
         if (index == 0) {
-            parametres[i] = 0;
+            parameters[i] = 0;
         } else if (index == -1) {
-            parametres[i] = 1;
+            parameters[i] = 1;
         } else {
-            parametres[i] = instruction->parametres[index - 1];
+            parameters[i] = instruction->parameters[index - 1];
         }
     }
 
@@ -92,9 +93,9 @@ void setOutputI(Instruction *instruction, char *output) {
     char x1[REGISTER_SIZE+1], x2[REGISTER_SIZE+1], x3[I_IMMEDIATE_SIZE+1];
 
     decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, OPcode);
-    decToBin(parametres[0], REGISTER_SIZE, x1);
-    decToBin(parametres[1], REGISTER_SIZE, x2);
-    decToBin(parametres[2], I_IMMEDIATE_SIZE, x3);
+    decToBin(parameters[0], REGISTER_SIZE, x1);
+    decToBin(parameters[1], REGISTER_SIZE, x2);
+    decToBin(parameters[2], I_IMMEDIATE_SIZE, x3);
 
     sprintf(output, "%s%s%s%s", OPcode, x1, x2, x3);
 }
@@ -104,7 +105,7 @@ void setOutputJ(Instruction *instruction, char *output) {
     char x[J_TARGET_SIZE+1];
 
     decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, OPcode);
-    decToBin(instruction->parametres[0], J_TARGET_SIZE, x);
+    decToBin(instruction->parameters[0], J_TARGET_SIZE, x);
 
     sprintf(output, "%s%s", OPcode, x);
 }
@@ -125,4 +126,40 @@ void getOutput(Instruction *instruction, char *output) {
     char instructionBin[BINARY_CODE_SIZE+1];
     setOutputFull(instruction, instructionBin);
     binToHex(instructionBin, output);
+}
+
+void setNOP(Instruction *instruction) {
+    int zeroArray[4] = {0};
+
+    setOperateur(instruction, "NOP\0");
+    setFormat(instruction, 13);
+    setNbParameters(instruction, 0);
+    setParameters(instruction, zeroArray);
+    setOPcodeOrFunc(instruction, 0);
+    setParametersOrder(instruction, zeroArray);
+}
+
+void setError(Instruction *instruction, int error) {
+    instruction->error = error;
+}
+
+int isError(Instruction *instruction) {
+    return instruction->error;
+}
+
+void showError(Instruction *instruction) {
+    switch (instruction->error) {
+        case NO_ERROR:
+            printf("Aucune erreur détéctée !!\n");
+            break;
+        case BAD_OPERATEUR:
+            printf("L'opérateur entré n'existe pas\n");
+            break;
+        case BAD_NBPARAMETERS:
+            printf("Le nombre de paramètres entré ne correspond pas avec l'opérateur\n");
+            break;
+        case BAD_REGISTER:
+            printf("Le(s) registre(s) entré(s) ne correspond(ent) n'existe(nt) pas\n");
+            break;
+    }
 }

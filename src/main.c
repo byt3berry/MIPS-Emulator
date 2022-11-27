@@ -21,28 +21,33 @@ int main(int argc, char **argv) {
     //     }
     // }
 
-    char instr[8], x1[4], x2[4], x3[4];
+    // int x = -5;
+    // char output[6];
+    // decToBin(x, 5, output);
+    // printf("%d : %s\n", x, output);
 
-    sscanf("ADDI $5 5($6)", "%s $%s %s($%s)", instr, x1, x2, x3);
+    // char instr[8], x1[4], x2[4], x3[4];
 
-    printf("%s %s %s %s\n", instr, x1, x2, x3);
+    // sscanf("ADDI $5 5($6)", "%s $%s %s($%s)", instr, x1, x2, x3);
 
-    int registres[32] = {0};
+    // printf("%s %s %s %s\n", instr, x1, x2, x3);
 
-    // read(file, registres);
+    int registers[32] = {0};
+
+    // read(file, registers);
 
     switch (argc) {
         case 1:
-            printf("Interactif\n");
-            modeInteractif(registres);
+            printf("* * * * * * * * * * * * Mode Automatique * * * * * * * * * * * *\n\n");
+            modeInteractif(registers);
             break;
         case 3:
-            printf("Pas a pas\n");
-            modeAutoPasAPas(argv[1], registres);
+            printf("* * * * * * * * * * * *  Mode Pas a pas * * * * * * * * * * *\n\n");
+            modeAutoPasAPas(argv[1], registers);
             break;
         case 4:
-            printf("Auto\n");
-            modeAuto(argv[1], argv[2], argv[3], registres);
+            printf("* * * * * * * * * * * * Mode Interactif * * * * * * * * * * * *\n\n");
+            modeAuto(argv[1], argv[2], argv[3], registers);
             break;
         default:
             break;

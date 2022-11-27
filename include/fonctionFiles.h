@@ -29,6 +29,8 @@ void setParametersFromLine(char *, Instruction *);
 
 void setParametersOrderFromLine(Instruction *);
 
+void checkRegisterExistence(Instruction *, int);
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 // * * * * * * * * * * * * * P A S  E N C O R E  I M P L E M E N T E * * * * * * * * * * * * * //
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

@@ -9,28 +9,28 @@
 
 #endif
 
-void modeInteractif(int *registres) {
+void modeInteractif(int *registers) {
 }
 
-void modeAutoPasAPas(char *nomProgAssembleur, int *registres) {
+void modeAutoPasAPas(char *nomProgAssembleur, int *registers) {
     FILE *progAssembleur = fopen(nomProgAssembleur, "r");
 
-    readPas(progAssembleur, registres);
+    readPas(progAssembleur, registers);
 
     fclose(progAssembleur);
 }
 
-void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichierFinal, int *registres) {
+void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichierFinal, int *registers) {
     FILE *progAssembleur = fopen(nomProgAssembleur, "r");
     FILE *fichierAssemble = fopen(nomFichierAssemble, "w");
     FILE *fichierFinal = fopen(nomFichierFinal, "w");
 
-    if (progAssembleur == NULL || fichierAssemble == NULL || fichierFinal == NULL) {
+    if (progAssembleur == NULL) {
         printf("Un des fichiers ne fonctionne pas\n");
         exit(1);
     }
 
-    readAuto(progAssembleur, fichierAssemble, registres);
+    readAuto(progAssembleur, fichierAssemble, registers);
 
     fclose(progAssembleur);
     fclose(fichierAssemble);

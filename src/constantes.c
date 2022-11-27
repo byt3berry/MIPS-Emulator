@@ -1,6 +1,10 @@
 #ifndef _CONSTANTES_C_
 #define _CONSTANTES_C_
 
+
+/* * * * * * * * * * *  */
+/* INSTRUCTIONS FORMATS */
+
 // Formats J
 #define FORMAT_1 1
 // Formats I
@@ -18,6 +22,13 @@
 #define FORMAT_12 12
 #define FORMAT_13 13
 
+/* INSTRUCTIONS FORMATS */
+/* * * * * * * * * * *  */
+
+
+/* * * * * * * * *  * * * * * * * * * * * */
+/* * * * INSTRUCTIONS FORMATS INPUT * * * */
+
 #define FORMAT_1_INPUT "%s %d"                 // from FORMAT 1 to 1
 #define FORMAT_2_INPUT "%s $%d, $%d, %d"       // from FORMAT 2 to 3
 #define FORMAT_3_INPUT "%s $%d, %d($%d)"       // from FORMAT 4 to 4
@@ -29,6 +40,9 @@
 #define FORMAT_9_INPUT "%s $%d"                // from FORMAT 12 to 12
 #define FORMAT_10_INPUT "%s"                   // from FORMAT 13 to 13
 
+/* * * * INSTRUCTIONS FORMATS INPUT * * * */
+/* * * * * * * * *  * * * * * * * * * * * */
+
 // #define FORMAT_1_INPUT "%s %s"                 // from FORMAT 1 to 1
 // #define FORMAT_2_INPUT "%s $%s, $%s, %s"       // from FORMAT 2 to 3
 // #define FORMAT_3_INPUT "%s $%s, %s($%s)"       // from FORMAT 4 to 4
@@ -39,6 +53,9 @@
 // #define FORMAT_8_INPUT "%s $%s"                // from FORMAT 11 to 11
 // #define FORMAT_9_INPUT "%s $%s"                // from FORMAT 12 to 12
 // #define FORMAT_10_INPUT "%s"                   // from FORMAT 13 to 13
+
+/* * * * * * * * * * * * * * * * * */
+/* * INSTRUCTIONS FORMATS OUTPUT * */
 
 #define FORMAT_1_OUTPUT "1"                   // FORMAT 1
 #define FORMAT_2_OUTPUT "2 1 3"               // FORMAT 2
@@ -54,10 +71,34 @@
 #define FORMAT_12_OUTPUT "1 0 0 0"            // FORMAT 12
 #define FORMAT_13_OUTPUT "0 0 0 0"            // FORMAT 13
 
+/* * INSTRUCTIONS FORMATS OUTPUT * */
+/* * * * * * * * * * * * * * * * * */
+
+
+/* * * * * * * * * * * * * * */
+/* * * * * * SIZES * * * * * */
+
 #define OPCODE_FUNC_SIZE 6
 #define I_IMMEDIATE_SIZE 16
 #define J_TARGET_SIZE 26
 #define REGISTER_SIZE 5
 #define BINARY_CODE_SIZE 32
+
+/* * * * * * SIZES * * * * * */
+/* * * * * * * * * * * * * * */
+
+
+/* * * * * *  * * * * */
+/* * * * ERRORS * * * */
+
+#define NO_ERROR 0
+#define BAD_OPERATEUR 1
+#define BAD_NBPARAMETERS 2
+#define BAD_REGISTER 3
+#define OVERFLOW 4
+
+/* * * * ERRORS * * * */
+/* * * * * *  * * * * */
+
 
 #endif

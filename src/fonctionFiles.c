@@ -31,9 +31,10 @@ int readLine(FILE *file, int size, char *line, Instruction *instruction, char *i
     return 1;
 }
 
-void readAuto(FILE *progAsembleur, FILE *fichierAssemble, int registres[32]) {
+void readAuto(FILE *progAsembleur, FILE *fichierAssemble, int registers[32]) {
     while (!feof(progAsembleur)) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
+        setError(instruction, NO_ERROR);
 
         char instructionHex[9], line[50];
         int resultat = readLine(progAsembleur, 50, line, instruction, instructionHex);
@@ -48,9 +49,10 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, int registres[32]) {
     }
 }
 
-void readPas(FILE *progAsembleur, int registres[32]) {
+void readPas(FILE *progAsembleur, int registers[32]) {
     while (!feof(progAsembleur)) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
+        setError(instruction, NO_ERROR);
 
         char instructionHex[9], line[50];
         int resultat = readLine(progAsembleur, 50, line, instruction, instructionHex);
@@ -64,6 +66,14 @@ void readPas(FILE *progAsembleur, int registres[32]) {
         printf("%s\n", line);
         printf("%s\n", instructionHex);
 
+        int errorCode =  isError(instruction);
+
+        if (errorCode) {
+            printf("Erreur détéctée sur l'instruction !!\n");
+            printf("Code d'erreur : %d\n", errorCode);
+            showError(instruction);
+        }
+
         char temp;
         temp = scanf("%c", &temp);
     }
@@ -73,10 +83,15 @@ void analyseLine(char *line, Instruction *instruction) {
     // on récupère toutes les infos de l'instruction
     setOperateurFromLine(line, instruction);
     setOperateurFormat(instruction);
-    // setNbParametersFromLine(instruction);
-    setParametersFromLine(line, instruction);
-    setOperateurOPcodeOrFunc(instruction);
-    setParametersOrderFromLine(instruction);
+    if (!isError(instruction)) { // s'il n'y a pas d'erreur sur l'opérateur
+        setNbParametersFromLine(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
+        setParametersFromLine(line, instruction);
+
+        if (!isError(instruction)) {  // s'il n'y a pas d'erreur sur les paramètres
+            setOperateurOPcodeOrFunc(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
+            setParametersOrderFromLine(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
+        }
+    }
 }
 
 void setOperateurFromLine(char *line, Instruction *instruction) {
@@ -93,13 +108,13 @@ void setOperateurFromLine(char *line, Instruction *instruction) {
 
     toUpperCase(operateur);
     setOperateur(instruction, operateur);
+
+    // return;
 }
 
 void setOperateurFormat(Instruction *instruction) {
     FILE *file = fopen("data//operateursFormat.txt", "r");
     int format = -1;
-    // printf("%s,\n", instruction->operateur);
-
 
     while (!feof(file) && format == -1) {
         char line[15];
@@ -120,14 +135,20 @@ void setOperateurFormat(Instruction *instruction) {
     }
 
     fclose(file);
-    setFormat(instruction, format);
+
+    if (format == -1) {  // si l'opérateur n'existe pas on transforme l'instruction en NOP
+        setNOP(instruction);
+        setError(instruction, BAD_OPERATEUR);
+    } else {
+        setFormat(instruction, format);
+    }
 }
 
 void setNbParametersFromLine(Instruction *instruction) {
-    FILE *file = fopen("data/operateursNbParametres.txt", "r");
-    int nbParametres = -1;
+    FILE *file = fopen("data/operateursNbParameters.txt", "r");
+    int nbParameters = -1;
 
-    while (!feof(file) && nbParametres == -1) {
+    while (!feof(file) && nbParameters == -1) {
         char line[15];
         char mot[8];
         int temp;
@@ -136,12 +157,12 @@ void setNbParametersFromLine(Instruction *instruction) {
         sscanf(line, "%s %d", mot, &temp);
 
         if (strcmp(instruction->operateur, mot) == 0) {
-            nbParametres = temp;
+            nbParameters = temp;
         }
     }
 
     fclose(file);
-    setNbParametres(instruction, nbParametres);
+    setNbParameters(instruction, nbParameters);
 }
 
 void setParametersFromLine(char *line, Instruction *instruction) {
@@ -171,7 +192,7 @@ void setParametersFromLine(char *line, Instruction *instruction) {
     }
 
     char temp[8];
-    int parametres[4];
+    int parameters[4];
     /*
     Dans les types I, J, et R les instructions recoivent au maximum 3 paramètres
     Dans le type R, le code binaire contient 4 paramètres : rd, rs, rt et sa
@@ -179,27 +200,69 @@ void setParametersFromLine(char *line, Instruction *instruction) {
     On ne donne donc pas de valeur à parametre[3] qui sera forcément nul
     */
 
-    int nbParametres = sscanf(line, formatInput, temp, &parametres[0], &parametres[1], &parametres[2]);
-    setNbParametres(instruction, nbParametres-1);
-    setParametres(instruction, parametres);
+    int nbParameters = sscanf(line, formatInput, temp, &parameters[0], &parameters[1], &parameters[2]);
+    
+    // TODO: faire une fonction void checkRegisterExistence(instruction, parametre) qui set une erreur si le registre n'existe pas (si besoin)
+
+    if (instruction->nbParameters != nbParameters -1) { // si on récupère un mauvais nombre de paramètres
+        setNOP(instruction);
+        setError(instruction, BAD_NBPARAMETERS);
+    }else {
+        switch (instruction->format) {
+            case 5:
+            case 6:
+            case 11:
+            case 12:
+                checkRegisterExistence(instruction, parameters[0]);
+                break;
+            case 2:
+            case 3:
+            case 9:
+            case 10:
+                checkRegisterExistence(instruction, parameters[0]);
+                checkRegisterExistence(instruction, parameters[1]);
+                break;
+            case 4:
+                checkRegisterExistence(instruction, parameters[0]);
+                checkRegisterExistence(instruction, parameters[2]);
+                break;
+            // si les paramètres 1, 2 et 3 sont des registres
+            case 7:
+            case 8:
+                checkRegisterExistence(instruction, parameters[0]);
+                checkRegisterExistence(instruction, parameters[1]);
+                checkRegisterExistence(instruction, parameters[2]);
+                break;
+        }
+    }
+
+    if (!isError(instruction)) {
+        setParameters(instruction, parameters);
+    }
 }
 
 void setOperateurOPcodeOrFunc(Instruction *instruction) {
     FILE *file = fopen("data/operateursOPcodeFunc.txt", "r");
-    int OPcodeOrFunc;
+    int OPcodeOrFunc = -1;
     char mot[8];
 
-    do {
-        char line[20];
+    while (!feof(file) && OPcodeOrFunc == -1) {
+        char line[15];
+        int temp;
 
-        char * checkError = fgets(line, 20, file);
+        char * checkError = fgets(line, 15, file);
 
         if (checkError == NULL) {
             continue;
         }
+
+        sscanf(line, "%s %d", mot, &temp);
+
+        if (strcmp(instruction->operateur, mot) == 0) {
+            OPcodeOrFunc = temp;
+        }
         
-        sscanf(line, "%s %d", mot, &OPcodeOrFunc);
-    } while (!feof(file) && strcmp(instruction->operateur, mot) != 0);
+    }
 
     fclose(file);
     setOPcodeOrFunc(instruction, OPcodeOrFunc);
@@ -207,7 +270,36 @@ void setOperateurOPcodeOrFunc(Instruction *instruction) {
 
 void setParametersOrderFromLine(Instruction *instruction) {
     char formatOutput[15];
-    int parametresOrder[4];
+    int parametersOrder[4];
+    int format = instruction->format;
+
+    // if (format == 1) {
+    //     copyStrings(FORMAT_1_OUTPUT, formatOutput);
+    // } else if (format == 2) {
+    //     copyStrings(FORMAT_2_OUTPUT, formatOutput);
+    // } else if (format == 3) {
+    //     copyStrings(FORMAT_3_OUTPUT, formatOutput);
+    // } else if (format == 4) {
+    //     copyStrings(FORMAT_4_OUTPUT, formatOutput);
+    // } else if (format == 5) {
+    //     copyStrings(FORMAT_5_OUTPUT, formatOutput);
+    // } else if (format == 6) {
+    //     copyStrings(FORMAT_6_OUTPUT, formatOutput);
+    // } else if (format == 7) {
+    //     copyStrings(FORMAT_7_OUTPUT, formatOutput);
+    // } else if (format == 8) {
+    //     copyStrings(FORMAT_8_OUTPUT, formatOutput);
+    // } else if (format == 9) {
+    //     copyStrings(FORMAT_9_OUTPUT, formatOutput);
+    // } else if (format == 10) {
+    //     copyStrings(FORMAT_10_OUTPUT, formatOutput);
+    // } else if (format == 11) {
+    //     copyStrings(FORMAT_11_OUTPUT, formatOutput);
+    // } else if (format == 12) {
+    //     copyStrings(FORMAT_12_OUTPUT, formatOutput);
+    // } else if (format == 13) {
+    //     copyStrings(FORMAT_13_OUTPUT, formatOutput);
+    // }
 
     switch (instruction->format) {
         case FORMAT_1:
@@ -252,12 +344,18 @@ void setParametersOrderFromLine(Instruction *instruction) {
     }
 
     if (instruction->format == FORMAT_1) {
-        sscanf(formatOutput, "%d", &parametresOrder[0]);
+        sscanf(formatOutput, "%d", &parametersOrder[0]);
     } else if (FORMAT_2 <= instruction->format && instruction->format <= FORMAT_6) {
-        sscanf(formatOutput, "%d %d %d", &parametresOrder[0], &parametresOrder[1], &parametresOrder[2]);
+        sscanf(formatOutput, "%d %d %d", &parametersOrder[0], &parametersOrder[1], &parametersOrder[2]);
     } else {
-        sscanf(formatOutput, "%d %d %d %d", &parametresOrder[0], &parametresOrder[1], &parametresOrder[2], &parametresOrder[3]);
+        sscanf(formatOutput, "%d %d %d %d", &parametersOrder[0], &parametersOrder[1], &parametersOrder[2], &parametersOrder[3]);
     }
 
-    setParametresOrder(instruction, parametresOrder);
+    setParametersOrder(instruction, parametersOrder);
+}
+
+void checkRegisterExistence(Instruction *instruction, int parameter) {
+    if (parameter < 0 || 31 <= parameter) {
+        setError(instruction, BAD_REGISTER);
+    }
 }
