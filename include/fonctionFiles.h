@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#ifndef _INSTRUCTION2_H_
-#define _INSTRUCTION2_H_
+#ifndef _FONCTION_FILES_H_
+#define _FONCTION_FILES_H_
 
-#include "Instruction2.h"
+#include "Instruction.h"
 
 #endif
 

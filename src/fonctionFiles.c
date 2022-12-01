@@ -5,7 +5,7 @@
 #ifndef _FONCTION_FILES_C_
 #define _FONCTION_FILES_C_
 
-#include "../include/fonctionFiles2.h"
+#include "../include/fonctionFiles.h"
 #include "../include/utils.h"
 #include "constantes.c"
 
@@ -14,23 +14,25 @@
 // TODO: stocker les formats d'entrée et de sortie des instructions dans la structure Instruction
 // TODO: implémenter la distinction entre les mnémoniques de registres et les registres
 // TODO: ranger les fonctions dans des fichiers spécifiques
-// TODO: savoir s'il faut implémenter les mnémoniques
+// TODO: implémenter les mnémoniques
 // TODO: verifier que les erreurs soient bien checkées pour le nouveau code
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
-    char* checkError = fgets(line, size, file);
+    char lineAnalyzed[size];
+    char* checkError = fgets(lineAnalyzed, size, file);
+
+    replaceChar(lineAnalyzed, '\n', '\0');
+    replaceChar(lineAnalyzed, '\r', '\0');
+    replaceChar(lineAnalyzed, '#', '\0');
+    strcpy(line, lineAnalyzed);
 
     /* Checking if the line is a comment or empty. */
-    if (checkError == NULL || checkError[0] == '#' || checkError[0] == '\n') {
+    if (checkError == NULL || checkError[0] == '\0') {
         return 0;
     }
 
-    // delLineFeed(line);
-    replace(line, '\n', '\0');
-    replace(line, '#', '\0');
-    analyseLine(line, instruction);
-    // printf("analyse finie\n");
-    // getOutput(instruction, instructionHex);
+    analyseLine(lineAnalyzed, instruction);
+    getOutput(instruction, instructionHex);
 
     return 1;
 }
@@ -40,8 +42,8 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, int registers[32]) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
         setError(instruction, NO_ERROR);
 
-        char instructionHex[9], line[50];
-        int resultat = readLine(progAsembleur, 50, line, instruction, instructionHex);
+        char instructionHex[9], line[100];
+        int resultat = readLine(progAsembleur, 100, line, instruction, instructionHex);
 
         if (!resultat) {
             continue;
@@ -58,8 +60,8 @@ void readPas(FILE *progAsembleur, int registers[32]) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
         setError(instruction, NO_ERROR);
 
-        char instructionHex[9], line[50];
-        int resultat = readLine(progAsembleur, 50, line, instruction, instructionHex);
+        char instructionHex[9], line[100];
+        int resultat = readLine(progAsembleur, 100, line, instruction, instructionHex);
 
         if (!resultat) {
             continue;
@@ -85,7 +87,6 @@ void readPas(FILE *progAsembleur, int registers[32]) {
 
 void analyseLine(char *line, Instruction *instruction) {
     // on récupère toutes les infos de l'instruction
-    // printf("%s\n", line);
     setOperateurFromLine(line, instruction);
     setInfos(line, instruction);
 
@@ -106,54 +107,34 @@ void analyseLine(char *line, Instruction *instruction) {
 void setInfos(char *line, Instruction *instruction) {
     FILE * file = fopen("data/data.txt", "r");
     int isFound = 0;
-    // printf("entrée\n");
     
     while(!feof(file) && !isFound) {
-        // printf("iciiii\n");
         char lineTested[100];
         char* checkError = fgets(lineTested, 100, file);
-        // printf("%s", lineTested);
 
         if (checkError[0] == '#') {
             continue;
         }
 
-        // printf("%s\n", lineTested);
-        replace(line, '\n', '\0');
+        replaceChar(line, '(', ' ');
+        replaceChar(line, ')', ' ');
+        replaceChar(line, '\n', '\0');
+        removeChar(line, ',');
 
         char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], orderParameters[10];
         sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, orderParameters);
 
-        replace(inputFormat, '+', ' ');
-        replace(orderParameters, '+', ' ');
-
-        // printf("operateur : %s\n", operateur);
-        // printf("format : %s\n", format);
-        // printf("OPcodeOrFunc : %s\n", OPcodeOrFunc);
-        // printf("nbParametres : %s\n", nbParametres);
-        // printf("format_input : %s\n", inputFormat);
-        // printf("orderParametres : %s\n", orderParametres);
-
-        // printf("\n\n");
+        replaceChar(inputFormat, '+', ' ');
+        replaceChar(orderParameters, '+', ' ');
 
         if (strcmp(instruction->operateur, operateur) == 0) {
             isFound = 1;
-
-            printf("operateur : %s\n", operateur);
-            printf("format : %s\n", format);
-            printf("OPcodeOrFunc : %s\n", OPcodeOrFunc);
-            printf("nbParameters : %s\n", nbParameters);
-            printf("format_input : %s\n", inputFormat);
-            printf("orderParameters : %s\n", orderParameters);
-            printf("\n");
 
             setOperateurFormat(format, instruction);
             setOperateurOPcodeOrFunc(OPcodeOrFunc, instruction);
             setNbParametersFromLine(nbParameters, instruction);
             setParametersFromLine(line, inputFormat, instruction);
-            // setParametersOrderFromLine(orderParameters, instruction);
-
-            printInfos(instruction);
+            setParametersOrderFromLine(orderParameters, instruction);
         }
         
     }
@@ -203,23 +184,21 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     On ne donne donc pas de valeur à parametre[3] qui sera forcément nul
     */
 
-    printf("iciiiii : %s\n", inputFormat);
-
     int nbParameters = sscanf(line, inputFormat, temp, &parameters[0], &parameters[1], &parameters[2]);
     
-    // TODO: faire une fonction void checkRegisterExistence(instruction, parametre) qui set une erreur si le registre n'existe pas (si besoin)
-
     if (instruction->nbParameters != nbParameters -1) { // si on récupère un mauvais nombre de paramètres
         setNOP(instruction);
         setError(instruction, BAD_NBPARAMETERS);
     } else {
         switch (instruction->format) {
+            // si le paramètre 1 est un registre
             case 5:
             case 6:
             case 11:
             case 12:
                 checkRegisterExistence(instruction, parameters[0]);
                 break;
+            // si les paramètres 1 et 2 sont des registres
             case 2:
             case 3:
             case 9:
@@ -227,6 +206,7 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
                 checkRegisterExistence(instruction, parameters[0]);
                 checkRegisterExistence(instruction, parameters[1]);
                 break;
+            // si les paramètres 1 et 3 sont des registres
             case 4:
                 checkRegisterExistence(instruction, parameters[0]);
                 checkRegisterExistence(instruction, parameters[2]);

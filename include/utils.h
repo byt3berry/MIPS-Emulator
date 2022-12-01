@@ -19,4 +19,4 @@ void replaceChar(char *, char, char);
 
 void toUpperCase(char *);
 
-void replace(char*, char, char);
+void complementA2(char *);

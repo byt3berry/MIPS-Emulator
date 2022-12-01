@@ -5,7 +5,7 @@
 #define _FONCTION_MODES_C_
 
 #include "../include/fonctionModes.h"
-#include "../include/fonctionFiles2.h"
+#include "../include/fonctionFiles.h"
 
 #endif
 
@@ -14,6 +14,11 @@ void modeInteractif(int *registers) {
 
 void modeAutoPasAPas(char *nomProgAssembleur, int *registers) {
     FILE *progAssembleur = fopen(nomProgAssembleur, "r");
+
+    if (progAssembleur == NULL) {
+        printf("Probleme avec le fichier source \"%s\"\n", nomProgAssembleur);
+        exit(1);
+    }
 
     readPas(progAssembleur, registers);
 
@@ -26,7 +31,7 @@ void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichie
     FILE *fichierFinal = fopen(nomFichierFinal, "w");
 
     if (progAssembleur == NULL) {
-        printf("Un des fichiers ne fonctionne pas\n");
+        printf("Probleme avec le fichier source \"%s\"\n", nomProgAssembleur);
         exit(1);
     }
 

@@ -1,35 +1,20 @@
 #include "..//include//utils.h"
 #include <string.h>
 
-int areStringsEqual(char *mot1, char *mot2) {
-    if (*mot1 != *mot2) {
-        return 0;
-    } else if (*mot1 == '\0' && *mot2 == '\0') {
-        return 1;
-    } else {
-        mot1++;
-        mot2++;
-        return areStringsEqual(mot1, mot2);
-    }
-}
-
-void copyStrings(char *source, char *destination) {
-    while (*source != '\0') {
-        *destination = *source;
-        source++;
-        destination++;
-    }
-
-    *destination = '\0';
-}
-
 void decToBin(int dec, int nbBits, char *bin) {
+    int decAbs;
+    if (dec < 0) {
+        decAbs = -dec;
+    } else {
+        decAbs = dec;
+    }
+    
     char temp[nbBits];
     int i = 0;
 
-    while (dec > 0) {
-        temp[i] = dec % 2 + '0';
-        dec /= 2;
+    while (decAbs > 0) {
+        temp[i] = decAbs % 2 + '0';
+        decAbs /= 2;
         i++;
     }
 
@@ -43,6 +28,24 @@ void decToBin(int dec, int nbBits, char *bin) {
     }
 
     bin[nbBits] = '\0';
+
+    if (dec < 0) {
+        complementA2(bin);
+    }
+}
+
+void complementA2(char *nombre) {
+    int i = 0;
+
+    while (nombre[i] != '\0'){i++;}  // on va a la fin de la boucle
+    while (i >= 0 && nombre[i] != '1'){i--;} // on cherche le dernier 1
+
+    i--;
+
+    while (i >= 0) {
+        nombre[i] = (nombre[i] == '1') ? '0' : '1';
+        i--;
+    }
 }
 
 void binToHex(char *bin, char *hex) {
@@ -68,108 +71,22 @@ void binToHex(char *bin, char *hex) {
     // printf("Le nombre hexadécimal est : %s\n", hex);
 }
 
-void binToHex2(char nombre_binaire[]) {
-    int nombre_hexadecimal[8] = {};
-    int position = 0;
-    char nombre_hex_affiche[8] = "";
-
-    for (int i = 1; i <= 8; i++) {
-        int nombre_stock = 0;
-        for (int j = 4; j >= 1; j--) {
-            position = (4 * i) - j;
-
-            nombre_stock += ((nombre_binaire[position]) - '0') * pow(2, j - 1);
-        }
-
-        nombre_hexadecimal[i - 1] = nombre_stock;
-    }
-
-    for (int i = 0; i < 8; i++) {
-        switch (nombre_hexadecimal[i]) {
-
-            case 0:
-                nombre_hex_affiche[i] = '0';
-                break;
-
-            case 1:
-                nombre_hex_affiche[i] = '1';
-                break;
-
-            case 2:
-                nombre_hex_affiche[i] = '2';
-                break;
-
-            case 3:
-                nombre_hex_affiche[i] = '3';
-                break;
-
-            case 4:
-                nombre_hex_affiche[i] = '4';
-                break;
-
-            case 5:
-                nombre_hex_affiche[i] = '5';
-                break;
-
-            case 6:
-                nombre_hex_affiche[i] = '6';
-                break;
-
-            case 7:
-                nombre_hex_affiche[i] = '7';
-                break;
-
-            case 8:
-                nombre_hex_affiche[i] = '8';
-                break;
-
-            case 9:
-                nombre_hex_affiche[i] = '9';
-                break;
-
-            case 10:
-                nombre_hex_affiche[i] = 'A';
-                break;
-
-            case 11:
-                nombre_hex_affiche[i] = 'B';
-                break;
-
-            case 12:
-                nombre_hex_affiche[i] = 'C';
-                break;
-
-            case 13:
-                nombre_hex_affiche[i] = 'D';
-                break;
-
-            case 14:
-                nombre_hex_affiche[i] = 'E';
-                break;
-
-            case 15:
-                nombre_hex_affiche[i] = 'F';
-                break;
-
-            default:
-                nombre_hex_affiche[i] = '!';
-        }
-    }
-
-    printf("Le nombre hexadécimal est : %s\n", nombre_hex_affiche);
-}
-
-void delLineFeed(char *string) {
-    int i = strcspn(string, "\n");
-    string[i] = ' ';
-}
-
-void replace(char* string, char suppr, char add) {
+void replaceChar(char* string, char suppr, char add) {
     while(*string != '\0') {
         if (*string == suppr) {
             *string = add;
         }
         string++;
+    }
+}
+
+void removeChar(char *string, char suppr) {
+    for (int i = 0; string[i] != '\0'; i++) {
+        if (string[i] == suppr) {
+            for (int j = i; string[j] != '\0'; j++) {
+                string[j] = string[j+1];
+            }
+        }
     }
 }
 
@@ -179,8 +96,4 @@ void toUpperCase(char *string) {
             string[i] -= 32;
         }
     }
-}
-
-void removeChar(char *string, char suppr) {
-    // TODO: finir la fonction
 }

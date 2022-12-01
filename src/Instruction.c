@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../include/Instruction2.h"
+#include "../include/Instruction.h"
 #include "../include/utils.h"
 #include "constantes.c"
 

@@ -25,4 +25,3 @@ ADDI $29, $29, 4 # On revient au sommet de la pile
 # $08:0x07770000
 # $09:0x000007D0
 # $29:0
-

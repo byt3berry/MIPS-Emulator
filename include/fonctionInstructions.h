@@ -1,5 +1,5 @@
-#ifndef _INSTRUCTION_H_
-#define _INSTRUCTION_H_
+#ifndef _FONCTION_INSTRUCTION_H_
+#define _FONCTION_INSTRUCTION_H_
 
 // #include "Instruction.h"
 
