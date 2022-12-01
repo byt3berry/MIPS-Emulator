@@ -7,6 +7,8 @@
 
 #endif
 
+void readInteractif(int[32]);
+
 void readAuto(FILE *, FILE *, int[32]);
 
 void readPas(FILE *, int[32]);

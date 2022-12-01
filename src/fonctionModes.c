@@ -10,6 +10,7 @@
 #endif
 
 void modeInteractif(int *registers) {
+    readInteractif(registers);
 }
 
 void modeAutoPasAPas(char *nomProgAssembleur, int *registers) {

@@ -11,15 +11,20 @@
 
 #endif
 
-// TODO: stocker les formats d'entrée et de sortie des instructions dans la structure Instruction
-// TODO: implémenter la distinction entre les mnémoniques de registres et les registres
-// TODO: ranger les fonctions dans des fichiers spécifiques
-// TODO: implémenter les mnémoniques
-// TODO: verifier que les erreurs soient bien checkées pour le nouveau code
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
     char lineAnalyzed[size];
-    char* checkError = fgets(lineAnalyzed, size, file);
+    char *checkError;
+
+    printf("ici\n");
+
+    if (file == NULL) {
+        checkError = fgets(lineAnalyzed, size, stdin);
+    } else {
+        checkError = fgets(lineAnalyzed, size, file);
+    }
+
+    printf("ici : %s\n", checkError);
 
     replaceChar(lineAnalyzed, '\n', '\0');
     replaceChar(lineAnalyzed, '\r', '\0');
@@ -31,10 +36,44 @@ int readLine(FILE *file, int size, char *line, Instruction *instruction, char *i
         return 0;
     }
 
-    analyseLine(lineAnalyzed, instruction);
+    printf("ici\n");
+
+    analyseLine(lineAnalyzed, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
     getOutput(instruction, instructionHex);
 
     return 1;
+}
+
+void readInteractif(int registers[32]) {
+    int isEnd = 0;
+
+    while (!isEnd) {
+        Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
+        setError(instruction, NO_ERROR);
+
+        char instructionHex[9], line[100];
+        int resultat = readLine(NULL, 100, line, instruction, instructionHex);
+
+        if (!resultat) {
+            continue;
+        }
+
+        free(instruction);
+
+        // printf("%s\n", line);
+        printf("%s\n", instructionHex);
+
+        int errorCode =  isError(instruction);
+
+        if (errorCode) {
+            printf("Erreur détéctée sur l'instruction !!\n");
+            printf("Code d'erreur : %d\n", errorCode);
+            showError(instruction);
+        }
+
+        char temp;
+        temp = scanf("%c", &temp);
+    }
 }
 
 void readAuto(FILE *progAsembleur, FILE *fichierAssemble, int registers[32]) {
@@ -175,8 +214,6 @@ void setNbParametersFromLine(char *nbParametersChar, Instruction *instruction) {
 }
 
 void setParametersFromLine(char *line, char *inputFormat, Instruction *instruction) {
-    char temp[8];
-    int parameters[4];
     /*
     Dans les types I, J, et R les instructions recoivent au maximum 3 paramètres
     Dans le type R, le code binaire contient 4 paramètres : rd, rs, rt et sa
@@ -184,6 +221,8 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     On ne donne donc pas de valeur à parametre[3] qui sera forcément nul
     */
 
+    char temp[8];
+    int parameters[4];
     int nbParameters = sscanf(line, inputFormat, temp, &parameters[0], &parameters[1], &parameters[2]);
     
     if (instruction->nbParameters != nbParameters -1) { // si on récupère un mauvais nombre de paramètres

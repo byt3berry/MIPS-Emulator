@@ -9,6 +9,12 @@
 #include "..//include//fonctionFiles.h"
 #include "..//include//utils.h"
 
+// TODO: implémenter la distinction entre les mnémoniques de registres et les registres
+// TODO: ranger les fonctions dans des fichiers spécifiques
+// TODO: verifier que les erreurs soient bien checkées pour le nouveau code
+// TODO: implémenter immédiats en hex
+// TODO: bug programme si un caractere n'est ni une lettre, ni un nombre, ni un $ ou une ,
+
 int main(int argc, char **argv) {
     printf("Hello émulateur MIPS!\n");
 
