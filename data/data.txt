@@ -1,0 +1,28 @@
+operateur ; OPcode ; nbParametres ; FORMAT_INPOUT ; ORDER_PARAMETER_OUTPOUT
+
+J ; 2 ; 1 ; %s %d ; 1
+JAL ; 3 ; 1 ; %s %d ; 1
+ADDI ; 8 ; 3 ; %s $%d, $%d, %d ; 2 1 3
+BEQ ; 4 ; 3 ; %s $%d, $%d, %d ; 1 2 3
+BNE ; 5 ; 3 ; %s $%d, $%d, %d ; 1 2 3
+LW ; 35 ; 3 ; %s $%d, %d($%d) ; 3 1 2
+SW ; 43 ; 3 ; %s $%d, %d($%d) ; 3 1 2
+BGTZ ; 7 ; 2 ; %s $%d, %d ; 1 0 2
+BLEZ ; 6 ; 2 ; %s $%d, %d ; 1 0 2
+LUI ; 15 ; 2 ; %s $%d, %d ; 0 1 2
+ADD ; 32 ; 3 ; %s $%d, $%d, $%d ; 2 3 1 0
+AND ; 36 ; 3 ; %s $%d, $%d, $%d ; 2 3 1 0
+OR ; 37 ; 3 ; %s $%d, $%d, $%d ; 2 3 1 0
+SLT ; 42 ; 3 ; %s $%d, $%d, $%d ; 2 3 1 0
+SUB ; 34 ; 3 ; %s $%d, $%d, $%d ; 2 3 1 0
+XOR ; 38 ; 3 ; %s $%d, $%d, $%d ; 2 3 1 0
+ROTR ; 2 ; 3 ; %s $%d, $%d, $%d ; -1 2 1 3
+SLL ; 0 ; 3 ; %s $%d, $%d, %d ; 0 2 1 3
+SRL ; 2 ; 3 ; %s $%d, $%d, %d ; 0 2 1 3
+DIV ; 26 ; 2 ; %s $%d, $%d ; 1 2 0 0
+MULT ; 24 ; 2 ; %s $%d, $%d ; 1 2 0 0
+MFHI ; 16 ; 1 ; %s $%d ; 0 0 1 0
+MFLO ; 18 ; 1 ; %s $%d ; 0 0 1 0
+JR ; 8 ; 1 ; %s $%d ; 1 0 0 0
+NOP ; 0 ; 0 ; %s ; 0 0 0 0
+SYSCALL ; 18 ; 0 ; %s ; 0 0 0 0
