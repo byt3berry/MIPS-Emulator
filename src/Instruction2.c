@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../include/Instruction.h"
+#include "../include/Instruction2.h"
 #include "../include/utils.h"
 #include "constantes.c"
 
@@ -78,7 +78,7 @@ void setOutputR(Instruction *instruction, char *output) {
 void setOutputI(Instruction *instruction, char *output) {
     int parameters[3];
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3 && instruction->parametersOrder[i] != -2; i++) {
         int index = instruction->parametersOrder[i];
         if (index == 0) {
             parameters[i] = 0;

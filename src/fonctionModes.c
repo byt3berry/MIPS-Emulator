@@ -5,7 +5,7 @@
 #define _FONCTION_MODES_C_
 
 #include "../include/fonctionModes.h"
-#include "../include/fonctionFiles.h"
+#include "../include/fonctionFiles2.h"
 
 #endif
 

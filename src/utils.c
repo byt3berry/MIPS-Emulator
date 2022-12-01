@@ -164,7 +164,14 @@ void delLineFeed(char *string) {
     string[i] = ' ';
 }
 
-
+void replace(char* string, char suppr, char add) {
+    while(*string != '\0') {
+        if (*string == suppr) {
+            *string = add;
+        }
+        string++;
+    }
+}
 
 void toUpperCase(char *string) {
     for (int i = 0; string[i] != '\0'; i++) {
@@ -172,4 +179,8 @@ void toUpperCase(char *string) {
             string[i] -= 32;
         }
     }
+}
+
+void removeChar(char *string, char suppr) {
+    // TODO: finir la fonction
 }

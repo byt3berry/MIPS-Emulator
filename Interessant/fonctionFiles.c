@@ -5,7 +5,7 @@
 #ifndef _FONCTION_FILES_C_
 #define _FONCTION_FILES_C_
 
-#include "../include/fonctionFiles.h"
+#include "fonctionFiles.h"
 #include "../include/utils.h"
 #include "constantes.c"
 

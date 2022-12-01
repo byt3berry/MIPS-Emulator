@@ -6,7 +6,7 @@
 #include <string.h>
 #include "..//include//fonctionModes.h"
 #include "..//include//fonctionInstructions.h"
-#include "..//include//fonctionFiles.h"
+#include "..//include//fonctionFiles2.h"
 #include "..//include//utils.h"
 
 int main(int argc, char **argv) {
