@@ -1,6 +1,13 @@
 #include "..//include//utils.h"
 #include <string.h>
 
+/**
+ * It converts a decimal number to a binary number
+ * 
+ * @param dec the decimal number to convert
+ * @param nbBits the number of bits you want to convert to
+ * @param bin the binary number
+ */
 void decToBin(int dec, int nbBits, char *bin) {
     int decAbs;
     if (dec < 0) {
@@ -34,6 +41,11 @@ void decToBin(int dec, int nbBits, char *bin) {
     }
 }
 
+/**
+ * Calcul le complément à 2 d'un nombre binaire
+ * 
+ * @param nombre the string to be converted
+ */
 void complementA2(char *nombre) {
     int i = 0;
 
@@ -48,6 +60,12 @@ void complementA2(char *nombre) {
     }
 }
 
+/**
+ * It takes a string of binary digits and converts it to a string of hexadecimal digits
+ * 
+ * @param bin the binary string
+ * @param hex the hexadecimal string
+ */
 void binToHex(char *bin, char *hex) {
     int temp[8];
     int position = 0;
@@ -67,10 +85,15 @@ void binToHex(char *bin, char *hex) {
     for (int i = 0; i < 8; i++) {
         sprintf(&hex[i], "%X", temp[i]);
     }
-
-    // printf("Le nombre hexadécimal est : %s\n", hex);
 }
 
+/**
+ * It replaces all occurrences of a character in a string with another character
+ * 
+ * @param string the string to be modified
+ * @param suppr the character to be replaced
+ * @param add the character to add
+ */
 void replaceChar(char* string, char suppr, char add) {
     while(*string != '\0') {
         if (*string == suppr) {
@@ -80,6 +103,12 @@ void replaceChar(char* string, char suppr, char add) {
     }
 }
 
+/**
+ * It removes all occurrences of a character from a string
+ * 
+ * @param string the string to remove the character from
+ * @param suppr the character to be removed
+ */
 void removeChar(char *string, char suppr) {
     for (int i = 0; string[i] != '\0'; i++) {
         if (string[i] == suppr) {
@@ -90,6 +119,12 @@ void removeChar(char *string, char suppr) {
     }
 }
 
+
+/**
+ * It takes a string and converts all lowercase letters to uppercase letters
+ * 
+ * @param string The string to be converted to uppercase.
+ */
 void toUpperCase(char *string) {
     for (int i = 0; string[i] != '\0'; i++) {
         if ('a' <= string[i] && string[i] <= 'z') {

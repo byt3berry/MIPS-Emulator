@@ -31,7 +31,7 @@ int readLine(FILE *file, int size, char *line, Instruction *instruction, char *i
     replaceChar(lineAnalyzed, '#', '\0');
     strcpy(line, lineAnalyzed);
 
-    /* Checking if the line is a comment or empty. */
+    /* Si la ligne est nulle est ou un commentaire */
     if (checkError == NULL || checkError[0] == '\0') {
         return 0;
     }
@@ -155,10 +155,16 @@ void setInfos(char *line, Instruction *instruction) {
             continue;
         }
 
+        replaceChar(line, '\n', '\0');
+
+
+        /* 
+         * On modifie la linge pour qu'elle soit juste une liste de paramètres
+         * ADDI $5, $0, 5 -> ADDI $5 $0 5
+        */
         replaceChar(line, '(', ' ');
         replaceChar(line, ')', ' ');
-        replaceChar(line, '\n', '\0');
-        removeChar(line, ',');
+        replaceChar(line, ',', ' ');
 
         char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], orderParameters[10];
         sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, orderParameters);
@@ -218,7 +224,7 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     Dans les types I, J, et R les instructions recoivent au maximum 3 paramètres
     Dans le type R, le code binaire contient 4 paramètres : rd, rs, rt et sa
     Mais un des 4 sera nul (le paramètre dépend de l'instruction)
-    On ne donne donc pas de valeur à parametre[3] qui sera forcément nul
+    On ne donne donc pas de valeur à parameters[3] qui sera forcément nul
     */
 
     char temp[8];
@@ -231,7 +237,7 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     } else {
         switch (instruction->format) {
             // si le paramètre 1 est un registre
-            case 5:
+            case FORMAT_5:
             case 6:
             case 11:
             case 12:
@@ -265,10 +271,10 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     }
 }
 
-void setParametersOrderFromLine(char *orderParametresChar, Instruction *instruction) {
-    int orderParametresInt[4];
-    sscanf(orderParametresChar, "%d %d %d %d", &orderParametresInt[0], &orderParametresInt[1], &orderParametresInt[2], &orderParametresInt[3]);
-    setParametersOrder(instruction, orderParametresInt);
+void setParametersOrderFromLine(char *parametersOrderChar, Instruction *instruction) {
+    int parametersOrderInt[4];
+    sscanf(parametersOrderChar, "%d %d %d %d", &parametersOrderInt[0], &parametersOrderInt[1], &parametersOrderInt[2], &parametersOrderInt[3]);
+    setParametersOrder(instruction, parametersOrderInt);
 }
 
 void checkRegisterExistence(Instruction *instruction, int parameter) {
