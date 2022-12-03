@@ -235,34 +235,24 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
         setNOP(instruction);
         setError(instruction, BAD_NBPARAMETERS);
     } else {
-        switch (instruction->format) {
+        int format = instruction->format;
+
+        if (format == 5 || format == 6 || format == 11 || format == 12) {
             // si le paramètre 1 est un registre
-            case FORMAT_5:
-            case 6:
-            case 11:
-            case 12:
-                checkRegisterExistence(instruction, parameters[0]);
-                break;
+            checkRegisterExistence(instruction, parameters[0]);
+        } else if (format == 2 || format == 3 || format == 9 || format == 10) {
             // si les paramètres 1 et 2 sont des registres
-            case 2:
-            case 3:
-            case 9:
-            case 10:
-                checkRegisterExistence(instruction, parameters[0]);
-                checkRegisterExistence(instruction, parameters[1]);
-                break;
+            checkRegisterExistence(instruction, parameters[0]);
+            checkRegisterExistence(instruction, parameters[1]);
+        } else if (format == 4) {
             // si les paramètres 1 et 3 sont des registres
-            case 4:
-                checkRegisterExistence(instruction, parameters[0]);
-                checkRegisterExistence(instruction, parameters[2]);
-                break;
+            checkRegisterExistence(instruction, parameters[0]);
+            checkRegisterExistence(instruction, parameters[2]);
+        } else if (format == 7 || format == 8) {
             // si les paramètres 1, 2 et 3 sont des registres
-            case 7:
-            case 8:
-                checkRegisterExistence(instruction, parameters[0]);
-                checkRegisterExistence(instruction, parameters[1]);
-                checkRegisterExistence(instruction, parameters[2]);
-                break;
+            checkRegisterExistence(instruction, parameters[0]);
+            checkRegisterExistence(instruction, parameters[1]);
+            checkRegisterExistence(instruction, parameters[2]);
         }
     }
 
@@ -278,7 +268,7 @@ void setParametersOrderFromLine(char *parametersOrderChar, Instruction *instruct
 }
 
 void checkRegisterExistence(Instruction *instruction, int parameter) {
-    if (parameter < 0 || 31 <= parameter) {
+    if (parameter < 0 || 31 < parameter) {
         setError(instruction, BAD_REGISTER);
     }
 }
