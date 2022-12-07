@@ -49,13 +49,13 @@ void decToBin(int dec, int nbBits, char *bin) {
 void complementA2(char *nombre) {
     int i = 0;
 
-    while (nombre[i] != '\0'){i++;}  // on va a la fin de la boucle
+    while (nombre[i] != '\0'){i++;}  // on va a la fin de la chaine
     while (i >= 0 && nombre[i] != '1'){i--;} // on cherche le dernier 1
 
     i--;
 
     while (i >= 0) {
-        nombre[i] = (nombre[i] == '1') ? '0' : '1';
+        nombre[i] = (nombre[i] == '1') ? '0' : '1';  // si on a un 1, ca devient un 0, sinon ca devient un 1
         i--;
     }
 }

@@ -5,8 +5,6 @@
 #include <math.h>
 #include <string.h>
 #include "..//include//fonctionModes.h"
-#include "..//include//fonctionInstructions.h"
-#include "..//include//fonctionFiles.h"
 #include "..//include//utils.h"
 
 // TODO: implémenter la distinction entre les mnémoniques de registres et les registres

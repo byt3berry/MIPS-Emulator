@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifndef _INSTRUCTION_C_
+#define _INSTRUCTION_C_
+
 #include "../include/Instruction.h"
 #include "../include/utils.h"
 #include "constantes.c"
+
+ #endif
 
 void printInfos(Instruction *instruction) {
     printf("operateur     : %s\n", instruction->operateur);

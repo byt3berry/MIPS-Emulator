@@ -11,8 +11,6 @@ void binToHex(char *, char *);
 
 void binToHex2(char *);
 
-void delLineFeed(char *);
-
 void removeChar(char *, char);
 
 void replaceChar(char *, char, char);
