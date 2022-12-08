@@ -80,7 +80,7 @@ internet à été très utile quant à la compréhension de ces notations.]
   - [x] Implémenté la traduction pour des instructions de toutes les catéories
       (calcul, comparaisons, sauts, HI/LO, mémoire)
   - [x] Implémenté la traduction pour toutes les instructions de l'annexe 2
-  - [ ] Pris en compte les cas particuliers : valeurs négatives, hors limites,
+  - [x] Pris en compte les cas particuliers : valeurs négatives, hors limites,
       noms d'instructions ou opérandes invalides...
 
 
@@ -90,15 +90,46 @@ internet à été très utile quant à la compréhension de ces notations.]
 
 * Quelle structure en modules planifiez-vous d'utiliser pour l'émulateur ?
 
-[COMPLÉTER ICI]
+[Nous avons huit modules différents :
+ - "modes.h"       : Les fonctions pour lancer les différents modes de lecture
+ - "read.h"        : Les fonctions pour lire les fichiers en fonction du mode
+                     de lecture
+ - "analyse.h"     : Fonctions pour extraire les données utiles de chaques 
+                     instruction
+ - "Instruction.h" : Gestion des objets instructions
+ - "execute.h"     : Les fonctions pour éxecuter les instructions
+ - "registers.h"   : Les fonctions pour gérer les registres (lecture, écriture)
+ - "utils.h"       : Les fonctions de conversion ou d'édition de chaines de
+                     caractères
+ - "constantes.h"  : Les constantes pour clarifier le code]
 
 * Quelles seront les fonctions principales de chaque module ?
 
-[COMPLÉTER ICI]
+[- "modes.h"       : "modeInteractif", "modeAutoPasAPas", "modeAuto" en
+                     fonctin du mode de lecture
+ - "read.h"        : "readLine", récupère une ligne dans le fichier à lire,
+                     appelle la fonction d'analyse
+ - "analyse.h"     : "analyseLine" récupère les différents paramètres de chaque
+                     instruction : opérateur, OPcode, registres ou immédiats
+ - "Instruction.h" : "setOutputFull" appelle les fonctions qui vont générer le
+                     code hexadécimal de l'instruction en distinguant le
+                     format (R, I ou J)
+ - "execute.h"     : Pas encore implémenté, on aura une fonction qui
+                     déterminera l'opérationà effectuer sur les registres :
+                     addition, soustraction, ...
+ - "registers.h"   : "setValueToRegister" et "getValueFromRegister" pour écrire
+                     et lire les registres
+ - "utils.h"       : "decToBin", "binToHex", "complementA2", et d'autres
+                      fonctions annexes
+ - "constantes.h"  : Aucunes fonctions ici, seulement des constantes]
 
 * Quels avantages voyez vous à cette structure (à comparer à un unique fichier)?
 
-[COMPLÉTER ICI]
+[Plusieurs modules permettent de structurer le code, le rendent ergonomique, 
+facile à parcourir et à débogger si nécessaire. Les fonctions sont regroupées
+en fonction de leurs objectifs, au lieu de faire de grandes fonctions, on essaye
+de les diviser en plus petites, plus simples et réutilisables, afin de factoriser
+le code.]
 
 
 ## Rendu 4
