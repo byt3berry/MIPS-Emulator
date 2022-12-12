@@ -5,17 +5,17 @@
 #ifndef _READ_H_
 #define _READ_H_
 
-#include "../include/read.h"
+#include "read.h"
 
 #endif
 
 #ifndef _ANALYSE_H_
 #define _ANALYSE_H_
-#include "../include/analyse.h"
+#include "analyse.h"
 
 #endif
 
-#include "../include/utils.h"
+#include "utils.h"
 #include "constantes.c"
 
 

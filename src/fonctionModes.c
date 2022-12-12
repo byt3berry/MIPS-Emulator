@@ -4,8 +4,8 @@
 #ifndef _FONCTION_MODES_C_
 #define _FONCTION_MODES_C_
 
-#include "../include/fonctionModes.h"
-#include "../include/read.h"
+#include "fonctionModes.h"
+#include "read.h"
 
 #endif
 

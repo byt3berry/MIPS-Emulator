@@ -4,8 +4,8 @@
 #ifndef _INSTRUCTION_C_
 #define _INSTRUCTION_C_
 
-#include "../include/Instruction.h"
-#include "../include/utils.h"
+#include "Instruction.h"
+#include "utils.h"
 #include "constantes.c"
 
  #endif

@@ -2,10 +2,8 @@
 // Auteurs: Cocagne_Strainovic
 
 #include <stdio.h>
-#include <math.h>
-#include <string.h>
-#include "..//include//fonctionModes.h"
-#include "..//include//utils.h"
+#include "fonctionModes.h"
+#include "utils.h"
 
 // TODO: implémenter la distinction entre les mnémoniques de registres et les registres
 // TODO: ranger les fonctions dans des fichiers spécifiques

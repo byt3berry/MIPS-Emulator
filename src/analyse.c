@@ -1,15 +1,14 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #ifndef _ANALYSE_H_
 #define _ANALYSE_H_
 
-#include "../include/analyse.h"
+#include "analyse.h"
 
 #endif
 
-#include "../include/utils.h"
+#include "utils.h"
 #include "constantes.c"
 
 

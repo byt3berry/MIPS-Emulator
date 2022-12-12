@@ -1,5 +1,4 @@
-#include "..//include//utils.h"
-#include <string.h>
+#include "utils.h"
 
 /**
  * It converts a decimal number to a binary number
