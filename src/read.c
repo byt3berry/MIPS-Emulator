@@ -46,6 +46,9 @@ int readLine(FILE *file, int size, char *line, Instruction *instruction, char *i
     // printf("ici\n");
 
     analyseLine(lineAnalyzed, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
+    
+    printInfos(instruction);
+
     getOutput(instruction, instructionHex);
 
     return 1;
@@ -68,6 +71,7 @@ void readInteractif(int registers[32]) {
         free(instruction);
 
         // printf("%s\n", line);
+        printInfos(instruction);
         printf("%s\n", instructionHex);
 
         int errorCode =  isError(instruction);

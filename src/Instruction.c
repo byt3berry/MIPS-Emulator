@@ -146,6 +146,7 @@ void setNOP(Instruction *instruction) {
 
 void setError(Instruction *instruction, int error) {
     instruction->error = error;
+    showError(instruction);
 }
 
 int isError(Instruction *instruction) {
