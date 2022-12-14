@@ -185,11 +185,12 @@ void checkRegisterExistence(Instruction *instruction, char *strParameter, int *i
 int findRegisterNumber(char *mnemonic) {
     FILE *file = fopen("data/registers.txt", "r");
     int output = -1;
-    int nbLine = 0;
+    int nbLine = -1;
 
     while (!feof(file) && output == -1) {
         char line[5];
         char *checkError = fgets(line, 5, file);
+        replaceChar(line, '\n', '\0');
 
         if (checkError[0] == '#' || checkError[0] == '\n') {
             continue;

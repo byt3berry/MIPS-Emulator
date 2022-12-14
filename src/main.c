@@ -14,15 +14,6 @@
 // TODO: bug programme si un caractere n'est ni une lettre, ni un nombre, ni un $ ou une ,
 
 int main(int argc, char **argv) {
-//    char strParameters[5][10] = {0};
-//    char string[20] = "ADDI $5  $0 5";
-//    int x = splitString(string, strParameters, ' ');
-//    printf("%s : %s : %s : %s : %s : %d\n", strParameters[0], strParameters[1], strParameters[2], strParameters[3], strParameters[4], x);
-
-//    char output1[20], output2[20], output3[20], output4[20];
-//    sscanf("ok ok2,ok3,ok4", "%s %s , %s , %s", output1, output2, output3, output4);
-//    printf("%s : %s : %s : %s\n", output1, output2, output3, output4);
-
     int registers[32] = {0};
 
     switch (argc) {
@@ -31,7 +22,9 @@ int main(int argc, char **argv) {
             modeInteractif(registers);
             break;
         case 3:
-            printf("* * * * * * * * * * * *  Mode Pas a pas * * * * * * * * * * *\n\n");
+            printf("* * * * * * * * * * * *  Mode Pas a pas * * * * * * * * * * *\n");
+            printf("Appuyez sur [ENTRER] pour passer à l'instruction suivante\n");
+            printf("Appuyez sur n'importe quelle touche pour quitter l'émulateur\n\n");
             modeAutoPasAPas(argv[1], registers);
             break;
         case 4:

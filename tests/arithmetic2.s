@@ -1,6 +1,6 @@
-ADDI $1, $1, 14
-ADDI $2, $2, 27
-ADD $3, $2, $1
+ADDI $at, $at, 14
+ADDI $v0, $v0, 27
+ADD $v1, $v0, $1
 SUB $4, $2, $1
 MULT $4, $3
 MFHI $5

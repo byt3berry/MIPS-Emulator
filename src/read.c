@@ -51,12 +51,7 @@ int readLine(FILE *file, int size, char *line, Instruction *instruction, char *i
         return 0;
     }
 
-    printf("%s\n", line);
-    printf("%s\n", lineAnalyzed);
-
     analyseLine(lineAnalyzed, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
-    
-//    printInfos(instruction);
 
     getOutput(instruction, instructionHex);
 
@@ -133,10 +128,7 @@ void readPas(FILE *progAsembleur, int registers[32]) {
             continue;
         }
 
-
-        // printInfos(instruction);
-//        printf("%s\n", line);
-        printf("%s\n", instructionHex);
+        printf("%s\n", line);
 
         int errorCode =  isError(instruction);
 
@@ -144,12 +136,18 @@ void readPas(FILE *progAsembleur, int registers[32]) {
             printf("Erreur détéctée sur l'instruction !!\n");
             printf("Code d'erreur : %d\n", errorCode);
             showError(instruction);
+        } else {
+            printf("%s\n", instructionHex);
         }
 
         free(instruction);
 
+//        char temp[50];
+//        scanf("%s\r\n", temp);
 
-        char temp;
-        temp = scanf("%c", &temp);
+        char temp[50];
+        if (*fgets(temp, 50, stdin) != '\n') {
+            break;
+        }
     }
 }
