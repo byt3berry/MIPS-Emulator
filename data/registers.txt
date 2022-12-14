@@ -31,4 +31,4 @@ sp
 fp
 ra
 
-# ici ligne-1 correspond au numero du registre
+# ligne-1 correspond au numero du registre

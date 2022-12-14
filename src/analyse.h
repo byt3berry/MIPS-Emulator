@@ -10,6 +10,8 @@
 
 void analyseLine(char *, Instruction *);
 
+void setInfos(char *, Instruction *);
+
 void setOperateurFromLine(char *, Instruction *);
 
 void setOperateurFormat(char *, Instruction *);
@@ -22,6 +24,8 @@ void setParametersFromLine(char *, char *, Instruction *);
 
 void setParametersOrderFromLine(char *, Instruction *);
 
-void checkRegisterExistence(Instruction *, int);
+void formatParameter(char *, int *);
 
-void setInfos(char *, Instruction *);
+void checkRegisterExistence(Instruction *, char *, int *);
+
+int findRegisterNumber(char *);

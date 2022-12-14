@@ -6,7 +6,7 @@
 
 #include "Instruction.h"
 #include "utils.h"
-#include "constantes.c"
+#include "constantes.h"
 
  #endif
 
@@ -106,13 +106,14 @@ void setOutputI(Instruction *instruction, char *output) {
 }
 
 void setOutputJ(Instruction *instruction, char *output) {
-    char OPcode[OPCODE_FUNC_SIZE];
+    char OPcode[OPCODE_FUNC_SIZE+1];
     char x[J_TARGET_SIZE+1];
 
     decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, OPcode);
     decToBin(instruction->parameters[0], J_TARGET_SIZE, x);
 
     sprintf(output, "%s%s", OPcode, x);
+
 }
 
 void setOutputFull(Instruction *instruction, char *output) {
@@ -125,6 +126,7 @@ void setOutputFull(Instruction *instruction, char *output) {
     } else {
         setOutputR(instruction, output);
     }
+
 }
 
 void getOutput(Instruction *instruction, char *output) {
@@ -146,7 +148,7 @@ void setNOP(Instruction *instruction) {
 
 void setError(Instruction *instruction, int error) {
     instruction->error = error;
-    showError(instruction);
+//    showError(instruction);
 }
 
 int isError(Instruction *instruction) {

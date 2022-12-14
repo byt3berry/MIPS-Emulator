@@ -17,4 +17,8 @@ void replaceChar(char *, char, char);
 
 void toUpperCase(char *);
 
+void toLowerCase(char *);
+
 void complementA2(char *);
+
+int splitString(char *, char (*)[10], char);

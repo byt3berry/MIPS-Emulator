@@ -1,4 +1,6 @@
 #include "utils.h"
+#include <string.h>
+#include <stdlib.h>
 
 /**
  * It converts a decimal number to a binary number
@@ -18,7 +20,7 @@ void decToBin(int dec, int nbBits, char *bin) {
     char temp[nbBits];
     int i = 0;
 
-    while (decAbs > 0) {
+    while (decAbs > 0 && i < nbBits) {
         temp[i] = decAbs % 2 + '0';
         decAbs /= 2;
         i++;
@@ -130,4 +132,36 @@ void toUpperCase(char *string) {
             string[i] -= 32;
         }
     }
+}
+
+void toLowerCase(char *string) {
+    for (int i = 0; string[i] != '\0'; i++) {
+        if ('A' <= string[i] && string[i] <= 'Z') {
+            string[i] += 32;
+        }
+    }
+}
+
+int splitString(char *input, char (*output)[10], char sep) {
+    int i, j, k;
+    i = j = k = 0;
+    char mot[10];
+
+    do {
+        if (input[i] != sep || input[i+1] != sep){
+            if (input[i] == sep || input[i] == 0) {
+                mot[j] = '\0';
+                strcpy(output[k], mot);
+                j = 0;
+                k++;
+            } else {
+                mot[j] = input[i];
+                j++;
+            }
+        }
+
+        i++;
+    }  while(input[i-1] != 0);
+
+    return k;
 }

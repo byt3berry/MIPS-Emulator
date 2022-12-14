@@ -16,7 +16,7 @@
 #endif
 
 #include "utils.h"
-#include "constantes.c"
+#include "constantes.h"
 
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
@@ -38,16 +38,25 @@ int readLine(FILE *file, int size, char *line, Instruction *instruction, char *i
     replaceChar(lineAnalyzed, '#', '\0');
     strcpy(line, lineAnalyzed);
 
+    /*
+ * On modifie la ligne pour qu'elle soit juste une liste de paramètres
+ * ADDI $5, $0, 5 -> ADDI $5 $0 5
+ */
+    replaceChar(lineAnalyzed, '(', ' ');
+    replaceChar(lineAnalyzed, ')', ' ');
+    replaceChar(lineAnalyzed, ',', ' ');
+
     /* Si la ligne est nulle est ou un commentaire */
     if (checkError == NULL || checkError[0] == '\0') {
         return 0;
     }
 
-    // printf("ici\n");
+    printf("%s\n", line);
+    printf("%s\n", lineAnalyzed);
 
     analyseLine(lineAnalyzed, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
     
-    printInfos(instruction);
+//    printInfos(instruction);
 
     getOutput(instruction, instructionHex);
 
@@ -68,12 +77,6 @@ void readInteractif(int registers[32]) {
             continue;
         }
 
-        free(instruction);
-
-        // printf("%s\n", line);
-        printInfos(instruction);
-        printf("%s\n", instructionHex);
-
         int errorCode =  isError(instruction);
 
         if (errorCode) {
@@ -81,6 +84,15 @@ void readInteractif(int registers[32]) {
             printf("Code d'erreur : %d\n", errorCode);
             showError(instruction);
         }
+
+        free(instruction);
+
+        // printf("%s\n", line);
+//        printInfos(instruction);
+        printf("%s\n", instructionHex);
+
+
+
 
         char temp;
         temp = scanf("%c", &temp);
@@ -99,9 +111,13 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, int registers[32]) {
             continue;
         }
 
+//        printInfos(instruction);
+
         free(instruction);
 
         fprintf(fichierAssemble, "%s\n", instructionHex);
+
+//        break;
     }
 }
 
@@ -117,10 +133,9 @@ void readPas(FILE *progAsembleur, int registers[32]) {
             continue;
         }
 
-        free(instruction);
 
         // printInfos(instruction);
-        printf("%s\n", line);
+//        printf("%s\n", line);
         printf("%s\n", instructionHex);
 
         int errorCode =  isError(instruction);
@@ -130,6 +145,9 @@ void readPas(FILE *progAsembleur, int registers[32]) {
             printf("Code d'erreur : %d\n", errorCode);
             showError(instruction);
         }
+
+        free(instruction);
+
 
         char temp;
         temp = scanf("%c", &temp);
