@@ -123,7 +123,7 @@ void removeChar(char *string, char suppr) {
 
 /**
  * It takes a string and converts all lowercase letters to uppercase letters
- * 
+ *
  * @param string The string to be converted to uppercase.
  */
 void toUpperCase(char *string) {
@@ -142,26 +142,3 @@ void toLowerCase(char *string) {
     }
 }
 
-int splitString(char *input, char (*output)[10], char sep) {
-    int i, j, k;
-    i = j = k = 0;
-    char mot[10];
-
-    do {
-        if (input[i] != sep || input[i+1] != sep){
-            if (input[i] == sep || input[i] == 0) {
-                mot[j] = '\0';
-                strcpy(output[k], mot);
-                j = 0;
-                k++;
-            } else {
-                mot[j] = input[i];
-                j++;
-            }
-        }
-
-        i++;
-    }  while(input[i-1] != 0);
-
-    return k;
-}

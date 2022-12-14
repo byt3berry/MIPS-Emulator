@@ -35,14 +35,10 @@ void analyseLine(char *line, Instruction *instruction) {
 void setInfos(char *line, Instruction *instruction) {
     FILE *file = fopen("data/data.txt", "r");
     int isFound = 0;
-//    int i = 0;
 
     while (!feof(file) && !isFound) {
-//        printf("%d\n", i+=1);
         char lineTested[100];
         char *checkError = fgets(lineTested, 100, file);
-
-//        printf("lineTested : %s\n", lineTested);
 
         if (checkError[0] == '#' || checkError[0] == '\n') {
             continue;
@@ -52,8 +48,6 @@ void setInfos(char *line, Instruction *instruction) {
 
         char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], orderParameters[15];
         sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, orderParameters);
-//        printf("inputFormat : %s\n", inputFormat);
-//        printf("%s ;; %s ;; %s ; %s ;; %s ;; %s ;;\n", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, orderParameters);
 
         if (strcmp(instruction->operateur, operateur) == 0) {
             replaceChar(inputFormat, '+', ' ');
@@ -108,21 +102,13 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     Dans les types I, J, et R les instructions recoivent au maximum 3 paramètres
     Dans le type R, le code binaire contient 4 paramètres : rd, rs, rt et sa
     Mais un des 4 sera nul (le paramètre dépend de l'instruction)
-    On ne donne donc pas de valeur à parameters[3] qui sera forcément nul
+    On ne donne donc pas de valeur à parameters[4] qui sera forcément nul
+    Mais parameters[4] sera utile plus tard donc on le garde pour éviter une condition en plus
     */
 
-    char temp[8];
     char strParameters[5][10] = {0};
     int intParameters[5];
-//    int nbParameters = splitString(line, strParameters, ' ');
-//    removeChar(strParameters[1], ' ');
-//    removeChar(strParameters[2], ' ');
-//    removeChar(strParameters[3], ' ');
     int nbParameters = sscanf(line, inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
-
-//    printf("%s\n", line);
-//    printf("%s\n", inputFormat);
-//    printf("nbParameters : %d\n", nbParameters);
 
     if (instruction->nbParameters != nbParameters - 1) { // si on récupère un mauvais nombre de paramètres
         setNOP(instruction);
@@ -170,8 +156,7 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
 
 void setParametersOrderFromLine(char *parametersOrderChar, Instruction *instruction) {
     int parametersOrderInt[4];
-    sscanf(parametersOrderChar, "%d %d %d %d", &parametersOrderInt[0], &parametersOrderInt[1], &parametersOrderInt[2],
-           &parametersOrderInt[3]);
+    sscanf(parametersOrderChar, "%d %d %d %d", &parametersOrderInt[0], &parametersOrderInt[1], &parametersOrderInt[2], &parametersOrderInt[3]);
     setParametersOrder(instruction, parametersOrderInt);
 }
 
@@ -185,15 +170,12 @@ void formatParameter(char *strParameter, int *intParameter) {
 
 void checkRegisterExistence(Instruction *instruction, char *strParameter, int *intParameter) {
     toLowerCase(strParameter);
-//    printf("check : ");
 
     if ('a' <= strParameter[0] && strParameter[0] <= 'z') {
         *intParameter = findRegisterNumber(strParameter);
     } else {
         sscanf(strParameter, "%d", intParameter);
     }
-
-//    printf("%d\n", *intParameter);
 
     if (*intParameter < 0 || 31 < *intParameter) {
         setError(instruction, BAD_REGISTER);
@@ -208,6 +190,10 @@ int findRegisterNumber(char *mnemonic) {
     while (!feof(file) && output == -1) {
         char line[5];
         char *checkError = fgets(line, 5, file);
+
+        if (checkError[0] == '#' || checkError[0] == '\n') {
+            continue;
+        }
 
         if (strcmp(mnemonic, line) == 0) {
             output = nbLine;
