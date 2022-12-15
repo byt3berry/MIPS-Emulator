@@ -4,9 +4,8 @@
   <component name="MakefileSettings">
     <option name="linkedExternalProjectsSettings">
       <MakefileProjectSettings>
-        <option name="buildDirectory" value="./src" />
-        <option name="buildTarget" value="" />
-        <option name="cleanTarget" value="" />
+        <option name="buildDirectory" value="" />
+        <option name="buildTarget" value="emul-mips" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
@@ -17,7 +16,5 @@
       </MakefileProjectSettings>
     </option>
   </component>
-  <component name="MakefileWorkspace" PROJECT_DIR="$PROJECT_DIR$">
-    <contentRoot DIR="$PROJECT_DIR$/src" />
-  </component>
+  <component name="MakefileWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
 </project>

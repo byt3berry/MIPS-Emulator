@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef _FONCTION_MODES_C_
-#define _FONCTION_MODES_C_
-
+#ifndef FONCTION_MODES_C_
+#define FONCTION_MODES_C_
 #include "fonctionModes.h"
 #include "read.h"
-
 #endif
 
 void modeInteractif(int *registers) {

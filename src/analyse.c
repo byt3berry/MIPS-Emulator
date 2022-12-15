@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef _ANALYSE_H_
-#define _ANALYSE_H_
-
+#ifndef ANALYSE_C_
+#define ANALYSE_C_
 #include "analyse.h"
-
 #endif
 
 #include "utils.h"
@@ -33,21 +31,25 @@ void analyseLine(char *line, Instruction *instruction) {
 }
 
 void setInfos(char *line, Instruction *instruction) {
-    FILE *file = fopen("data/data.txt", "r");
+    FILE *file = fopen("data//data.txt", "r");
     int isFound = 0;
 
     while (!feof(file) && !isFound) {
+//        printf("icii\n");
         char lineTested[100];
         char *checkError = fgets(lineTested, 100, file);
+//        printf("icii\n");
 
         if (checkError[0] == '#' || checkError[0] == '\n') {
             continue;
         }
+//        printf("iciii\n");
 
         replaceChar(lineTested, '\n', '\0');
 
         char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], orderParameters[15];
         sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, orderParameters);
+//        printf("iciiii\n");
 
         if (strcmp(instruction->operateur, operateur) == 0) {
             replaceChar(inputFormat, '+', ' ');
@@ -59,6 +61,7 @@ void setInfos(char *line, Instruction *instruction) {
             setNbParametersFromLine(nbParameters, instruction);
             setParametersFromLine(line, inputFormat, instruction);
             setParametersOrderFromLine(orderParameters, instruction);
+//            printInfos(instruction);
         }
     }
 }
@@ -68,7 +71,7 @@ void setOperateurFromLine(char *line, Instruction *instruction) {
     char *tempOP = operateur;
     char *tempLine = line;
 
-    while (*tempLine != ' ' && *tempLine != '\n') { // tant qu'il n'y a pas d'espace ou de retour à la ligne
+    while (*tempLine != '\0' && *tempLine != ' ') { // tant qu'il n'y a pas d'espace ou de retour à la ligne
         *tempOP = *tempLine;
         tempOP++;
         tempLine++;
@@ -107,8 +110,11 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     */
 
     char strParameters[5][10] = {0};
-    int intParameters[5];
+    int intParameters[5] = {0};
     int nbParameters = sscanf(line, inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
+
+//    printf("line : %s\n", line);
+//    printf("%s : %s : %s : %s : %s\n", inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
 
     if (instruction->nbParameters != nbParameters - 1) { // si on récupère un mauvais nombre de paramètres
         setNOP(instruction);
@@ -119,7 +125,7 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
         if (format == 1) {
             // si le paramètre 1 est un immédiat
             formatParameter(strParameters[1], &intParameters[0]);
-        } else if (format == 2 || format == 3 || format == 9) {
+        } else if (format == 2 || format == 3 || format == 8 || format == 9) {
             // si les paramètres 1 et 2 sont des registres et 3 est un immédiat
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);  // +1 pour éliminer le $
             checkRegisterExistence(instruction, strParameters[2], &intParameters[1]);
@@ -133,7 +139,7 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
             // si le paramètre 1 est un registre et 2 est un immédiat
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
             formatParameter(strParameters[2], &intParameters[1]);
-        } else if (format == 7 || format == 8) {
+        } else if (format == 7) {
             // si les paramètres 1, 2 et 3 sont des registres
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
             checkRegisterExistence(instruction, strParameters[2], &intParameters[1]);
@@ -147,6 +153,9 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
         }
     }
+
+//    printf("parametres : %d : %d : %d : %d : %d\n", intParameters[0], intParameters[1], intParameters[2], intParameters[3], intParameters[4]);
+
 
 
     if (!isError(instruction)) {

@@ -52,4 +52,13 @@
 /* * * * * *  * * * * */
 
 
+/* * * * * * */
+/* REGISTERS */
+#define HI 32
+#define LO 33
+#define PC 34
+/* REGISTERS */
+/* * * * * * */
+
+
 #endif

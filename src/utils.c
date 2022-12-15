@@ -1,6 +1,4 @@
 #include "utils.h"
-#include <string.h>
-#include <stdlib.h>
 
 /**
  * It converts a decimal number to a binary number
@@ -16,7 +14,7 @@ void decToBin(int dec, int nbBits, char *bin) {
     } else {
         decAbs = dec;
     }
-    
+
     char temp[nbBits];
     int i = 0;
 
@@ -50,8 +48,8 @@ void decToBin(int dec, int nbBits, char *bin) {
 void complementA2(char *nombre) {
     int i = 0;
 
-    while (nombre[i] != '\0'){i++;}  // on va a la fin de la chaine
-    while (i >= 0 && nombre[i] != '1'){i--;} // on cherche le dernier 1
+    while (nombre[i] != '\0') { i++; }  // on va a la fin de la chaine
+    while (i >= 0 && nombre[i] != '1') { i--; } // on cherche le dernier 1
 
     i--;
 
@@ -95,8 +93,8 @@ void binToHex(char *bin, char *hex) {
  * @param suppr the character to be replaced
  * @param add the character to add
  */
-void replaceChar(char* string, char suppr, char add) {
-    while(*string != '\0') {
+void replaceChar(char *string, char suppr, char add) {
+    while (*string != '\0') {
         if (*string == suppr) {
             *string = add;
         }
@@ -114,7 +112,7 @@ void removeChar(char *string, char suppr) {
     for (int i = 0; string[i] != '\0'; i++) {
         if (string[i] == suppr) {
             for (int j = i; string[j] != '\0'; j++) {
-                string[j] = string[j+1];
+                string[j] = string[j + 1];
             }
         }
     }

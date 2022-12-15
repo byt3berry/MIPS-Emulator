@@ -2,17 +2,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef _READ_H_
-#define _READ_H_
-
+#ifndef READ_H_
+#define READ_H_
 #include "read.h"
-
 #endif
 
-#ifndef _ANALYSE_H_
-#define _ANALYSE_H_
+#ifndef ANALYSE_H_
+#define ANALYSE_H_
 #include "analyse.h"
+#endif
 
+#ifndef EXECUTE_H
+#define EXECUTE_H
+#include "execute.h"
 #endif
 
 #include "utils.h"
@@ -20,7 +22,7 @@
 
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
-    char lineAnalyzed[size];
+    char lineAnalyzed[size+1];
     char *checkError;
 
     // printf("ici\n");
@@ -52,6 +54,7 @@ int readLine(FILE *file, int size, char *line, Instruction *instruction, char *i
     }
 
     analyseLine(lineAnalyzed, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
+    execute(instruction);
 
     getOutput(instruction, instructionHex);
 
@@ -141,9 +144,6 @@ void readPas(FILE *progAsembleur, int registers[32]) {
         }
 
         free(instruction);
-
-//        char temp[50];
-//        scanf("%s\r\n", temp);
 
         char temp[50];
         if (*fgets(temp, 50, stdin) != '\n') {

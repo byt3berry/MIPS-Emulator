@@ -1,10 +1,8 @@
 #include <stdio.h>
 
-#ifndef _INSTRUCTION_H_
-#define _INSTRUCTION_H_
-
+#ifndef INSTRUCTION_H_
+#define INSTRUCTION_H_
 #include "Instruction.h"
-
 #endif
 
 

@@ -14,7 +14,13 @@
 // TODO: bug programme si un caractere n'est ni une lettre, ni un nombre, ni un $ ou une ,
 
 int main(int argc, char **argv) {
-    int registers[32] = {0};
+    /*
+     * De 0 à 31 : les registres de 0 à 31
+     * 32 : HI
+     * 33 : LO
+     * 34 : PC
+     */
+    int registers[35] = {0};
 
     switch (argc) {
         case 1:
