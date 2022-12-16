@@ -1,26 +1,28 @@
-J target	            Jump	                pc=pc_upper|(target<<2) 	    000010	target
-JAL target	            Jump And Link	        r31=pc; pc=target<<2 	        000011	target
-ADD rd,rs,rt	        Add	                    rd=rs+rt 	                    000000	rs	rt	rd	00000	100000
-SLL rd,rt,sa	        Shift Left Logical	    rd=rt<<sa 	                    000000	rs	rt	rd	sa	000000
-MFHI rd	                Move From HI	        rd=HI 	                        000000	0000000000	rd	00000	010000
-MFLO rd	                Move From LO	        rd=LO 	                        000000	0000000000	rd	00000	010010
-MULT rs,rt	            Multiply	            HI,LO=rs*rt 	                000000	rs	rt	0000000000	011000
-DIV rs,rt	            Divide	                HI=rs%rt; LO=rs/rt 	            000000	rs	rt	0000000000	011010
-SRL rd,rt,sa	        Shift Right Logical	    rd=rt>>sa 	                    000000	rs	rt	rd	sa	000010
-SUB rd,rs,rt	        Subtract	            rd=rs-rt 	                    000000	rs	rt	rd	00000	100010
-AND rd,rs,rt	        And	                    rd=rs&rt 	                    000000	rs	rt	rd	00000	100100	
-OR rd,rs,rt	            Or                      rd=rs|rt 	                    000000	rs	rt	rd	00000	100101
-XOR rd,rs,rt	        Exclusive Or	        rd=rs^rt 	                    000000	rs	rt	rd	00000	100110
-SLT rd,rs,rt	        Set On Less Than	    rd=rs<rt 	                    000000	rs	rt	rd	00000	101010
-JR rs	                Jump Register	        pc=rs 	                        000000	rs	000000000000000	001000
-ROTR
-BLEZ rs,offset	        Branch On 	            if(rs<=0) pc+=offset*4 	        000110	rs	00000	offset
-BGTZ rs,offset	        Branch On > 0	        if(rs>0) pc+=offset*4 	        000111	rs	00000	offset
-LW rt,offset(rs)	    Load Word	            rt=*(int*)(offset+rs) 	        100011	rs	rt	offset
-SW rt,offset(rs)	    Store Word	            *(int*)(offset+rs)=rt 	        101011	rs	rt	offset
-BEQ rs,rt,offset	    Branch On Equal	        if(rs==rt) pc+=offset*4 	    000100	rs	rt	offset
-BNE rs,rt,offset	    Branch On Not Equal	    if(rs!=rt) pc+=offset*4 	    000101	rs	rt	offset
-LUI rt,imm	            Load                    Upper Immediate	rt=imm<<16 	    001111	rs	rt	imm
-ADDI rt,rs,imm	        Add Immediate	        rt=rs+imm 	                    001000	rs	rt	imm
-NOP
-SYSCALL	                System Call	            pc=pc; pc=0x3c 	                000000	00000000000000000000	001100
+J target	            Jump	                pc = pc_upper | (target << 2)
+JAL target	            Jump And Link	        r31 = pc; pc = target << 2
+
+ADDI rt, rs, imm	    Add Immediate	        rt = rs + imm
+BEQ rs, rt, offset	    Branch On Equal	        if(rs == rt) pc += offset * 4
+BNE rs, rt, offset	    Branch On Not Equal	    if(rs != rt) pc += offset * 4
+LW rt, offset(rs)	    Load Word	            rt = *(int*)(offset + rs)
+SW rt, offset(rs)	    Store Word	            *(int*)(offset + rs) = rt
+BGTZ rs, offset	        Branch On > 0	        if(rs > 0) pc += offset * 4
+BLEZ rs, offset	        Branch On 	            if(rs <= 0) pc += offset * 4
+LUI rt, imm	            Load Upper Immediate	rt = imm << 16
+
+ADD rd, rs, rt	        Add	                    rd = rs + rt
+AND rd, rs, rt	        And	                    rd = rs & rt
+OR rd, rs, rt	        Or                      rd = rs | rt
+SLT rd, rs, rt	        Set On Less Than	    rd = rs < rt
+SUB rd, rs, rt	        Subtract	            rd = rs - rt
+XOR rd, rs, rt	        Exclusive Or	        rd = rs ^ rt
+ROTR rd, rt, sa         Rotate Word Right       rd = rt[sa-1:0] + rt[31:sa]
+SLL rd, rt, sa	        Shift Left Logical	    rd = rt << sa
+SRL rd, rt, sa	        Shift Right Logical	    rd = rt >> sa
+DIV rs, rt	            Divide	                HI = rs % rt; LO = rs / rt
+MULT rs, rt	            Multiply	            HI, LO = rs * rt
+MFHI rd	                Move From HI	        rd = HI
+MFLO rd	                Move From LO	        rd = LO
+JR rs	                Jump Register	        pc = rs
+NOP                     No Operation            $zero += 0
+SYSCALL	                System Call	            pc = pc; pc = 0x3c

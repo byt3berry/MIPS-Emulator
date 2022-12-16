@@ -1,5 +1,5 @@
-#ifndef _CONSTANTES_C_
-#define _CONSTANTES_C_
+#ifndef CONSTANTES_C_
+#define CONSTANTES_C_
 
 
 /* * * * * * * * * * *  */
@@ -11,9 +11,9 @@
 #define FORMAT_2 2
 #define FORMAT_3 3
 #define FORMAT_4 4
-// Formats R
 #define FORMAT_5 5
 #define FORMAT_6 6
+// Formats R
 #define FORMAT_7 7
 #define FORMAT_8 8
 #define FORMAT_9 9
