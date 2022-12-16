@@ -43,20 +43,19 @@ void setInfos(char *line, Instruction *instruction) {
 
         replaceChar(lineTested, '\n', '\0');
 
-        char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], orderParameters[15];
-        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, orderParameters);
-//        printf("iciiii\n");
+        char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], parametersOrder[15], executeFunction[5], executeParameters[10];
+        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder);
 
         if (strcmp(instruction->operateur, operateur) == 0) {
             replaceChar(inputFormat, '+', ' ');
-            replaceChar(orderParameters, '+', ' ');
+            replaceChar(parametersOrder, '+', ' ');
             isFound = 1;
 
             setOperateurFormat(format, instruction);
             setOperateurOPcodeOrFunc(OPcodeOrFunc, instruction);
             setNbParametersFromLine(nbParameters, instruction);
             setParametersFromLine(line, inputFormat, instruction);
-            setParametersOrderFromLine(orderParameters, instruction);
+            setParametersOrderFromLine(parametersOrder, instruction);
 //            printInfos(instruction);
         }
     }
@@ -118,33 +117,33 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     } else {
         int format = instruction->format;
 
-        if (format == 1) {
+        if (format == FORMAT_1) {
             // si le paramètre 1 est un immédiat
             formatParameter(strParameters[1], &intParameters[0]);
-        } else if (format == 2 || format == 3 || format == 8 || format == 9) {
+        } else if (format == FORMAT_2 || format == FORMAT_3 || format == FORMAT_8 || format == FORMAT_9) {
             // si les paramètres 1 et 2 sont des registres et 3 est un immédiat
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);  // +1 pour éliminer le $
             checkRegisterExistence(instruction, strParameters[2], &intParameters[1]);
             formatParameter(strParameters[3], &intParameters[2]);
-        } else if (format == 4) {
+        } else if (format == FORMAT_4) {
             // si les paramètres 1 et 3 sont des registres et 2 est un immédiat
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
             formatParameter(strParameters[2], &intParameters[1]);
             checkRegisterExistence(instruction, strParameters[3], &intParameters[2]);
-        } else if (format == 5 || format == 6) {
+        } else if (format == FORMAT_5 || format == FORMAT_6) {
             // si le paramètre 1 est un registre et 2 est un immédiat
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
             formatParameter(strParameters[2], &intParameters[1]);
-        } else if (format == 7) {
+        } else if (format == FORMAT_7) {
             // si les paramètres 1, 2 et 3 sont des registres
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
             checkRegisterExistence(instruction, strParameters[2], &intParameters[1]);
             checkRegisterExistence(instruction, strParameters[3], &intParameters[2]);
-        } else if (format == 10) {
+        } else if (format == FORMAT_10) {
             // si les paramètres 1 et 2 sont des registres
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
             checkRegisterExistence(instruction, strParameters[2], &intParameters[1]);
-        } else if (format == 11 || format == 12) {
+        } else if (format == FORMAT_11 || format == FORMAT_12) {
             // si le paramètre 1 est un registre
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
         }

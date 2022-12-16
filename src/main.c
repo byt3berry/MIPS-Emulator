@@ -38,8 +38,16 @@ int main(int argc, char **argv) {
 //    printf("%b\n", PCupper);
 //    printf("%b\n", PCupper2);
 
-    long lower64bits = getUpperBits(1, 64);
-    printf("lower 64 bits : %ld\n", lower64bits);
+//    for (int x3 = 0; x3 <= 5; x3++) {
+//        int param1 = 0b10010;
+//        int param2 = x3 % 5; // une rotation de 32 + n bits équivaut à une rotation de n bits
+//        int upperNbits = param1 & (int) getUpperBits(5 - param2, 5);
+//        int lowerNbits = param1 & (int) getLowerBits(param2);
+//        int upperNbitsShifted = upperNbits >> param2;
+//        param1 = lowerNbits << (5 - param2);
+//
+//        printf("%b : %b\n", param1, param1 | upperNbitsShifted);
+//    }
 
     /*
      * De 0 à 31 : les registres de 0 à 31

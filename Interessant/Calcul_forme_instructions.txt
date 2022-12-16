@@ -20,7 +20,7 @@ ROTR rd, rt, sa         Rotate Word Right       rd = rt[sa-1:0] + rt[31:sa]
 SLL rd, rt, sa	        Shift Left Logical	    rd = rt << sa
 SRL rd, rt, sa	        Shift Right Logical	    rd = rt >> sa
 DIV rs, rt	            Divide	                HI = rs % rt; LO = rs / rt
-MULT rs, rt	            Multiply	            HI, LO = rs * rt
+MULT rs, rt	            Multiply	            HI = (rs * rt)[63:32]; LO = (rs * rt)[31:0]
 MFHI rd	                Move From HI	        rd = HI
 MFLO rd	                Move From LO	        rd = LO
 JR rs	                Jump Register	        pc = rs

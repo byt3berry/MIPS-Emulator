@@ -53,7 +53,7 @@ void branch(int *registers, const int x1, const int x2, const char condition, co
 
 }
 
-void shiftLeft(int *registers, const int x1, const int x2, const int x3, const char isReverse){
+void shiftLeft(int *registers, const int x1, const int x2, const int x3, const char isReverse) {
     unsigned int shift;
     int toShift;
 
@@ -124,9 +124,27 @@ void moveFrom(int *registers, const int x, const char HIorLO) {
     setValueToRegister(registers, x, result);
 }
 
-//void rotate(int *registers, const int x1, const int x2, const int x3) {
-//
-//}
+void rotate(int *registers, const int x1, const int x2, const int x3) {
+    // on va effectuer une rotation vers la gauche pour simplifier le code
+    /*
+     * Exemple pour rotate 0b10010 de 3 bits vers la droite : (exemple sur 5 bits pour simplifier)
+     * upperNbits = 0b10010 & 0b11000 = 0b10000
+     * lowerNbits = 0b10010 & 0b00111 = 0b00010
+     * upperNbitsShifted = 0b10000 >> 3 = 0b00010
+     * lowerNbitsShifted = 0b00010 << 2 = 0b01000
+     * output = lowerNbitsShifted | upperNbitsShifted = 0b01010
+     */
+
+    int param1;
+    getValueFromRegister(registers, x2, &param1);
+    int param2 = x3 % 32; // une rotation de 32 + n bits équivaut à une rotation de n bits
+    int upperNbits = param1 & (int) getUpperBits(32 - param2, 32);
+    int lowerNbits = param1 & (int) getLowerBits(param2);
+    int upperNbitsShifted = upperNbits >> param2;
+    int lowerNbitsShifted = lowerNbits << (32 - param1);
+
+    setValueToRegister(registers, x1, lowerNbitsShifted | upperNbitsShifted);
+}
 
 void divide(int *registers, const int x1, const int x2) {
     int toDivide, divisor;
