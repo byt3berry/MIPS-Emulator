@@ -2,27 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef READ_H_
-#define READ_H_
 #include "read.h"
-#endif
-
-#ifndef ANALYSE_H_
-#define ANALYSE_H_
 #include "analyse.h"
-#endif
-
-#ifndef EXECUTE_H
-#define EXECUTE_H
 #include "execute.h"
-#endif
-
 #include "utils.h"
 #include "constantes.h"
 
 
 int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
-    char lineAnalyzed[size+1];
+    char lineAnalyzed[size + 1];
     char *checkError;
 
     // printf("ici\n");
@@ -75,7 +63,7 @@ void readInteractif(int registers[32]) {
             continue;
         }
 
-        int errorCode =  isError(instruction);
+        int errorCode = isError(instruction);
 
         if (errorCode) {
             printf("Erreur détéctée sur l'instruction !!\n");
@@ -88,8 +76,6 @@ void readInteractif(int registers[32]) {
         // printf("%s\n", line);
 //        printInfos(instruction);
         printf("%s\n", instructionHex);
-
-
 
 
         char temp;
@@ -133,7 +119,7 @@ void readPas(FILE *progAsembleur, int registers[32]) {
 
         printf("%s\n", line);
 
-        int errorCode =  isError(instruction);
+        int errorCode = isError(instruction);
 
         if (errorCode) {
             printf("Erreur détéctée sur l'instruction !!\n");

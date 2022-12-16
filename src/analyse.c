@@ -2,11 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef ANALYSE_C_
-#define ANALYSE_C_
 #include "analyse.h"
-#endif
-
 #include "utils.h"
 #include "constantes.h"
 

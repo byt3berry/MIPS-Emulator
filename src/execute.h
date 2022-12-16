@@ -1,7 +1,7 @@
-#ifndef INSTRUCTION_H_
-#define INSTRUCTION_H_
+#ifndef EXECUTE_H
+#define EXECUTE_H
+
 #include "Instruction.h"
-#endif
 
 void execute(Instruction *);
 
@@ -34,3 +34,5 @@ int shiftRight(int, int);
 int rotate(int, int);
 
 int condition(int, int, char);
+
+#endif

@@ -1,7 +1,7 @@
-#include <stdio.h>
 #ifndef REGISTERS_H_
 #define REGISTERS_H_
-#endif
+
+#include <stdio.h>
 
 
 void setValueToRegister(int *, int, int);  // int1 est le numero du registre, int2 est le nombre à stocker
@@ -17,3 +17,6 @@ void branch(int *, int, int, char, int);
 int getPCupper(int);  // unsigned int est la valeur de PC
 
 void incrementPC(int *, int);  // int* est l'adresse des registres, int est la valeur d'incrémentation
+
+
+#endif

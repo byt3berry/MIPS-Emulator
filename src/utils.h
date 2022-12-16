@@ -1,3 +1,6 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 #include <math.h>
 #include <stdio.h>
 
@@ -20,3 +23,5 @@ void toUpperCase(char *);
 void toLowerCase(char *);
 
 void complementA2(char *);
+
+#endif

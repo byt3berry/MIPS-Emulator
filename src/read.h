@@ -1,9 +1,8 @@
-#include <stdio.h>
+#ifndef READ_H
+#define READ_H
 
-#ifndef INSTRUCTION_H_
-#define INSTRUCTION_H_
+#include <stdio.h>
 #include "Instruction.h"
-#endif
 
 void readInteractif(int[32]);
 
@@ -12,3 +11,5 @@ void readAuto(FILE *, FILE *, int[32]);
 void readPas(FILE *, int[32]);
 
 int readLine(FILE *, int, char *, Instruction *, char *);
+
+#endif

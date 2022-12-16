@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef INSTRUCTION_H_
-#define INSTRUCTION_H_
 #include "Instruction.h"
-#endif
 #include "utils.h"
 #include "constantes.h"
+
 
 void printInfos(Instruction *instruction) {
     printf("operateur     : %s\n", instruction->operateur);

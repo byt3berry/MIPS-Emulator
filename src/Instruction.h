@@ -1,4 +1,7 @@
-typedef struct Instruction{
+#ifndef INSTRUCTION_H
+#define INSTRUCTION_H
+
+typedef struct Instruction {
     char operateur[8];
     int format;
     int OPcodeOrFunc;
@@ -39,3 +42,5 @@ void setError(Instruction *, int);
 int isError(Instruction *);
 
 void showError(Instruction *);
+
+#endif
