@@ -118,7 +118,6 @@ void removeChar(char *string, char suppr) {
     }
 }
 
-
 /**
  * It takes a string and converts all lowercase letters to uppercase letters
  *
@@ -140,3 +139,20 @@ void toLowerCase(char *string) {
     }
 }
 
+long getLowerBits(int nLowerBits) {
+    int output = 0b0;
+    int puissanceDe2 = 1;
+
+    for (int i = 0; i < nLowerBits; i++) {
+        output += puissanceDe2;
+        puissanceDe2 *= 2;
+    }
+
+    return output;
+}
+
+long getUpperBits(int nUpperBits, int nTotalBits) {
+    long output = getLowerBits(nUpperBits) << (nTotalBits - nUpperBits);
+
+    return output;
+}

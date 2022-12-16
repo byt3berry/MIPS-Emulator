@@ -3,36 +3,26 @@
 
 #include "Instruction.h"
 
-void execute(Instruction *);
+void execute(Instruction *, int *);
 
-void executeI(Instruction *);
+void jump(int *, int, int, int);  // int* est l'adresse des registres, int est la target, int vaut 1 s'il faut link, int vaut 1 si la target est dans un registre
 
-void executeJ(Instruction *);
+void branch(int *, int, int, char, int);
 
-void executeR(Instruction *);
+void shiftLeft(int *, int, int, int, char);
 
-int add(int, int);
+void add(int *, int, int, int, char, char);
 
-int substract(int, int);
+void logical(int *, int, int, int, char);
 
-int multiply(int, int);
+void moveFrom(int *, int, char);
 
-int divide(int, int);
+void rotate(int *, int, int, int);
 
-int and(int, int);
+void divide(int *, int, int);
 
-int or(int, int);
+void multiply(int *, int, int);
 
-int xor(int, int);
-
-int modulo(int, int);
-
-int shiftLeft(int, int);
-
-int shiftRight(int, int);
-
-int rotate(int, int);
-
-int condition(int, int, char);
+void memory(int *, int, int, int, char);
 
 #endif

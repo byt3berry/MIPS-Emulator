@@ -1,4 +1,4 @@
-# operateur ; format ; OPcodeOrFunc ; nbParametres ; inputFormat ; ORDER_PARAMETER_OUTPOUT ;
+# operateur ; format ; OPcodeOrFunc ; nbParametres ; inputFormat ; ORDER_PARAMETER_OUTPOUT ; executeFunction ; executeParameters ;
 J       ; 1  ; 2  ; 1 ; %s+%s          ; 1+-2+-2+-2 ;
 JAL     ; 1  ; 3  ; 1 ; %s+%s          ; 1+-2+-2+-2 ;
 ADDI    ; 2  ; 8  ; 3 ; %s+$%s+$%s+%s  ; 2+1+3+-2   ;

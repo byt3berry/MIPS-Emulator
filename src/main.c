@@ -38,6 +38,9 @@ int main(int argc, char **argv) {
 //    printf("%b\n", PCupper);
 //    printf("%b\n", PCupper2);
 
+    long lower64bits = getUpperBits(1, 64);
+    printf("lower 64 bits : %ld\n", lower64bits);
+
     /*
      * De 0 à 31 : les registres de 0 à 31
      * 32 : HI

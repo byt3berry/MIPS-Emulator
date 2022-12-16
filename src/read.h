@@ -4,12 +4,12 @@
 #include <stdio.h>
 #include "Instruction.h"
 
-void readInteractif(int[32]);
+void readInteractif(int *);
 
-void readAuto(FILE *, FILE *, int[32]);
+void readAuto(FILE *, FILE *, int *);
 
-void readPas(FILE *, int[32]);
+void readPas(FILE *, int *);
 
-int readLine(FILE *, int, char *, Instruction *, char *);
+int readLine(FILE *, int *, int, char *, Instruction *, char *);
 
 #endif

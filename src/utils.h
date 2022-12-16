@@ -4,9 +4,6 @@
 #include <math.h>
 #include <stdio.h>
 
-int areStringsEqual(char *, char *);
-
-void copyStrings(char *, char *);
 
 void decToBin(int, int, char *);
 
@@ -23,5 +20,9 @@ void toUpperCase(char *);
 void toLowerCase(char *);
 
 void complementA2(char *);
+
+long getLowerBits(int);
+
+long getUpperBits(int, int);
 
 #endif
