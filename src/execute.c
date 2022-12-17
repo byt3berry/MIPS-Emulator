@@ -3,6 +3,7 @@
 #include "registers.h"
 #include "constantes.h"
 #include "utils.h"
+#include <stdlib.h>
 
 
 //void execute(Instruction *instruction) {
@@ -82,8 +83,10 @@ void shiftLeft(int *registers, const int *executeParameters, const int *paramete
 
     x1 = parameters[executeParameters[0] - 1];
     x2 = parameters[executeParameters[1] - 1];
-    x3 = parameters[executeParameters[2] - 1];
+    x3 = executeParameters[2];
     isReverse = executeParameters[3];
+
+    printf("%d : %d : %d\n", x1, x2, x3);
 
     unsigned int shift;
 
@@ -93,6 +96,9 @@ void shiftLeft(int *registers, const int *executeParameters, const int *paramete
         shift = x3;
         getValueFromRegister(registers, x2, &x2);
     }
+    printf("ici\n");
+
+    printf("%d : %d : %d\n", x1, x2, x3);
 
     if (isReverse) {
         setValueToRegister(registers, x1, x2 >> shift);
@@ -142,16 +148,20 @@ void logical(int *registers, const int *executeParameters, const int *parameters
     int result = 0;
 
     switch (operation) {
-        case '&':
+        case 0:
+            printf("%d = %d & %d\n", x1, x2, x3);
             result = x2 & x3;
             break;
-        case '|':
+        case 1:
+            printf("%d = %d | %d\n", x1, x2, x3);
             result = x2 | x3;
             break;
-        case '^':
+        case 2:
+            printf("%d = %d ^ %d\n", x1, x2, x3);
             result = x2 ^ x3;
             break;
-        case '<':
+        case 3:
+            printf("%d = %d < %d\n", x1, x2, x3);
             result = x2 < x3;
             break;
         default:
@@ -236,7 +246,8 @@ void multiply(int *registers, const int *executeParameters, const int *parameter
     long lower32bits = getLowerBits(32);
     long upper32bits = getUpperBits(32, 64);
 
-    result = x1 * x2;
+    result = (long) x1 * (long) x2;
+
     setValueToRegister(registers, LO, (int) (result & lower32bits));
     setValueToRegister(registers, HI, (int) ((result & upper32bits) >> 32));
 }

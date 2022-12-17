@@ -58,6 +58,7 @@ void setInfos(char *line, Instruction *instruction) {
             setParametersOrderFromLine(parametersOrder, instruction);
             setExecuteFunctionFromLine(executeFunction, instruction);
             setExecuteParametersFromLine(executeParameters, instruction);
+            printInfos(instruction);
 //            printf("ready !\n");
 //            printf("%s : %s : %s : %s : %s : %s : %s : %s :\n", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
         }
@@ -224,8 +225,8 @@ int findRegisterNumber(char *mnemonic) {
     int nbLine = 0;
 
     while (!feof(file) && output == -1) {
-        char line[5];
-        char *checkError = fgets(line, 5, file);
+        char line[10];
+        char *checkError = fgets(line, 10, file);
         replaceChar(line, '\n', '\0');
 
         if (checkError[0] == '#' || checkError[0] == '\n') {
@@ -237,7 +238,6 @@ int findRegisterNumber(char *mnemonic) {
         }
 
         nbLine++;
-
     }
 
     return output;
