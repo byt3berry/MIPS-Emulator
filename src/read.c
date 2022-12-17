@@ -4,7 +4,6 @@
 
 #include "read.h"
 #include "analyse.h"
-#include "execute.h"
 #include "utils.h"
 #include "constantes.h"
 
@@ -41,8 +40,10 @@ int readLine(FILE *file, int *registers, int size, char *line, Instruction *inst
         return 0;
     }
 
+    printf("%s\n", lineAnalyzed);
+
     analyseLine(lineAnalyzed, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
-    execute(instruction, registers);
+    executeInstruction(instruction, registers);
 
     getOutput(instruction, instructionHex);
 

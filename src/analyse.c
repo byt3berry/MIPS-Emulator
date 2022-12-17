@@ -31,24 +31,21 @@ void setInfos(char *line, Instruction *instruction) {
     int isFound = 0;
 
     while (!feof(file) && !isFound) {
-//        printf("icii\n");
         char lineTested[100];
         char *checkError = fgets(lineTested, 100, file);
-//        printf("icii\n");
-
-        if (checkError[0] == '#' || checkError[0] == '\n') {
-            continue;
-        }
-//        printf("iciii\n");
-
         replaceChar(lineTested, '\n', '\0');
 
-        char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], parametersOrder[15], executeFunction[5], executeParameters[10];
-        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder);
+        if (checkError[0] == '#' || checkError[0] == '\0') {
+            continue;
+        }
+
+        char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], parametersOrder[15], executeFunction[5], executeParameters[15];
+        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
 
         if (strcmp(instruction->operateur, operateur) == 0) {
             replaceChar(inputFormat, '+', ' ');
             replaceChar(parametersOrder, '+', ' ');
+            replaceChar(executeParameters, '+', ' ');
             isFound = 1;
 
             setOperateurFormat(format, instruction);
@@ -56,6 +53,10 @@ void setInfos(char *line, Instruction *instruction) {
             setNbParametersFromLine(nbParameters, instruction);
             setParametersFromLine(line, inputFormat, instruction);
             setParametersOrderFromLine(parametersOrder, instruction);
+            setExecuteFunctionFromLine(executeFunction, instruction);
+            setExecuteParametersFromLine(executeParameters, instruction);
+            printf("ready !\n");
+            printInfos(instruction);
 //            printInfos(instruction);
         }
     }
@@ -112,7 +113,7 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
 //    printf("%s : %s : %s : %s : %s\n", inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
 
     if (instruction->nbParameters != nbParameters - 1) { // si on récupère un mauvais nombre de paramètres
-        setNOP(instruction);
+//        setNOP(instruction);
         setError(instruction, BAD_NBPARAMETERS);
     } else {
         int format = instruction->format;
@@ -163,6 +164,19 @@ void setParametersOrderFromLine(char *parametersOrderChar, Instruction *instruct
     sscanf(parametersOrderChar, "%d %d %d %d", &parametersOrderInt[0], &parametersOrderInt[1], &parametersOrderInt[2], &parametersOrderInt[3]);
     setParametersOrder(instruction, parametersOrderInt);
 }
+
+void setExecuteFunctionFromLine(char *executeFunctionChar, Instruction *instruction){
+    int executeFunctionInt;
+    sscanf(executeFunctionChar, "%d", &executeFunctionInt);
+    setExecuteFunction(instruction, executeFunctionInt);
+}
+
+void setExecuteParametersFromLine(char *executeParametersChar, Instruction *instruction) {
+    int executeParametersInt[5];
+    sscanf(executeParametersChar, "%d %d %d %d %d", &executeParametersInt[0], &executeParametersInt[1], &executeParametersInt[2], &executeParametersInt[3], &executeParametersInt[4]);
+    setExecuteParameters(instruction, executeParametersInt);
+}
+
 
 void formatParameter(char *strParameter, int *intParameter) {
     if (strParameter[0] == '0' && strParameter[1] == 'x') {

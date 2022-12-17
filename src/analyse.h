@@ -2,7 +2,9 @@
 
 #ifndef INSTRUCTION_H_
 #define INSTRUCTION_H_
+
 #include "Instruction.h"
+
 #endif
 
 
@@ -21,6 +23,10 @@ void setNbParametersFromLine(char *, Instruction *);
 void setParametersFromLine(char *, char *, Instruction *);
 
 void setParametersOrderFromLine(char *, Instruction *);
+
+void setExecuteFunctionFromLine(char *, Instruction *);
+
+void setExecuteParametersFromLine(char *, Instruction *);
 
 void formatParameter(char *, int *);
 

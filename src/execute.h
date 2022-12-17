@@ -1,28 +1,30 @@
 #ifndef EXECUTE_H
 #define EXECUTE_H
 
-#include "Instruction.h"
+//#include "Instruction.h"
 
-void execute(Instruction *, int *);
+//void execute(Instruction *);
 
-void jump(int *, int, int, int);  // int* est l'adresse des registres, int est la target, int vaut 1 s'il faut link, int vaut 1 si la target est dans un registre
+void jump(int *, int *);
 
-void branch(int *, int, int, char, int);
+void branch(int *, int *);
 
-void shiftLeft(int *, int, int, int, char);
+void shiftLeft(int *, int *);
 
-void add(int *, int, int, int, char, char);
+void add(int *, int *);
 
-void logical(int *, int, int, int, char);
+void logical(int *, int *);
 
-void moveFrom(int *, int, char);
+void moveFrom(int *, int *);
 
-void rotate(int *, int, int, int);
+void rotate(int *, int *);
 
-void divide(int *, int, int);
+void divide(int *, int *);
 
-void multiply(int *, int, int);
+void multiply(int *, int *);
 
-void memory(int *, int, int, int, char);
+void memory(int *, int *);
 
 #endif
+
+

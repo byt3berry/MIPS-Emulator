@@ -2,16 +2,19 @@
 // Auteurs: Cocagne_Strainovic
 
 #include <stdio.h>
-#include "fonctionModes.h"
-#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
+
+//#include "execute.h"
+#include "fonctionModes.h"
+#include "utils.h"
 
 // TODO: implémenter la distinction entre les mnémoniques de registres et les registres
 // TODO: ranger les fonctions dans des fichiers spécifiques
 // TODO: verifier que les erreurs soient bien checkées pour le nouveau code
 // TODO: implémenter immédiats en hex
 // TODO: bug programme si un caractere n'est ni une lettre, ni un nombre, ni un $ ou une ,
+
 
 int main(int argc, char **argv) {
 //    unsigned int PC = 0b01010110011101100111001010010100;
@@ -55,6 +58,8 @@ int main(int argc, char **argv) {
      * 33 : LO
      * 34 : PC
      */
+
+//    initializeExecuteFunctions();
     int registers[35] = {0};
 
     switch (argc) {

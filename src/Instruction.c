@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "Instruction.h"
+#include "ExecuteFunctions.h"
 #include "utils.h"
 #include "constantes.h"
 
@@ -16,6 +17,11 @@ void printInfos(Instruction *instruction) {
     printf("x2            : %d\n", instruction->parameters[1]);
     printf("x3            : %d\n", instruction->parameters[2]);
     printf("x4            : %d\n", instruction->parameters[3]);
+    printf("y1            : %d\n", instruction->executeParameters[0]);
+    printf("y2            : %d\n", instruction->executeParameters[1]);
+    printf("y3            : %d\n", instruction->executeParameters[2]);
+    printf("y4            : %d\n", instruction->executeParameters[3]);
+    printf("y5            : %d\n", instruction->executeParameters[4]);
     printf("error         : %d\n", instruction->error);
 }
 
@@ -35,7 +41,7 @@ void setNbParameters(Instruction *instruction, int nbParameters) {
     instruction->nbParameters = nbParameters;
 }
 
-void setParameters(Instruction *instruction, int *parameters) {
+void setParameters(Instruction *instruction, const int *parameters) {
     for (int i = 0; i < 4; i++) {
         if (i < instruction->nbParameters) {
             instruction->parameters[i] = parameters[i];
@@ -45,9 +51,24 @@ void setParameters(Instruction *instruction, int *parameters) {
     }
 }
 
-void setParametersOrder(Instruction *instruction, int *parametersOrder) {
+void setParametersOrder(Instruction *instruction, const int *parametersOrder) {
     for (int i = 0; i < 4; i++) {
         instruction->parametersOrder[i] = parametersOrder[i];
+    }
+}
+
+void setExecuteFunction(Instruction *instruction, int executeFunction) {
+    if (executeFunction < 0) return;
+    instruction->executeFunction = executeFunctions[executeFunction];
+}
+
+void setExecuteParameters(Instruction *instruction, int *executeParameters) {
+    for (int i = 0; i < 5; i++) {
+        if (executeParameters[i] == '~') {
+            instruction->executeParameters[i] = 0;
+        } else {
+            instruction->executeParameters[i] = executeParameters[i];
+        }
     }
 }
 
@@ -88,7 +109,7 @@ void setOutputR(Instruction *instruction, char *output) {
 void setOutputI(Instruction *instruction, char *output) {
     int parameters[3];
 
-    for (int i = 0; i < 3 && instruction->parametersOrder[i] != -2; i++) {
+    for (int i = 0; i < 3 && instruction->parametersOrder[i] != '~'; i++) {
         int index = instruction->parametersOrder[i];
         if (index == 0) {
             parameters[i] = 0;
@@ -138,6 +159,10 @@ void getOutput(Instruction *instruction, char *output) {
     char instructionBin[BINARY_CODE_SIZE + 1];
     setOutputFull(instruction, instructionBin);
     binToHex(instructionBin, output);
+}
+
+void executeInstruction(Instruction *instruction, int *registers) {
+    instruction->executeFunction(registers, instruction->executeParameters);
 }
 
 void setNOP(Instruction *instruction) {
