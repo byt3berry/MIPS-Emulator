@@ -29,8 +29,8 @@ void decToBin(int dec, int nbBits, char *bin) {
         i++;
     }
 
-    for (int i = 0; i < nbBits; i++) {
-        bin[i] = temp[nbBits - 1 - i];
+    for (int j = 0; j < nbBits; j++) {
+        bin[j] = temp[nbBits - 1 - j];
     }
 
     bin[nbBits] = '\0';
@@ -65,9 +65,9 @@ void complementA2(char *nombre) {
  * @param bin the binary string
  * @param hex the hexadecimal string
  */
-void binToHex(char *bin, char *hex) {
+void binToHex(const char *bin, char *hex) {
     int temp[8];
-    int position = 0;
+    int position;
     // char nombre_hex_affiche[8] = "";
 
     for (int i = 1; i <= 8; i++) {
@@ -139,7 +139,7 @@ void toLowerCase(char *string) {
     }
 }
 
-long getLowerBits(int nLowerBits) {
+long getLowerBits(const int nLowerBits) {
     int output = 0b0;
     int puissanceDe2 = 1;
 
@@ -151,7 +151,7 @@ long getLowerBits(int nLowerBits) {
     return output;
 }
 
-long getUpperBits(int nUpperBits, int nTotalBits) {
+long getUpperBits(const int nUpperBits, const int nTotalBits) {
     long output = getLowerBits(nUpperBits) << (nTotalBits - nUpperBits);
 
     return output;

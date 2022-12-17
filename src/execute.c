@@ -10,15 +10,23 @@
 //}
 
 // parameters = [target, link, isRegister]
-void jump(int *registers, int *parameters) {
+void jump(int *registers, const int *executeParameters, const int *parameters) {
+    printf("jump\n");
+
+    int target, link, isRegister;
+
+    target = executeParameters[0];
+    link = executeParameters[1];
+    isRegister = executeParameters[2];
+
     int PCupper = 0;
     int offset = 0;
     int PCvalue;
     getValueFromRegister(registers, PC, &PCvalue);
 
-    if (parameters[2] == 'y') {
-        parameters[0] = registers[parameters[0]];
-    } else if (parameters[1] == 'y') {
+    if (isRegister) {
+        getValueFromRegister(registers, parameters[target - 1], &target);
+    } else if (link) {
         setValueToRegister(registers, 31, PCvalue);
         offset = 2;
     } else {
@@ -26,115 +34,163 @@ void jump(int *registers, int *parameters) {
         offset = 2;
     }
 
-    setValueToRegister(registers, PC, PCupper | (parameters[0] << offset));
+    setValueToRegister(registers, PC, PCupper | (target << offset));
 }
 
 // parameters = [x1, x2, condition, offset]
-void branch(int *registers, int *parameters) {
+void branch(int *registers, const int *executeParameters, const int *parameters) {
+    printf("branch\n");
+
+    int x1, x2, condition, offset;
+
+    getValueFromRegister(registers, parameters[executeParameters[0] - 1], &x1);
+    getValueFromRegister(registers, parameters[executeParameters[1] - 1], &x2);
+    condition = executeParameters[2];
+    offset = executeParameters[3];
+
     int result = 0;
     int PCvalue;
     getValueFromRegister(registers, PC, &PCvalue);
 
-    switch (parameters[2]) {
-        case '<':
-            result = parameters[0] <= parameters[1];
+    switch (condition) {
+        case 0:
+            result = x1 == x2;
             break;
-        case '>':
-            result = parameters[0] > parameters[1];
+        case 1:
+            result = x1 != x2;
             break;
-        case '=':
-            result = parameters[0] == parameters[1];
+        case 2:
+            result = x1 > x2;
             break;
-        case '!':
-            result = parameters[0] != parameters[1];
+        case 3:
+            result = x1 <= x2;
             break;
         default:
             break;
     }
 
     if (result) {
-        incrementPC(registers, parameters[3]);
+        incrementPC(registers, offset);
     }
-
 }
 
 // parameters = [x1, x2, x3, isReverse]
-void shiftLeft(int *registers, int *parameters) {
-    unsigned int shift;
-    int toShift;
+void shiftLeft(int *registers, const int *executeParameters, const int *parameters) {
+    printf("shiftLeft\n");
 
-    if (parameters[2] == -16) {
+    int x1, x2, x3, isReverse;
+
+    x1 = parameters[executeParameters[0] - 1];
+    x2 = parameters[executeParameters[1] - 1];
+    x3 = parameters[executeParameters[2] - 1];
+    isReverse = executeParameters[3];
+
+    unsigned int shift;
+
+    if (x3 == -16) {
         shift = 16;
-        toShift = parameters[1];
     } else {
-        shift = parameters[2];
-        toShift = registers[parameters[1]];
+        shift = x3;
+        getValueFromRegister(registers, x2, &x2);
     }
 
-    if (parameters[3] == 'y') {
-        setValueToRegister(registers, parameters[0], toShift >> shift);
+    if (isReverse) {
+        setValueToRegister(registers, x1, x2 >> shift);
     } else {
-        setValueToRegister(registers, parameters[0], toShift << shift);
+        setValueToRegister(registers, x1, x2 << shift);
     }
 }
 
 // parameters = [x1, x2, x3, isSub, isImmediate]
-void add(int *registers, int *parameters) {
-    int param1, param2;
-    getValueFromRegister(registers, parameters[1], &param1);
+void add(int *registers, const int *executeParameters, const int *parameters) {
+    printf("add : %d %d %d %d %d\n", executeParameters[0], executeParameters[1], executeParameters[2], executeParameters[3], executeParameters[4]);
 
-    if (parameters[4] == 'y') {
-        param2 = parameters[2];
-    } else {
-        getValueFromRegister(registers, parameters[2], &param2);
+    int x1, x2, x3, isSub, isImmediate;
+
+    x1 = parameters[executeParameters[0] - 1];
+    getValueFromRegister(registers, parameters[executeParameters[1] - 1], &x2);
+    x3 = parameters[executeParameters[2] - 1];
+    isSub = executeParameters[3];
+    isImmediate = executeParameters[4];
+
+
+    if (!isImmediate) {
+        getValueFromRegister(registers, x3, &x3);
     }
 
-    param2 = (parameters[3] == 'y') ? -param2 : param2;
-    setValueToRegister(registers, parameters[0], param1 + param2);
+    x3 = (isSub) ? -x3 : x3;
+
+    printf("$%d = %d + %d\n", x1, x2, x3);
+
+    setValueToRegister(registers, x1, x2 + x3);
 }
 
 // parameters = [x1, x2, x3, operation]
-void logical(int *registers, int *parameters) {
-    int result = 0;
-    int param1, param2;
-    getValueFromRegister(registers, parameters[1], &param1);
-    getValueFromRegister(registers, parameters[2], &param2);
+void logical(int *registers, const int *executeParameters, const int *parameters) {
+    printf("logical\n");
 
-    switch (parameters[3]) {
+    printf("logical : %d %d %d %d\n", executeParameters[0], executeParameters[1], executeParameters[2], executeParameters[3]);
+
+    int x1, x2, x3, operation;
+
+
+    x1 = parameters[executeParameters[0] - 1];
+    getValueFromRegister(registers, parameters[executeParameters[1] - 1], &x2);
+    getValueFromRegister(registers, parameters[executeParameters[2] - 1], &x3);
+    operation = executeParameters[3];
+
+    int result = 0;
+
+    switch (operation) {
         case '&':
-            result = param1 & param2;
+            result = x2 & x3;
             break;
         case '|':
-            result = param1 | param2;
+            result = x2 | x3;
             break;
         case '^':
-            result = param1 ^ param2;
+            result = x2 ^ x3;
             break;
         case '<':
-            result = param1 < param2;
+            result = x2 < x3;
             break;
         default:
             break;
     }
 
-    setValueToRegister(registers, parameters[0], result);
+    setValueToRegister(registers, x1, result);
 }
 
 // parameters = [x, HIorLO]
-void moveFrom(int *registers, int *parameters) {
+void moveFrom(int *registers, const int *executeParameters, const int *parameters) {
+    printf("moveFrom\n");
+
+    int x, HIorLO;
+
+    x = parameters[executeParameters[0] - 1];
+    HIorLO = executeParameters[1];
+
     int result;
 
-    if (parameters[1] == 'H') {
+    if (HIorLO == 1) {
         getValueFromRegister(registers, HI, &result);
     } else {
         getValueFromRegister(registers, LO, &result);
     }
 
-    setValueToRegister(registers, parameters[0], result);
+    setValueToRegister(registers, x, result);
 }
 
-// parameters = [x1, x2, x3]
-void rotate(int *registers, int *parameters) {
+// parameters = [x1, x2, offset]
+void rotate(int *registers, const int *executeParameters, const int *parameters) {
+    printf("rotate\n");
+
+    int x1, x2, offset;
+
+    x1 = parameters[executeParameters[0] - 1];
+    getValueFromRegister(registers, parameters[executeParameters[1] - 1], &x2);
+    offset = executeParameters[2] % 32;  // une rotation de 32 + n bits équivaut à une rotation de n bits
+
     // on va effectuer une rotation vers la gauche pour simplifier le code
     /*
      * Exemple pour rotate 0b10010 de 3 bits vers la droite : (exemple sur 5 bits pour simplifier)
@@ -145,42 +201,49 @@ void rotate(int *registers, int *parameters) {
      * output = lowerNbitsShifted | upperNbitsShifted = 0b01010
      */
 
-    int param1;
-    getValueFromRegister(registers, parameters[1], &param1);
-    int param2 = parameters[2] % 32; // une rotation de 32 + n bits équivaut à une rotation de n bits
-    int upperNbits = param1 & (int) getUpperBits(32 - param2, 32);
-    int lowerNbits = param1 & (int) getLowerBits(param2);
-    int upperNbitsShifted = upperNbits >> param2;
-    int lowerNbitsShifted = lowerNbits << (32 - param1);
+    int upperNbits = x2 & (int) getUpperBits(32 - offset, 32);
+    int lowerNbits = x2 & (int) getLowerBits(offset);
+    int upperNbitsShifted = upperNbits >> offset;
+    int lowerNbitsShifted = lowerNbits << (32 - x2);
 
-    setValueToRegister(registers, parameters[0], lowerNbitsShifted | upperNbitsShifted);
+    setValueToRegister(registers, x1, lowerNbitsShifted | upperNbitsShifted);
 }
 
 // parameters = [x1, x2]
-void divide(int *registers, int *parameters) {
-    int toDivide, divisor;
-    getValueFromRegister(registers, parameters[0], &toDivide);
-    getValueFromRegister(registers, parameters[1], &divisor);
+void divide(int *registers, const int *executeParameters, const int *parameters) {
+    printf("divide\n");
 
-    setValueToRegister(registers, HI, toDivide % divisor);
-    setValueToRegister(registers, LO, toDivide / divisor);
+    int x1, x2;
+
+    getValueFromRegister(registers, parameters[executeParameters[0] - 1], &x1);
+    getValueFromRegister(registers, parameters[executeParameters[1] - 1], &x2);
+    printf("toDivide, divisor = %d, %d\n", x1, x2);
+
+    setValueToRegister(registers, HI, x1 % x2);
+    setValueToRegister(registers, LO, x1 / x2);
 }
 
 // parameters = [x1, x2]
-void multiply(int *registers, int *parameters) {
-    int param1, param2;
+void multiply(int *registers, const int *executeParameters, const int *parameters) {
+    printf("multiply\n");
+
+    int x1, x2;
+
+    getValueFromRegister(registers, parameters[executeParameters[0] - 1], &x1);
+    getValueFromRegister(registers, parameters[executeParameters[1] - 1], &x2);
+
     long result;
     long lower32bits = getLowerBits(32);
     long upper32bits = getUpperBits(32, 64);
-    getValueFromRegister(registers, parameters[0], &param1);
-    getValueFromRegister(registers, parameters[1], &param2);
 
-    result = param1 * param2;
+    result = x1 * x2;
     setValueToRegister(registers, LO, (int) (result & lower32bits));
     setValueToRegister(registers, HI, (int) ((result & upper32bits) >> 32));
 }
 
 // parameters = [x1, x2, x3, LorS]
-void memory(int *registers, int *parameters) {
+void memory(int *registers, const int *executeParameters, const int *parameters) {
+    printf("memory\n");
+
 
 }

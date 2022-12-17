@@ -42,11 +42,14 @@ void setInfos(char *line, Instruction *instruction) {
         char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], parametersOrder[15], executeFunction[5], executeParameters[15];
         sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
 
+        // TODO: Vérifier les valeurs de executeParameters !!!
+
         if (strcmp(instruction->operateur, operateur) == 0) {
             replaceChar(inputFormat, '+', ' ');
             replaceChar(parametersOrder, '+', ' ');
             replaceChar(executeParameters, '+', ' ');
             isFound = 1;
+
 
             setOperateurFormat(format, instruction);
             setOperateurOPcodeOrFunc(OPcodeOrFunc, instruction);
@@ -55,9 +58,8 @@ void setInfos(char *line, Instruction *instruction) {
             setParametersOrderFromLine(parametersOrder, instruction);
             setExecuteFunctionFromLine(executeFunction, instruction);
             setExecuteParametersFromLine(executeParameters, instruction);
-            printf("ready !\n");
-            printInfos(instruction);
-//            printInfos(instruction);
+//            printf("ready !\n");
+//            printf("%s : %s : %s : %s : %s : %s : %s : %s :\n", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
         }
     }
 }
@@ -105,9 +107,10 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     Mais parameters[4] sera utile plus tard donc on le garde pour éviter une condition en plus
     */
 
-    char strParameters[5][10] = {0};
+    char strParameters[5][100] = {0};
     int intParameters[5] = {0};
     int nbParameters = sscanf(line, inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
+
 
 //    printf("line : %s\n", line);
 //    printf("%s : %s : %s : %s : %s\n", inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
@@ -152,6 +155,8 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
 
 //    printf("parametres : %d : %d : %d : %d : %d\n", intParameters[0], intParameters[1], intParameters[2], intParameters[3], intParameters[4]);
 
+//    printf("%s : %s : %s : %s\n", strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
+//    printf("%d : %d : %d : %d\n", intParameters[0], intParameters[1], intParameters[2], intParameters[3]);
 
 
     if (!isError(instruction)) {
@@ -174,9 +179,20 @@ void setExecuteFunctionFromLine(char *executeFunctionChar, Instruction *instruct
 void setExecuteParametersFromLine(char *executeParametersChar, Instruction *instruction) {
     int executeParametersInt[5];
     sscanf(executeParametersChar, "%d %d %d %d %d", &executeParametersInt[0], &executeParametersInt[1], &executeParametersInt[2], &executeParametersInt[3], &executeParametersInt[4]);
+
+    /*
+    for (int i = 0; i < 5; i++) {
+        int testValue = executeParametersChar[i] - '0';
+        if (1 <= testValue && testValue <= 3) {
+            executeParametersInt[i] = testValue;
+        } else {
+            executeParametersInt[i] = (int) executeParametersChar[i];
+        }
+    }
+     */
+
     setExecuteParameters(instruction, executeParametersInt);
 }
-
 
 void formatParameter(char *strParameter, int *intParameter) {
     if (strParameter[0] == '0' && strParameter[1] == 'x') {
@@ -195,6 +211,8 @@ void checkRegisterExistence(Instruction *instruction, char *strParameter, int *i
         sscanf(strParameter, "%d", intParameter);
     }
 
+    printf("register : %s -> %d\n", strParameter, *intParameter);
+
     if (*intParameter < 0 || 31 < *intParameter) {
         setError(instruction, BAD_REGISTER);
     }
@@ -203,7 +221,7 @@ void checkRegisterExistence(Instruction *instruction, char *strParameter, int *i
 int findRegisterNumber(char *mnemonic) {
     FILE *file = fopen("data/registers.txt", "r");
     int output = -1;
-    int nbLine = -1;
+    int nbLine = 0;
 
     while (!feof(file) && output == -1) {
         char line[5];
@@ -219,6 +237,7 @@ int findRegisterNumber(char *mnemonic) {
         }
 
         nbLine++;
+
     }
 
     return output;

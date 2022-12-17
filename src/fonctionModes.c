@@ -3,6 +3,7 @@
 
 #include "fonctionModes.h"
 #include "read.h"
+#include "registers.h"
 
 
 void modeInteractif(int *registers) {
@@ -33,6 +34,7 @@ void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichie
     }
 
     readAuto(progAssembleur, fichierAssemble, registers);
+    writeFinalStateRegisters(registers, fichierFinal);
 
     fclose(progAssembleur);
     fclose(fichierAssemble);

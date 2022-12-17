@@ -3,7 +3,7 @@
 
 #include "execute.h"
 
-typedef void (*ExecuteFunctions) (int*, int *);
+typedef void (*ExecuteFunctions) (int*, const int *, const int *);
 
 ExecuteFunctions executeFunctions[10] = {
         jump,
@@ -17,5 +17,7 @@ ExecuteFunctions executeFunctions[10] = {
         multiply,
         memory
 };
+
+//void initExecuteFunctions();
 
 #endif

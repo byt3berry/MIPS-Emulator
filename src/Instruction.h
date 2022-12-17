@@ -11,7 +11,7 @@ typedef struct Instruction {
     int nbParameters;
     int parameters[4];
     int parametersOrder[4];
-    void (*executeFunction)(int *, int *);
+    void (*executeFunction)(int *, const int *, const int *);
     int executeParameters[5];
     int error;
 } Instruction;
@@ -30,7 +30,7 @@ void setParametersOrder(Instruction *, const int *);
 
 void setExecuteFunction(Instruction *, int);
 
-void setExecuteParameters(Instruction *, int *);
+void setExecuteParameters(Instruction *, const int *);
 
 void setOutputFull(Instruction *, char *);
 

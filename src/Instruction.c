@@ -43,6 +43,7 @@ void setNbParameters(Instruction *instruction, int nbParameters) {
 
 void setParameters(Instruction *instruction, const int *parameters) {
     for (int i = 0; i < 4; i++) {
+        printf("Parametre : %d\n", parameters[i]);
         if (i < instruction->nbParameters) {
             instruction->parameters[i] = parameters[i];
         } else {
@@ -62,12 +63,14 @@ void setExecuteFunction(Instruction *instruction, int executeFunction) {
     instruction->executeFunction = executeFunctions[executeFunction];
 }
 
-void setExecuteParameters(Instruction *instruction, int *executeParameters) {
+void setExecuteParameters(Instruction *instruction, const int *executeParameters) {
     for (int i = 0; i < 5; i++) {
-        if (executeParameters[i] == '~') {
+        int index_ = executeParameters[i];
+//        printf("index : %d\n", index_);
+        if (index_ == '~') {
             instruction->executeParameters[i] = 0;
         } else {
-            instruction->executeParameters[i] = executeParameters[i];
+            instruction->executeParameters[i] = index_;
         }
     }
 }
@@ -162,7 +165,7 @@ void getOutput(Instruction *instruction, char *output) {
 }
 
 void executeInstruction(Instruction *instruction, int *registers) {
-    instruction->executeFunction(registers, instruction->executeParameters);
+    instruction->executeFunction(registers, instruction->executeParameters, instruction->parameters);
 }
 
 void setNOP(Instruction *instruction) {

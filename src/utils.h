@@ -7,7 +7,7 @@
 
 void decToBin(int, int, char *);
 
-void binToHex(char *, char *);
+void binToHex(const char *, char *);
 
 void binToHex2(char *);
 
