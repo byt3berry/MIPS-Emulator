@@ -4,19 +4,6 @@
 
 memoryElement memory[MEMORY_SIZE] = {0};
 
-void initMemory() {
-    memoryElement element;
-    element.address = 0;
-    element.value = 0;
-    element.isUsed = 0;
-    element.isNext = 0;
-
-    for (int i = 0; i < MEMORY_SIZE; i++) {
-        memory[i] = element;
-    }
-
-    memory[0].isNext = 1;
-}
 
 void setValueToMemory(const int address, const int source) {
     int isFound = 0;
@@ -48,19 +35,8 @@ void getValueFromMemory(const int address, int *destination) {
     // TODO: Warning si on accède à une zone mémoire non allouée
 }
 
-//int findAddressInMemory(const int address) {
-//    int index = -1;
-//    for (int i = 0; i < 100 && index == -1; i += 2) {
-//        if (memory[i] == address) {
-//            index = i;
-//        }
-//    }
-//
-//    return index;
-//}
-
 void showMemoryStates() {
     for (int i = 0; i < MEMORY_SIZE /*&& memory[i].isNext*/; i++) {
-        printf("MEM[%d] : %d : %d : %d\n", memory[i].address, memory[i].value, memory[i].isUsed, memory[i].isNext);
+        printf("MEM[%d] : %d : %d\n", memory[i].address, memory[i].value, memory[i].isUsed);
     }
 }

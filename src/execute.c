@@ -7,9 +7,7 @@
 #include <stdlib.h>
 
 
-//void execute(Instruction *instruction) {
-//
-//}
+// TODO: Interdire la modification de $0
 
 // parameters = [target, link, isRegister]
 void jump(const int *executeParameters, const int *parameters) {
