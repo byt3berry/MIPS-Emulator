@@ -59,7 +59,6 @@ int main(int argc, char **argv) {
      */
 
 //    initExecuteFunctions();
-    int registers[35] = {0};
 
     switch (argc) {
         case 1:

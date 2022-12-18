@@ -1,11 +1,18 @@
-//
-// Created by mathis on 12/17/22.
-//
-//
-//#include "ExecuteFunctions.h"
-//#include "constantes.h"
-//
-//
+#include "ExecuteFunctions.h"
+
+ExecuteFunctions executeFunctions[10] = {
+        jump,
+        branch,
+        shiftLeft,
+        add,
+        logical,
+        moveFrom,
+        rotate,
+        divide,
+        multiply,
+        memory
+};
+
 //void initExecuteFunctions() {
 //    executeFunctions[JUMP] = jump;
 //    executeFunctions[BRANCH] = branch;

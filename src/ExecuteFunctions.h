@@ -5,19 +5,6 @@
 
 typedef void (*ExecuteFunctions) (int*, const int *, const int *);
 
-ExecuteFunctions executeFunctions[10] = {
-        jump,
-        branch,
-        shiftLeft,
-        add,
-        logical,
-        moveFrom,
-        rotate,
-        divide,
-        multiply,
-        memory
-};
-
-//void initExecuteFunctions();
+extern ExecuteFunctions executeFunctions[10];
 
 #endif

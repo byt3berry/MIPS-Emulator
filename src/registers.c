@@ -2,6 +2,8 @@
 #include "constantes.h"
 #include "utils.h"
 
+int registers[35] = {0};
+
 void setValueToRegister(int *registers, const int registerNumber, const int source) {
     registers[registerNumber] = source;
 }

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+extern int registers[35];
 
 void setValueToRegister(int *, int, int);  // int1 est le numero du registre, int2 est le nombre à stocker
 
