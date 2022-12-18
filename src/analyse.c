@@ -58,7 +58,7 @@ void setInfos(char *line, Instruction *instruction) {
             setParametersOrderFromLine(parametersOrder, instruction);
             setExecuteFunctionFromLine(executeFunction, instruction);
             setExecuteParametersFromLine(executeParameters, instruction);
-            printInfos(instruction);
+//            printInfos(instruction);
 //            printf("ready !\n");
 //            printf("%s : %s : %s : %s : %s : %s : %s : %s :\n", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
         }
@@ -171,7 +171,7 @@ void setParametersOrderFromLine(char *parametersOrderChar, Instruction *instruct
     setParametersOrder(instruction, parametersOrderInt);
 }
 
-void setExecuteFunctionFromLine(char *executeFunctionChar, Instruction *instruction){
+void setExecuteFunctionFromLine(char *executeFunctionChar, Instruction *instruction) {
     int executeFunctionInt;
     sscanf(executeFunctionChar, "%d", &executeFunctionInt);
     setExecuteFunction(instruction, executeFunctionInt);
@@ -212,7 +212,7 @@ void checkRegisterExistence(Instruction *instruction, char *strParameter, int *i
         sscanf(strParameter, "%d", intParameter);
     }
 
-    printf("register : %s -> %d\n", strParameter, *intParameter);
+//    printf("register : %s -> %d\n", strParameter, *intParameter);
 
     if (*intParameter < 0 || 31 < *intParameter) {
         setError(instruction, BAD_REGISTER);

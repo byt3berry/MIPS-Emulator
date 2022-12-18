@@ -2,6 +2,7 @@
 #define INSTRUCTION_H
 
 #include "execute.h"
+#include "ExecuteFunctions.h"
 
 
 typedef struct Instruction {
@@ -11,7 +12,7 @@ typedef struct Instruction {
     int nbParameters;
     int parameters[4];
     int parametersOrder[4];
-    void (*executeFunction)(int *, const int *, const int *);
+    ExecuteFunctions executeFunction;
     int executeParameters[5];
     int error;
 } Instruction;
@@ -42,7 +43,7 @@ void setOutputJ(Instruction *, char *);
 
 void getOutput(Instruction *, char *);
 
-void executeInstruction(Instruction *, int *);
+void executeInstruction(Instruction *);
 
 void printInfos(Instruction *);
 

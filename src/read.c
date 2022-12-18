@@ -7,9 +7,10 @@
 #include "utils.h"
 #include "constantes.h"
 #include "registers.h"
+#include "memory.h"
 
 
-int readLine(FILE *file, int *registers, int size, char *line, Instruction *instruction, char *instructionHex) {
+int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
     char lineAnalyzed[size + 1];
     char *checkError;
 
@@ -45,15 +46,17 @@ int readLine(FILE *file, int *registers, int size, char *line, Instruction *inst
 
     analyseLine(lineAnalyzed, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
 //    printInfos(instruction);
-    executeInstruction(instruction, registers);
-    showRegistersStates(registers);
+    executeInstruction(instruction);
+    showRegistersStates();
+    showMemoryStates();
 
     getOutput(instruction, instructionHex);
+    printf("\n");
 
     return 1;
 }
 
-void readInteractif(int *registers) {
+void readInteractif() {
     int isEnd = 0;
 
     while (!isEnd) {
@@ -61,7 +64,7 @@ void readInteractif(int *registers) {
         setError(instruction, NO_ERROR);
 
         char instructionHex[9], line[100];
-        int resultat = readLine(NULL, registers, 100, line, instruction, instructionHex);
+        int resultat = readLine(NULL, 100, line, instruction, instructionHex);
 
         if (!resultat) {
             continue;
@@ -87,13 +90,13 @@ void readInteractif(int *registers) {
     }
 }
 
-void readAuto(FILE *progAsembleur, FILE *fichierAssemble, int *registers) {
+void readAuto(FILE *progAsembleur, FILE *fichierAssemble) {
     while (!feof(progAsembleur)) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
         setError(instruction, NO_ERROR);
 
         char instructionHex[9], line[100];
-        int resultat = readLine(progAsembleur, registers, 100, line, instruction, instructionHex);
+        int resultat = readLine(progAsembleur, 100, line, instruction, instructionHex);
 
         if (!resultat) {
             continue;
@@ -109,13 +112,13 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, int *registers) {
     }
 }
 
-void readPas(FILE *progAsembleur, int *registers) {
+void readPas(FILE *progAsembleur) {
     while (!feof(progAsembleur)) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
         setError(instruction, NO_ERROR);
 
         char instructionHex[9], line[100];
-        int resultat = readLine(progAsembleur, registers, 100, line, instruction, instructionHex);
+        int resultat = readLine(progAsembleur, 100, line, instruction, instructionHex);
 
         if (!resultat) {
             continue;

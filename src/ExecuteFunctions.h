@@ -3,7 +3,7 @@
 
 #include "execute.h"
 
-typedef void (*ExecuteFunctions) (int*, const int *, const int *);
+typedef void (*ExecuteFunctions) (const int *, const int *);
 
 extern ExecuteFunctions executeFunctions[10];
 

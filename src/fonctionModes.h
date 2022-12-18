@@ -2,11 +2,11 @@
 #define FONCTION_MODES_H
 
 
-void modeInteractif(int *);
+void modeInteractif();
 
-void modeAutoPasAPas(char *, int *);
+void modeAutoPasAPas(char *);
 
-void modeAuto(char *, char *, char *, int *);
+void modeAuto(char *, char *, char *);
 
 
 #endif

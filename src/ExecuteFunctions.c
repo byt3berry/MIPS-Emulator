@@ -10,18 +10,5 @@ ExecuteFunctions executeFunctions[10] = {
         rotate,
         divide,
         multiply,
-        memory
+        memoryAccess
 };
-
-//void initExecuteFunctions() {
-//    executeFunctions[JUMP] = jump;
-//    executeFunctions[BRANCH] = branch;
-//    executeFunctions[SHIFT_LEFT] = shiftLeft;
-//    executeFunctions[ADD] = add;
-//    executeFunctions[LOGICAL] = logical;
-//    executeFunctions[MOVE_FROM] = moveFrom;
-//    executeFunctions[ROTATE] = rotate;
-//    executeFunctions[DIVIDE] = divide;
-//    executeFunctions[MULTIPLY] = multiply;
-//    executeFunctions[MEMORY] = memory;
-//}

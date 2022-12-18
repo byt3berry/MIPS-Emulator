@@ -4,11 +4,11 @@
 
 int registers[35] = {0};
 
-void setValueToRegister(int *registers, const int registerNumber, const int source) {
+void setValueToRegister(const int registerNumber, const int source) {
     registers[registerNumber] = source;
 }
 
-void getValueFromRegister(const int *registers, const int registerNumber, int *destination) {
+void getValueFromRegister(const int registerNumber, int *destination) {
     *destination = registers[registerNumber];
 }
 
@@ -17,21 +17,21 @@ int getPCupper(const int PCvalue) {
     return PCvalue & ((int) PCupper);
 }
 
-void incrementPC(int *registers, const int offset) {
+void incrementPC(const int offset) {
     int pcValue;
-    getValueFromRegister(registers, PC, &pcValue);
-    setValueToRegister(registers, PC, pcValue + offset * 4);
+    getValueFromRegister(PC, &pcValue);
+    setValueToRegister(PC, pcValue + offset * 4);
 }
 
-void showRegistersStates(int *registers) {
+void showRegistersStates() {
     for (int i = 0; i < 35; i++) {
-        if (registers[i] != -1) {
+        if (registers[i] != 0) {
             printf("register %d : %d\n", i, registers[i]);
         }
     }
 }
 
-void writeFinalStateRegisters(int *registers, FILE *fichierFinal) {
+void writeFinalStateRegisters(FILE *fichierFinal) {
     for (int i = 0; i < 32; i++) {
         fprintf(fichierFinal, "$%.2d:%d\n", i, registers[i]);
     }

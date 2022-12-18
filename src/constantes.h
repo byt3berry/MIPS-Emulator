@@ -77,5 +77,6 @@
 /* REGISTERS */
 /* * * * * * */
 
+#define MEMORY_SIZE 5
 
 #endif

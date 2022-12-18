@@ -43,7 +43,7 @@ void setNbParameters(Instruction *instruction, int nbParameters) {
 
 void setParameters(Instruction *instruction, const int *parameters) {
     for (int i = 0; i < 4; i++) {
-        printf("Parametre : %d\n", parameters[i]);
+//        printf("Parametre : %d\n", parameters[i]);
         if (i < instruction->nbParameters) {
             instruction->parameters[i] = parameters[i];
         } else {
@@ -164,8 +164,8 @@ void getOutput(Instruction *instruction, char *output) {
     binToHex(instructionBin, output);
 }
 
-void executeInstruction(Instruction *instruction, int *registers) {
-    instruction->executeFunction(registers, instruction->executeParameters, instruction->parameters);
+void executeInstruction(Instruction *instruction) {
+    instruction->executeFunction(instruction->executeParameters, instruction->parameters);
 }
 
 void setNOP(Instruction *instruction) {

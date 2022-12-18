@@ -5,25 +5,25 @@
 
 //void execute(Instruction *);
 
-void jump(int *, const int *, const int *);
+void jump(const int *, const int *);
 
-void branch(int *, const int *, const int *);
+void branch(const int *, const int *);
 
-void shiftLeft(int *, const int *, const int *);
+void shiftLeft(const int *, const int *);
 
-void add(int *, const int *, const int *);
+void add(const int *, const int *);
 
-void logical(int *, const int *, const int *);
+void logical(const int *, const int *);
 
-void moveFrom(int *, const int *, const int *);
+void moveFrom(const int *, const int *);
 
-void rotate(int *, const int *, const int *);
+void rotate(const int *, const int *);
 
-void divide(int *, const int *, const int *);
+void divide(const int *, const int *);
 
-void multiply(int *, const int *, const int *);
+void multiply(const int *, const int *);
 
-void memory(int *, const int *, const int *);
+void memoryAccess(const int *, const int *);
 
 #endif
 

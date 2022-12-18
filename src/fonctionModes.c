@@ -6,11 +6,11 @@
 #include "registers.h"
 
 
-void modeInteractif(int *registers) {
-    readInteractif(registers);
+void modeInteractif() {
+    readInteractif();
 }
 
-void modeAutoPasAPas(char *nomProgAssembleur, int *registers) {
+void modeAutoPasAPas(char *nomProgAssembleur) {
     FILE *progAssembleur = fopen(nomProgAssembleur, "r");
 
     if (progAssembleur == NULL) {
@@ -18,12 +18,12 @@ void modeAutoPasAPas(char *nomProgAssembleur, int *registers) {
         exit(1);
     }
 
-    readPas(progAssembleur, registers);
+    readPas(progAssembleur);
 
     fclose(progAssembleur);
 }
 
-void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichierFinal, int *registers) {
+void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichierFinal) {
     FILE *progAssembleur = fopen(nomProgAssembleur, "r");
     FILE *fichierAssemble = fopen(nomFichierAssemble, "w");
     FILE *fichierFinal = fopen(nomFichierFinal, "w");
@@ -33,8 +33,8 @@ void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichie
         exit(1);
     }
 
-    readAuto(progAssembleur, fichierAssemble, registers);
-    writeFinalStateRegisters(registers, fichierFinal);
+    readAuto(progAssembleur, fichierAssemble);
+    writeFinalStateRegisters(fichierFinal);
 
     fclose(progAssembleur);
     fclose(fichierAssemble);
