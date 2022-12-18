@@ -288,3 +288,9 @@ void memoryAccess(const int *executeParameters, const int *parameters) {
 
 
 }
+
+// parameters = [rien]
+void nothing(const int *executeParameters, const int *parameters) {
+    int rien = executeParameters[parameters[0]];
+    incrementPC(rien);
+}

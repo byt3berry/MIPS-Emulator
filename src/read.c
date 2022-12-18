@@ -58,36 +58,19 @@ int readLine(FILE *file, int size, char *line, Instruction *instruction, char *i
 }
 
 void readInteractif() {
+    Instruction *instructions[LINES_NUMBER_MAX] = {0};
+    int index = 0;
     int isEnd = 0;
 
     while (!isEnd) {
-        Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
-        setError(instruction, NO_ERROR);
+        getAllInstructions(NULL, instructions, index);
+        assemble(NULL, instructions, index);
+        execute(instructions, index);
 
-        char instructionHex[9], line[100];
-        int resultat = readLine(NULL, 100, line, instruction, instructionHex);
-
-        if (!resultat) {
-            continue;
+        char temp[50] = {0};
+        if (*fgets(temp, 50, stdin) != '\n') {
+            isEnd = 1;
         }
-
-        int errorCode = isError(instruction);
-
-        if (errorCode) {
-            printf("Erreur détéctée sur l'instruction !!\n");
-            printf("Code d'erreur : %d\n", errorCode);
-            showError(instruction);
-        }
-
-        free(instruction);
-
-        // printf("%s\n", line);
-//        printInfos(instruction);
-        printf("%s\n", instructionHex);
-
-
-        char temp;
-        temp = scanf("%c", &temp);
     }
 }
 
@@ -96,12 +79,6 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
     getAllInstructions(progAsembleur, instructions, 0);
     assemble(fichierAssemble, instructions, -1);
 
-//    for (int i = 0; instructions[i] != 0; i++) {
-////        printf("%d : %s\n", i + 1, instructions[i]->line);
-//        printInfos(instructions[i]);
-//        printf("\n");
-//    }
-
     execute(instructions, -1);
     showRegistersStates();
     writeFinalStateRegisters(fichierFinal);
@@ -109,52 +86,39 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
 }
 
 void readPas(FILE *progAsembleur) {
-    while (!feof(progAsembleur)) {
-        Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
-        setError(instruction, NO_ERROR);
+    Instruction *instructions[LINES_NUMBER_MAX] = {0};
+    getAllInstructions(progAsembleur, instructions, 0);
 
-        char instructionHex[9], line[100];
-        int resultat = readLine(progAsembleur, 100, line, instruction, instructionHex);
+    int index = 0;
+    int isEnd = 0;
 
-        if (!resultat) {
-            continue;
+    while (!isEnd) {
+        assemble(NULL, instructions, index);
+        execute(instructions, index);
+
+        char temp[50] = {0};
+        char *check = fgets(temp, 1, stdin);  // TODO: faire un truc pour passer à l'instruction suivante
+        if (*check != '\n') {
+            isEnd = 1;
         }
-
-        printf("%s\n", line);
-
-        int errorCode = isError(instruction);
-
-        if (errorCode) {
-            printf("Erreur détéctée sur l'instruction !!\n");
-            printf("Code d'erreur : %d\n", errorCode);
-            showError(instruction);
-        } else {
-            printf("%s\n", instructionHex);
-        }
-
-        free(instruction);
-
-        char temp[50];
-        if (*fgets(temp, 50, stdin) != '\n') {
-            break;
-        }
+        printf("iciii %d\n", (int) temp[0]);
     }
 }
 
 void getAllInstructions(FILE *file, Instruction *instructions[LINES_NUMBER_MAX], int index) {
-    if (feof(file)) {
-        return;
-    }
-
     Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
     char line[LINES_LENGTHS_MAX];
     char *checkError;
 
     if (file == NULL) {
         checkError = fgets(line, LINES_LENGTHS_MAX - 1, stdin);
+    } else if (feof(file)) {
+        printf("ici\n");
+        return;
     } else {
         checkError = fgets(line, LINES_LENGTHS_MAX - 1, file);
     }
+
 
     replaceChar(line, '\n', '\0');
     replaceChar(line, '\r', '\0');
@@ -167,6 +131,10 @@ void getAllInstructions(FILE *file, Instruction *instructions[LINES_NUMBER_MAX],
 
     analyseLine(line, instruction);
     instructions[index] = instruction;
+
+    if (file == NULL) {
+        return;
+    }
 
     return getAllInstructions(file, instructions, index + 1);
 
@@ -195,9 +163,7 @@ void execute(Instruction *instructions[LINES_NUMBER_MAX], int index) {
     PCvalue /= 4;
 
     while(PCvalue < LINES_NUMBER_MAX && instructions[PCvalue] != 0) {
-        printf("PC : %d\n", PCvalue);
         if (index != -1 && PCvalue != index) {
-            printf("iciiiiiii\n");
             continue;
         }
 

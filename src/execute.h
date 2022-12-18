@@ -25,6 +25,8 @@ void multiply(const int *, const int *);
 
 void memoryAccess(const int *, const int *);
 
+void nothing(const int *, const int *);
+
 #endif
 
 

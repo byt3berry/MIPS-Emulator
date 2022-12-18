@@ -5,6 +5,6 @@
 
 typedef void (*ExecuteFunctions) (const int *, const int *);
 
-extern ExecuteFunctions executeFunctions[10];
+extern ExecuteFunctions executeFunctions[];
 
 #endif

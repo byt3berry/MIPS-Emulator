@@ -63,6 +63,7 @@ void setParametersOrder(Instruction *instruction, const int *parametersOrder) {
 }
 
 void setExecuteFunction(Instruction *instruction, int executeFunction) {
+    printf("%d\n", executeFunction);
     if (executeFunction < 0) return;
     instruction->executeFunction = executeFunctions[executeFunction];
 }

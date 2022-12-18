@@ -1,6 +1,6 @@
 #include "ExecuteFunctions.h"
 
-ExecuteFunctions executeFunctions[10] = {
+ExecuteFunctions executeFunctions[11] = {
         jump,
         branch,
         shiftLeft,
@@ -10,5 +10,6 @@ ExecuteFunctions executeFunctions[10] = {
         rotate,
         divide,
         multiply,
-        memoryAccess
+        memoryAccess,
+        nothing
 };
