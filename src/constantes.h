@@ -78,5 +78,7 @@
 /* * * * * * */
 
 #define MEMORY_SIZE 5
+#define LINES_LENGTHS_MAX 100
+#define LINES_NUMBER_MAX 100
 
 #endif

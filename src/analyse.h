@@ -10,9 +10,11 @@
 
 void analyseLine(char *, Instruction *);
 
-void setInfos(char *, Instruction *);
-
 void setOperateurFromLine(char *, Instruction *);
+
+void saveLine(char *, Instruction *);
+
+void formatLine(char *);
 
 void setOperateurFormat(char *, Instruction *);
 

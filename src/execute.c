@@ -48,7 +48,7 @@ void branch(const int *executeParameters, const int *parameters) {
     getValueFromRegister(parameters[executeParameters[0] - 1], &x1);
     getValueFromRegister(parameters[executeParameters[1] - 1], &x2);
     condition = executeParameters[2];
-    offset = executeParameters[3];
+    offset = parameters[executeParameters[3] - 1];
 
     int result = 0;
     int PCvalue;

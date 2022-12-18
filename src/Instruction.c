@@ -25,6 +25,10 @@ void printInfos(Instruction *instruction) {
     printf("error         : %d\n", instruction->error);
 }
 
+void setLine(Instruction *instruction, char *line){
+    strcpy(instruction->line, line);
+}
+
 void setOperateur(Instruction *instruction, char *operateur) {
     strcpy(instruction->operateur, operateur);
 }
@@ -98,13 +102,6 @@ void setOutputR(Instruction *instruction, char *output) {
     decToBin(parameters[1], REGISTER_SIZE, x2);
     decToBin(parameters[2], REGISTER_SIZE, x3);
     decToBin(parameters[3], REGISTER_SIZE, x4);
-
-//    printf("%s\n", OPcode);
-//    printf("%s\n", x1);
-//    printf("%s\n", x2);
-//    printf("%s\n", x3);
-//    printf("%s\n", x4);
-//    printf("%s\n", func);
 
     sprintf(output, "%s%s%s%s%s%s", OPcode, x1, x2, x3, x4, func);
 }

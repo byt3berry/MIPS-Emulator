@@ -33,8 +33,7 @@ void modeAuto(char *nomProgAssembleur, char *nomFichierAssemble, char *nomFichie
         exit(1);
     }
 
-    readAuto(progAssembleur, fichierAssemble);
-    writeFinalStateRegisters(fichierFinal);
+    readAuto(progAssembleur, fichierAssemble, fichierFinal);
 
     fclose(progAssembleur);
     fclose(fichierAssemble);

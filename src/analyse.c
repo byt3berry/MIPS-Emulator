@@ -9,24 +9,10 @@
 
 void analyseLine(char *line, Instruction *instruction) {
     // on récupère toutes les infos de l'instruction
+    saveLine(line, instruction);
+    formatLine(line);
     setOperateurFromLine(line, instruction);
-    setInfos(line, instruction);
 
-
-
-    // setOperateurFormat(instruction);
-    // if (!isError(instruction)) { // s'il n'y a pas d'erreur sur l'opérateur
-    //     setNbParametersFromLine(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
-    //     setParametersFromLine(line, instruction);
-
-    //     if (!isError(instruction)) {  // s'il n'y a pas d'erreur sur les paramètres
-    //         setOperateurOPcodeOrFunc(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
-    //         setParametersOrderFromLine(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
-    //     }
-    // }
-}
-
-void setInfos(char *line, Instruction *instruction) {
     FILE *file = fopen("data//data.txt", "r");
     int isFound = 0;
 
@@ -63,6 +49,27 @@ void setInfos(char *line, Instruction *instruction) {
 //            printf("%s : %s : %s : %s : %s : %s : %s : %s :\n", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
         }
     }
+
+    // setOperateurFormat(instruction);
+    // if (!isError(instruction)) { // s'il n'y a pas d'erreur sur l'opérateur
+    //     setNbParametersFromLine(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
+    //     setParametersFromLine(line, instruction);
+
+    //     if (!isError(instruction)) {  // s'il n'y a pas d'erreur sur les paramètres
+    //         setOperateurOPcodeOrFunc(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
+    //         setParametersOrderFromLine(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
+    //     }
+    // }
+}
+
+void saveLine(char *line, Instruction *instruction) {
+    setLine(instruction, line);
+}
+
+void formatLine(char *line) {
+    replaceChar(line, '(', ' ');
+    replaceChar(line, ')', ' ');
+    replaceChar(line, ',', ' ');
 }
 
 void setOperateurFromLine(char *line, Instruction *instruction) {

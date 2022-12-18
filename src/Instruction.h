@@ -3,9 +3,10 @@
 
 #include "execute.h"
 #include "ExecuteFunctions.h"
-
+#include "constantes.h"
 
 typedef struct Instruction {
+    char line[LINES_LENGTHS_MAX];
     char operateur[8];
     int format;
     int OPcodeOrFunc;
@@ -16,6 +17,8 @@ typedef struct Instruction {
     int executeParameters[5];
     int error;
 } Instruction;
+
+void setLine(Instruction *, char *);
 
 void setOperateur(Instruction *, char *);
 
