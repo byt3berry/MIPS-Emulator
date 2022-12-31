@@ -9,8 +9,8 @@
 void printInfos(Instruction *instruction) {
     printf("operateur     : %s\n", instruction->operateur);
     printf("format        : %d\n", instruction->format);
-    printf("OPcodeOrFunc  : %d\n", instruction->OPcodeOrFunc);
-    printf("nbParameters  : %d\n", instruction->nbParameters);
+//    printf("OPcodeOrFunc  : %d\n", instruction->OPcodeOrFunc);
+//    printf("nbParameters  : %d\n", instruction->nbParameters);
     printf("Ordre         : %d %d %d %d\n", instruction->parametersOrder[0], instruction->parametersOrder[1], instruction->parametersOrder[2], instruction->parametersOrder[3]);
     printf("x1            : %d\n", instruction->parameters[0]);
     printf("x2            : %d\n", instruction->parameters[1]);
@@ -61,20 +61,18 @@ void setParametersOrder(Instruction *instruction, const int *parametersOrder) {
     }
 }
 
-void setExecuteFunction(Instruction *instruction, int executeFunction) {
-//    printf("%d\n", executeFunction);
+void setExecuteFunction(Instruction *instruction, const int executeFunction) {
     if (executeFunction < 0) return;
     instruction->executeFunction = executeFunctions[executeFunction];
 }
 
 void setExecuteParameters(Instruction *instruction, const int *executeParameters) {
     for (int i = 0; i < 5; i++) {
-        int index_ = executeParameters[i];
-//        printf("index : %d\n", index_);
-        if (index_ == '~') {
+        int index = executeParameters[i];
+        if (index == '~') {
             instruction->executeParameters[i] = 0;
         } else {
-            instruction->executeParameters[i] = index_;
+            instruction->executeParameters[i] = index;
         }
     }
 }
@@ -146,7 +144,7 @@ void getOutput(Instruction *instruction, int *output) {
         setOutputR(instruction, output);
     }
 
-    printf("instrAssemble : %032b\n", *output);
+//    printf("instrAssemble : %032b\n", *output);
 }
 
 void executeInstruction(Instruction *instruction) {
@@ -186,6 +184,9 @@ void showError(Instruction *instruction) {
             break;
         case BAD_REGISTER:
             printf("Le(s) registre(s) entré(s) ne correspond(ent) n'existe(nt) pas\n");
+            break;
+        default:
+            printf("Autre erreur ????\n");
             break;
     }
 }

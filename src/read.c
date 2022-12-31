@@ -11,54 +11,67 @@
 
 // TODO : mode interactif à finir
 void readInteractif() {
-    Instruction *instructions[LINES_NUMBER_MAX] = {0};
+    Instruction *instructionsToAssemble[LINES_NUMBER_MAX] = {0};
+    Instruction *instructionsToExecute[LINES_NUMBER_MAX] = {0};
+    int assembled[LINES_NUMBER_MAX] = {0};
+
     int index = 0;
     int isEnd = 0;
 
     while (!isEnd) {
-        getAllInstructions(NULL, instructions, index);
-        assemble(NULL, instructions, index);
-        execute(instructions, index);
+        getAllInstructions(NULL, instructionsToAssemble, index);
+        assemble(NULL, instructionsToAssemble, assembled, index);
+
+        disassemble(assembled, instructionsToExecute, index);
+        execute(instructionsToExecute, index);
 
         char temp[50] = {0};
         if (*fgets(temp, 50, stdin) != '\n') {
             isEnd = 1;
         }
     }
+
+    freeAll(instructionsToAssemble);
+    freeAll(instructionsToExecute);
 }
 
 void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
-    Instruction *instructions[LINES_NUMBER_MAX] = {0};
-    getAllInstructions(progAsembleur, instructions, 0);
-    assemble(fichierAssemble, instructions, -1);
+    Instruction *instructionsToAssemble[LINES_NUMBER_MAX] = {0};
+    Instruction *instructionsToExecute[LINES_NUMBER_MAX] = {0};
+    int assembled[LINES_NUMBER_MAX] = {0};
 
-    execute(instructions, -1);
-    showRegistersStates();
-    writeFinalStateRegisters(fichierFinal);
-    freeAll(instructions);
+    getAllInstructions(progAsembleur, instructionsToAssemble, 0);
+    assemble(fichierAssemble, instructionsToAssemble, assembled, -1);
+
+    disassemble(assembled, instructionsToExecute, -1);
+//    execute(instructionsToExecute, -1);
+//    showRegistersStates();
+//    writeFinalStateRegisters(fichierFinal);
+    freeAll(instructionsToAssemble);
+    freeAll(instructionsToExecute);
 }
 
+// TODO : mode pas à pas à finir
 void readPas(FILE *progAsembleur) {
-    Instruction *instructions[LINES_NUMBER_MAX] = {0};
-//    printf("ici0\n");
-    getAllInstructions(progAsembleur, instructions, 0);
+    Instruction *instructionsToAssemble[LINES_NUMBER_MAX] = {0};
+    Instruction *instructionsToExecute[LINES_NUMBER_MAX] = {0};
+    int assembled[LINES_NUMBER_MAX] = {0};
+    getAllInstructions(progAsembleur, instructionsToAssemble, 0);
 
     int index = 0;
     int isEnd = 0;
 
-//    printf("ici1\n");
     while (!isEnd) {
-        assemble(NULL, instructions, index);
-//        printf("ici2\n");
-        execute(instructions, index);
-//        printf("ici3\n");
+        assemble(NULL, instructionsToAssemble, assembled, index);
+
+        disassemble(assembled, instructionsToExecute, index);
+        execute(instructionsToExecute, index);
 
         char temp[50] = {0};
         char *check = fgets(temp, 1, stdin);  // TODO: faire un truc pour passer à l'instruction suivante
         if (*check != '\n') {
             isEnd = 1;
         }
-//        printf("iciii %d\n", (int) temp[0]);
     }
 }
 
@@ -85,8 +98,11 @@ int getAllInstructions(FILE *file, Instruction *instructions[LINES_NUMBER_MAX], 
     } else {
         while (!feof(file)) {
             Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
+            setError(instruction, 0);
+//            printf("error0 : %d\n", instruction->error);
             char line[LINES_LENGTHS_MAX];
             char *checkError = fgets(line, LINES_LENGTHS_MAX - 1, file);
+
 
             replaceChar(line, '\n', '\0');
             replaceChar(line, '\r', '\0');
@@ -96,9 +112,13 @@ int getAllInstructions(FILE *file, Instruction *instructions[LINES_NUMBER_MAX], 
 
             /* Si la ligne est nulle est ou un commentaire */
             if (checkError == NULL || checkError[0] == '\0') {
+//                printf("skip : %s\n", line);
                 index--;
             } else {
+//                printf("accepted : %s\n", line);
                 analyseLine(line, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
+//                printInfos(instruction);
+//                printf("\n");
                 instructions[index] = instruction;
             }
 
@@ -109,13 +129,19 @@ int getAllInstructions(FILE *file, Instruction *instructions[LINES_NUMBER_MAX], 
     return 0;
 }
 
-void assemble(FILE *fichierAssemble, Instruction *instructions[LINES_NUMBER_MAX], int index) {
-    for (int i = 0; i < LINES_NUMBER_MAX && instructions[i] != 0; i++) {
+void assemble(FILE *fichierAssemble, Instruction *instructions[LINES_NUMBER_MAX], int *assembled, int index) {
+    for (int i = 0; i < LINES_NUMBER_MAX; i++) {
         if (index != -1 && i != index) {
             continue;
         }
 
+        if (instructions[i] == 0) {
+            assembled[i] = -1;
+            continue;
+        }
+
         int instructionAssemble;
+//        printInfos(instructions[i]);
         getOutput(instructions[i], &instructionAssemble);
 
         if (fichierAssemble == NULL) {
@@ -123,6 +149,30 @@ void assemble(FILE *fichierAssemble, Instruction *instructions[LINES_NUMBER_MAX]
         } else {
             fprintf(fichierAssemble, "%08X\n", instructionAssemble);
         }
+
+        if (assembled != NULL) {
+            assembled[i] = instructionAssemble;
+        }
+
+        printf("%08X\n", instructionAssemble);
+    }
+    printf("\n");
+}
+
+void disassemble(int *assembled, Instruction *instructions[LINES_NUMBER_MAX], int index) {
+    for (int i = 0; i < LINES_NUMBER_MAX && assembled[i] != -1; i++) {
+        if (index != -1 && i != index) {
+            continue;
+        }
+
+        Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
+        setError(instruction, 0);
+        printf("%08X\n", assembled[i]);
+        analyseHex(assembled[i], instruction);
+        printInfos(instruction);
+        printf("\n");
+
+        instructions[i] = instruction;
     }
 }
 
@@ -131,7 +181,7 @@ void execute(Instruction *instructions[LINES_NUMBER_MAX], int index) {
     getValueFromRegister(PC, &PCvalue);
     PCvalue /= 4;
 
-    while(PCvalue < LINES_NUMBER_MAX && instructions[PCvalue] != 0) {
+    while (PCvalue < LINES_NUMBER_MAX && instructions[PCvalue] != 0) {
         if (index != -1 && PCvalue != index) {
             continue;
         }

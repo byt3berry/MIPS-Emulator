@@ -10,6 +10,8 @@
 
 void analyseLine(char *, Instruction *);
 
+void analyseHex(int, Instruction *);
+
 void setOperateurFromLine(char *, Instruction *);
 
 void formatLine(char *);
@@ -21,6 +23,8 @@ void setOperateurOPcodeOrFunc(char *, Instruction *);
 void setNbParametersFromLine(char *, Instruction *);
 
 void setParametersFromLine(char *, char *, Instruction *);
+
+void setParametersFromHex(int, Instruction *);
 
 void setParametersOrderFromLine(char *, Instruction *);
 

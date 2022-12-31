@@ -13,7 +13,9 @@ void readPas(FILE *);
 
 int getAllInstructions(FILE *, Instruction *[LINES_NUMBER_MAX], int);
 
-void assemble(FILE *, Instruction *[LINES_NUMBER_MAX], int);
+void assemble(FILE *, Instruction *[LINES_NUMBER_MAX], int *, int);
+
+void disassemble(int *, Instruction *[LINES_NUMBER_MAX], int);
 
 void execute(Instruction *[LINES_NUMBER_MAX], int);
 

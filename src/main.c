@@ -11,14 +11,10 @@
 
 // TODO: verifier que les erreurs soient bien checkées pour le nouveau code
 // TODO: bug programme si un caractere n'est ni une lettre, ni un nombre, ni un $ ou une ,
-
+// TODO: split data.txt en dataAssemble.txt et dataExecute.txt ??
+// TODO: fonction getUpperBits et getLowerBits : return long -> int ?
 
 int main(int argc, char **argv) {
-
-    int x = 0b10011;
-    printf("bin : %032b\n", x);
-    printf("dec : %d\n", x);
-    printf("hex : %08X\n", x);
     switch (argc) {
         case 1:
             printf("* * * * * * * * * * * * Mode Interactif * * * * * * * * * * * *\n\n");
