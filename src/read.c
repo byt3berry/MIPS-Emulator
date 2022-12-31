@@ -9,6 +9,7 @@
 #include "registers.h"
 
 
+// TODO : mode interactif à finir
 void readInteractif() {
     Instruction *instructions[LINES_NUMBER_MAX] = {0};
     int index = 0;
@@ -39,57 +40,73 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
 
 void readPas(FILE *progAsembleur) {
     Instruction *instructions[LINES_NUMBER_MAX] = {0};
+//    printf("ici0\n");
     getAllInstructions(progAsembleur, instructions, 0);
 
     int index = 0;
     int isEnd = 0;
 
+//    printf("ici1\n");
     while (!isEnd) {
         assemble(NULL, instructions, index);
+//        printf("ici2\n");
         execute(instructions, index);
+//        printf("ici3\n");
 
         char temp[50] = {0};
         char *check = fgets(temp, 1, stdin);  // TODO: faire un truc pour passer à l'instruction suivante
         if (*check != '\n') {
             isEnd = 1;
         }
-        printf("iciii %d\n", (int) temp[0]);
+//        printf("iciii %d\n", (int) temp[0]);
     }
 }
 
-void getAllInstructions(FILE *file, Instruction *instructions[LINES_NUMBER_MAX], int index) {
-    Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
-    char line[LINES_LENGTHS_MAX];
-    char *checkError;
-
+// TODO : A refractoriser
+int getAllInstructions(FILE *file, Instruction *instructions[LINES_NUMBER_MAX], int index) {
     if (file == NULL) {
+        Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
+        char line[LINES_LENGTHS_MAX];
+        char *checkError;
+
         checkError = fgets(line, LINES_LENGTHS_MAX - 1, stdin);
-    } else if (feof(file)) {
-        printf("ici\n");
-        return;
+
+        replaceChar(line, '\n', '\0');
+        replaceChar(line, '\r', '\0');
+        replaceChar(line, '#', '\0');
+
+        /* Si la ligne est nulle est ou un commentaire */
+        if (checkError == NULL || checkError[0] == '\0') {
+            return -1;
+        }
+
+        analyseLine(line, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
+        instructions[index] = instruction;
     } else {
-        checkError = fgets(line, LINES_LENGTHS_MAX - 1, file);
+        while (!feof(file)) {
+            Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
+            char line[LINES_LENGTHS_MAX];
+            char *checkError = fgets(line, LINES_LENGTHS_MAX - 1, file);
+
+            replaceChar(line, '\n', '\0');
+            replaceChar(line, '\r', '\0');
+            replaceChar(line, '#', '\0');
+
+//            printf("%s\n", line);
+
+            /* Si la ligne est nulle est ou un commentaire */
+            if (checkError == NULL || checkError[0] == '\0') {
+                index--;
+            } else {
+                analyseLine(line, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
+                instructions[index] = instruction;
+            }
+
+            index++;
+        }
     }
 
-
-    replaceChar(line, '\n', '\0');
-    replaceChar(line, '\r', '\0');
-    replaceChar(line, '#', '\0');
-
-    /* Si la ligne est nulle est ou un commentaire */
-    if (checkError == NULL || checkError[0] == '\0') {
-        return getAllInstructions(file, instructions, index);
-    }
-
-    analyseLine(line, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
-    instructions[index] = instruction;
-
-    if (file == NULL) {
-        return;
-    }
-
-    return getAllInstructions(file, instructions, index + 1);
-
+    return 0;
 }
 
 void assemble(FILE *fichierAssemble, Instruction *instructions[LINES_NUMBER_MAX], int index) {
@@ -98,13 +115,13 @@ void assemble(FILE *fichierAssemble, Instruction *instructions[LINES_NUMBER_MAX]
             continue;
         }
 
-        char instructionHex[9];
-        getOutput(instructions[i], instructionHex);
+        int instructionAssemble;
+        getOutput(instructions[i], &instructionAssemble);
 
         if (fichierAssemble == NULL) {
-            printf("%s\n", instructionHex);
+            printf("hex : %08X\n", instructionAssemble);
         } else {
-            fprintf(fichierAssemble, "%s\n", instructionHex);
+            fprintf(fichierAssemble, "%08X\n", instructionAssemble);
         }
     }
 }

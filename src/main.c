@@ -15,19 +15,10 @@
 
 int main(int argc, char **argv) {
 
-//    int x = 8;
-//    printf("%d\n", (char) x);
-//    char bin[15];
-//    decToBin(x, 5, bin);
-//
-//    printf("%d : %s\n", x, bin);
-//    return 1;
-
-
-//    for (int i = 0; i < 40; i++) {
-//        printf("%X\n", i);
-//    }
-
+    int x = 0b10011;
+    printf("bin : %032b\n", x);
+    printf("dec : %d\n", x);
+    printf("hex : %08X\n", x);
     switch (argc) {
         case 1:
             printf("* * * * * * * * * * * * Mode Interactif * * * * * * * * * * * *\n\n");

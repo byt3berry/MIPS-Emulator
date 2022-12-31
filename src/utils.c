@@ -20,7 +20,7 @@ void decToBin(int dec, int nbBits, char *bin) {
 //        sprintf(&bin[i], "%d", decAbs % 2);
         bin[i] = decAbs % 2 + '0';
         decAbs /= 2;
-        printf("%c\n", bin[i]);
+//        printf("%c\n", bin[i]);
     }
 
     for (; i >= 0; i--) {
