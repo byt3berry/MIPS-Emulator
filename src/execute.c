@@ -4,15 +4,26 @@
 #include "constantes.h"
 #include "utils.h"
 #include "memory.h"
-#include <stdlib.h>
 
+
+ExecuteFunctions executeFunctions[11] = {
+        jump,
+        branch,
+        shiftLeft,
+        add,
+        logical,
+        moveFrom,
+        rotate,
+        divide,
+        multiply,
+        memoryAccess,
+        nothing
+};
 
 // TODO: Interdire la modification de $0
 
 // parameters = [target, link, isRegister]
 void jump(const int *executeParameters, const int *parameters) {
-    printf("jump\n");
-
     int target, link, isRegister;
 
     target = executeParameters[0];
@@ -34,15 +45,11 @@ void jump(const int *executeParameters, const int *parameters) {
         offset = 2;
     }
 
-    printf("PC = %d | %d << %d\n", PCupper, target, offset);
-
     setValueToRegister(PC, PCupper | (target << offset));
 }
 
 // parameters = [x1, x2, condition, offset]
 void branch(const int *executeParameters, const int *parameters) {
-    printf("branch\n");
-
     int x1, x2, condition, offset;
 
     getValueFromRegister(parameters[executeParameters[0] - 1], &x1);
@@ -56,19 +63,15 @@ void branch(const int *executeParameters, const int *parameters) {
 
     switch (condition) {
         case 0:
-            printf("if (%d == %d) : PC += %d\n", x1, x2, offset);
             result = x1 == x2;
             break;
         case 1:
-            printf("if (%d != %d) : PC += %d\n", x1, x2, offset);
             result = x1 != x2;
             break;
         case 2:
-            printf("if (%d > %d) : PC += %d\n", x1, x2, offset);
             result = x1 > x2;
             break;
         case 3:
-            printf("if (%d <= %d) : PC += %d\n", x1, x2, offset);
             result = x1 <= x2;
             break;
         default:
@@ -82,8 +85,6 @@ void branch(const int *executeParameters, const int *parameters) {
 
 // parameters = [x1, x2, x3, isReverse]
 void shiftLeft(const int *executeParameters, const int *parameters) {
-    printf("shiftLeft\n");
-
     int x1, x2, x3, isReverse;
 
     x1 = parameters[executeParameters[0] - 1];
@@ -99,22 +100,16 @@ void shiftLeft(const int *executeParameters, const int *parameters) {
         shift = x3;
         getValueFromRegister(x2, &x2);
     }
-    printf("ici\n");
-
 
     if (isReverse) {
-        printf("$%d = %d >> %d\n", x1, x2, shift);
         setValueToRegister(x1, x2 >> shift);
     } else {
-        printf("$%d = %d << %d\n", x1, x2, shift);
         setValueToRegister(x1, x2 << shift);
     }
 }
 
 // parameters = [x1, x2, x3, isSub, isImmediate]
 void add(const int *executeParameters, const int *parameters) {
-    printf("add\n");
-
     int x1, x2, x3, isSub, isImmediate;
 
     x1 = parameters[executeParameters[0] - 1];
@@ -130,15 +125,11 @@ void add(const int *executeParameters, const int *parameters) {
 
     x3 = (isSub) ? -x3 : x3;
 
-    printf("$%d = %d + %d\n", x1, x2, x3);
-
     setValueToRegister(x1, x2 + x3);
 }
 
 // parameters = [x1, x2, x3, operation]
 void logical(const int *executeParameters, const int *parameters) {
-    printf("logical\n");
-
     int x1, x2, x3, operation;
 
     x1 = parameters[executeParameters[0] - 1];
@@ -150,19 +141,15 @@ void logical(const int *executeParameters, const int *parameters) {
 
     switch (operation) {
         case 0:
-            printf("$%d = %d & %d\n", x1, x2, x3);
             result = x2 & x3;
             break;
         case 1:
-            printf("$%d = %d | %d\n", x1, x2, x3);
             result = x2 | x3;
             break;
         case 2:
-            printf("$%d = %d ^ %d\n", x1, x2, x3);
             result = x2 ^ x3;
             break;
         case 3:
-            printf("$%d = %d < %d\n", x1, x2, x3);
             result = x2 < x3;
             break;
         default:
@@ -174,8 +161,6 @@ void logical(const int *executeParameters, const int *parameters) {
 
 // parameters = [x, HIorLO]
 void moveFrom(const int *executeParameters, const int *parameters) {
-    printf("moveFrom\n");
-
     int x, HIorLO;
 
     x = parameters[executeParameters[0] - 1];
@@ -189,14 +174,11 @@ void moveFrom(const int *executeParameters, const int *parameters) {
         getValueFromRegister(LO, &result);
     }
 
-    printf("$%d = %d\n", x, result);
     setValueToRegister(x, result);
 }
 
 // parameters = [x1, x2, offset]
 void rotate(const int *executeParameters, const int *parameters) {
-    printf("rotate\n");
-
     int x1, x2, offset;
 
     x1 = parameters[executeParameters[0] - 1];
@@ -218,29 +200,22 @@ void rotate(const int *executeParameters, const int *parameters) {
     int upperNbitsShifted = upperNbits >> offset;
     int lowerNbitsShifted = lowerNbits << (32 - x2);
 
-    printf("$%d = %d\n", x1, lowerNbitsShifted | upperNbitsShifted);
     setValueToRegister(x1, lowerNbitsShifted | upperNbitsShifted);
 }
 
 // parameters = [x1, x2]
 void divide(const int *executeParameters, const int *parameters) {
-    printf("divide\n");
-
     int x1, x2;
 
     getValueFromRegister(parameters[executeParameters[0] - 1], &x1);
     getValueFromRegister(parameters[executeParameters[1] - 1], &x2);
 
-    printf("HI = %d %% %d\n", x1, x2);
-    printf("LO = %d / %d\n", x1, x2);
     setValueToRegister(HI, x1 % x2);
     setValueToRegister(LO, x1 / x2);
 }
 
 // parameters = [x1, x2]
 void multiply(const int *executeParameters, const int *parameters) {
-    printf("multiply\n");
-
     int x1, x2;
 
     getValueFromRegister(parameters[executeParameters[0] - 1], &x1);
@@ -252,16 +227,12 @@ void multiply(const int *executeParameters, const int *parameters) {
 
     result = (long) x1 * (long) x2;
 
-    printf("HI = %d\n", (int) ((result & upper32bits) >> 32));
-    printf("LO = %d\n", (int) (result & lower32bits));
     setValueToRegister(LO, (int) (result & lower32bits));
     setValueToRegister(HI, (int) ((result & upper32bits) >> 32));
 }
 
 // parameters = [x1, offset, x2, LorS]
 void memoryAccess(const int *executeParameters, const int *parameters) {
-    printf("memory\n");
-
     int x1, offset, x2, LorS;
 
     x1 = parameters[executeParameters[0] - 1];
@@ -275,18 +246,14 @@ void memoryAccess(const int *executeParameters, const int *parameters) {
         case 0:
             getValueFromMemory(x2 + offset, &value);
             setValueToRegister(x1, value);
-            printf("$%d = %d\n", x1, value);
             break;
         case 1:
             getValueFromRegister(x1, &value);
             setValueToMemory(x2 + offset, value);
-            printf("MEM[%d] = %d\n", x2 + offset, value);
             break;
         default:
             break;
     }
-
-
 }
 
 // parameters = [rien]

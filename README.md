@@ -91,37 +91,33 @@ internet à été très utile quant à la compréhension de ces notations.]
 * Quelle structure en modules planifiez-vous d'utiliser pour l'émulateur ?
 
 [Nous avons huit modules différents :
- - "modes.h"       : Les fonctions pour lancer les différents modes de lecture
- - "read.h"        : Les fonctions pour lire les fichiers en fonction du mode
-                     de lecture
- - "analyse.h"     : Fonctions pour extraire les données utiles de chaques 
-                     instruction
- - "Instruction.h" : Gestion des objets instructions
- - "execute.h"     : Les fonctions pour éxecuter les instructions
- - "registers.h"   : Les fonctions pour gérer les registres (lecture, écriture)
- - "utils.h"       : Les fonctions de conversion ou d'édition de chaines de
-                     caractères
- - "constantes.h"  : Les constantes pour clarifier le code]
+ - "modes.h" : Les fonctions pour lancer les différents modes de lecture
+ - "read.h" : Les fonctions pour lire les fichiers en fonction du mode de lecture
+ - "analyse.h" : Fonctions pour extraire les données utiles de chaques instruction
+ - "Instruction.h" : Gestion des objets du type Instruction
+ - "execute.h" : Les fonctions pour éxecuter les instructions
+ - "registers.h" : Les fonctions pour gérer les registres (lecture, écriture)
+ - "fonctionModes.h" : Les fonctions lancées après le choix du mode d'éxecutions
+ - "utils.h" : Les fonctions de conversion ou d'édition de chaines de caractères
+ - "constantes.h" : Les constantes pour clarifier le code]
 
 * Quelles seront les fonctions principales de chaque module ?
 
-[- "modes.h"       : "modeInteractif", "modeAutoPasAPas", "modeAuto" en
-                     fonctin du mode de lecture
- - "read.h"        : "readLine", récupère une ligne dans le fichier à lire,
-                     appelle la fonction d'analyse
- - "analyse.h"     : "analyseLine" récupère les différents paramètres de chaque
-                     instruction : opérateur, OPcode, registres ou immédiats
- - "Instruction.h" : "setOutputFull" appelle les fonctions qui vont générer le
-                     code hexadécimal de l'instruction en distinguant le
-                     format (R, I ou J)
- - "execute.h"     : Pas encore implémenté, on aura une fonction qui
-                     déterminera l'opérationà effectuer sur les registres :
-                     addition, soustraction, ...
- - "registers.h"   : "setValueToRegister" et "getValueFromRegister" pour écrire
-                     et lire les registres
- - "utils.h"       : "decToBin", "binToHex", "complementA2", et d'autres
-                      fonctions annexes
- - "constantes.h"  : Aucunes fonctions ici, seulement des constantes]
+[Les fichiers et leurs fonctions principales :
+ - "modes.h" : "modeInteractif", "modeAutoPasAPas", "modeAuto" en fonction du mode 
+de lecture
+ - "read.h" : "readLine", récupère une ligne dans le fichier à lire, appelle la 
+fonction d'analyse
+ - "analyse.h" : "analyseLine" récupère les différents paramètres de chaque
+instruction : opérateur, OPcode, registres ou immédiats
+ - "Instruction.h" : "setOutputFull" appelle les fonctions qui vont générer le code
+hexadécimal de l'instruction en distinguant le format (R, I ou J)
+ - "execute.h" : Pas encore implémenté, on aura une fonction qui déterminera 
+l'opération à effectuer sur les registres : addition, soustraction, ...
+ - "registers.h" : "setValueToRegister" et "getValueFromRegister" pour écrire et lire
+les registres
+ - "utils.h" : "decToBin", "binToHex", "complementA2", et d'autres fonctions annexes
+ - "constantes.h" : Aucunes fonctions ici, seulement des constantes]
 
 * Quels avantages voyez vous à cette structure (à comparer à un unique fichier)?
 

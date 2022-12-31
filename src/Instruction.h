@@ -2,7 +2,6 @@
 #define INSTRUCTION_H
 
 #include "execute.h"
-#include "ExecuteFunctions.h"
 #include "constantes.h"
 
 typedef struct Instruction {
@@ -49,8 +48,6 @@ void getOutput(Instruction *, char *);
 void executeInstruction(Instruction *);
 
 void printInfos(Instruction *);
-
-void setNOP(Instruction *);
 
 void setError(Instruction *, int);
 

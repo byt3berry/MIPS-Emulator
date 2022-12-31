@@ -1,9 +1,9 @@
 #ifndef EXECUTE_H
 #define EXECUTE_H
 
-//#include "Instruction.h"
+typedef void (*ExecuteFunctions) (const int *, const int *);
 
-//void execute(Instruction *);
+extern ExecuteFunctions executeFunctions[];
 
 void jump(const int *, const int *);
 

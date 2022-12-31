@@ -7,55 +7,7 @@
 #include "utils.h"
 #include "constantes.h"
 #include "registers.h"
-#include "memory.h"
 
-
-int readLine(FILE *file, int size, char *line, Instruction *instruction, char *instructionHex) {
-    char lineAnalyzed[size + 1];
-    char *checkError;
-
-    printf("line : %s\n", line);
-    // printf("ici\n");
-
-    if (file == NULL) {
-        checkError = fgets(lineAnalyzed, size, stdin);
-    } else {
-        checkError = fgets(lineAnalyzed, size, file);
-    }
-
-    // printf("ici : %s\n", checkError);
-
-    replaceChar(lineAnalyzed, '\n', '\0');
-    replaceChar(lineAnalyzed, '\r', '\0');
-    replaceChar(lineAnalyzed, '#', '\0');
-    strcpy(line, lineAnalyzed);
-
-    /*
- * On modifie la ligne pour qu'elle soit juste une liste de paramètres
- * ADDI $5, $0, 5 -> ADDI $5 $0 5
- */
-    replaceChar(lineAnalyzed, '(', ' ');
-    replaceChar(lineAnalyzed, ')', ' ');
-    replaceChar(lineAnalyzed, ',', ' ');
-
-    /* Si la ligne est nulle est ou un commentaire */
-    if (checkError == NULL || checkError[0] == '\0') {
-        return 0;
-    }
-
-    printf("%s\n", lineAnalyzed);
-
-    analyseLine(lineAnalyzed, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
-//    printInfos(instruction);
-    executeInstruction(instruction);
-    showRegistersStates();
-    showMemoryStates();
-
-    getOutput(instruction, instructionHex);
-    printf("\n");
-
-    return 1;
-}
 
 void readInteractif() {
     Instruction *instructions[LINES_NUMBER_MAX] = {0};
@@ -129,7 +81,7 @@ void getAllInstructions(FILE *file, Instruction *instructions[LINES_NUMBER_MAX],
         return getAllInstructions(file, instructions, index);
     }
 
-    analyseLine(line, instruction);
+    analyseLine(line, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
     instructions[index] = instruction;
 
     if (file == NULL) {

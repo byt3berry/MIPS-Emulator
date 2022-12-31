@@ -9,11 +9,12 @@
 
 void analyseLine(char *line, Instruction *instruction) {
     // on récupère toutes les infos de l'instruction
-    saveLine(line, instruction);
+    setLine(instruction, line);
     formatLine(line);
     setOperateurFromLine(line, instruction);
 
     FILE *file = fopen("data//data.txt", "r");
+    char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], parametersOrder[15], executeFunction[5], executeParameters[15];
     int isFound = 0;
 
     while (!feof(file) && !isFound) {
@@ -25,30 +26,26 @@ void analyseLine(char *line, Instruction *instruction) {
             continue;
         }
 
-        char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], parametersOrder[15], executeFunction[5], executeParameters[15];
-        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
+        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters,
+               inputFormat, parametersOrder, executeFunction, executeParameters);
 
         // TODO: Vérifier les valeurs de executeParameters !!!
 
         if (strcmp(instruction->operateur, operateur) == 0) {
-            replaceChar(inputFormat, '+', ' ');
-            replaceChar(parametersOrder, '+', ' ');
-            replaceChar(executeParameters, '+', ' ');
             isFound = 1;
-
-
-            setOperateurFormat(format, instruction);
-            setOperateurOPcodeOrFunc(OPcodeOrFunc, instruction);
-            setNbParametersFromLine(nbParameters, instruction);
-            setParametersFromLine(line, inputFormat, instruction);
-            setParametersOrderFromLine(parametersOrder, instruction);
-            setExecuteFunctionFromLine(executeFunction, instruction);
-            setExecuteParametersFromLine(executeParameters, instruction);
-//            printInfos(instruction);
-//            printf("ready !\n");
-//            printf("%s : %s : %s : %s : %s : %s : %s : %s :\n", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
         }
     }
+    replaceChar(inputFormat, '+', ' ');
+    replaceChar(parametersOrder, '+', ' ');
+    replaceChar(executeParameters, '+', ' ');
+
+    setOperateurFormat(format, instruction);
+    setOperateurOPcodeOrFunc(OPcodeOrFunc, instruction);
+    setNbParametersFromLine(nbParameters, instruction);
+    setParametersFromLine(line, inputFormat, instruction);
+    setParametersOrderFromLine(parametersOrder, instruction);
+    setExecuteFunctionFromLine(executeFunction, instruction);
+    setExecuteParametersFromLine(executeParameters, instruction);
 
     // setOperateurFormat(instruction);
     // if (!isError(instruction)) { // s'il n'y a pas d'erreur sur l'opérateur
@@ -60,10 +57,6 @@ void analyseLine(char *line, Instruction *instruction) {
     //         setParametersOrderFromLine(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
     //     }
     // }
-}
-
-void saveLine(char *line, Instruction *instruction) {
-    setLine(instruction, line);
 }
 
 void formatLine(char *line) {
@@ -89,20 +82,17 @@ void setOperateurFromLine(char *line, Instruction *instruction) {
 }
 
 void setOperateurFormat(char *formatChar, Instruction *instruction) {
-    int formatInt;
-    sscanf(formatChar, "%d", &formatInt);
+    int formatInt = (int) strtol(formatChar, NULL, 10);
     setFormat(instruction, formatInt);
 }
 
 void setOperateurOPcodeOrFunc(char *OPcodeOrFuncChar, Instruction *instruction) {
-    int OPcodeOrFuncInt;
-    sscanf(OPcodeOrFuncChar, "%d", &OPcodeOrFuncInt);
+    int OPcodeOrFuncInt = (int) strtol(OPcodeOrFuncChar, NULL, 10);
     setOPcodeOrFunc(instruction, OPcodeOrFuncInt);
 }
 
 void setNbParametersFromLine(char *nbParametersChar, Instruction *instruction) {
-    int nbParametersInt;
-    sscanf(nbParametersChar, "%d", &nbParametersInt);
+    int nbParametersInt = (int) strtol(nbParametersChar, NULL, 10);
     setNbParameters(instruction, nbParametersInt);
 }
 
@@ -117,7 +107,8 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
 
     char strParameters[5][100] = {0};
     int intParameters[5] = {0};
-    int nbParameters = sscanf(line, inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
+    int nbParameters = sscanf(line, inputFormat, strParameters[0], strParameters[1], strParameters[2],
+                              strParameters[3]);
 
 
 //    printf("line : %s\n", line);
@@ -174,40 +165,39 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
 
 void setParametersOrderFromLine(char *parametersOrderChar, Instruction *instruction) {
     int parametersOrderInt[4];
-    sscanf(parametersOrderChar, "%d %d %d %d", &parametersOrderInt[0], &parametersOrderInt[1], &parametersOrderInt[2], &parametersOrderInt[3]);
+    char *ptr = parametersOrderChar;
+
+    for (int i = 0; i < 4; i++) {
+        parametersOrderInt[i] = (int) strtol(ptr, &ptr, 10);
+    }
+
     setParametersOrder(instruction, parametersOrderInt);
 }
 
 void setExecuteFunctionFromLine(char *executeFunctionChar, Instruction *instruction) {
-    int executeFunctionInt;
-    sscanf(executeFunctionChar, "%d", &executeFunctionInt);
+    int executeFunctionInt = (int) strtol(executeFunctionChar, NULL, 10);
     setExecuteFunction(instruction, executeFunctionInt);
 }
 
 void setExecuteParametersFromLine(char *executeParametersChar, Instruction *instruction) {
     int executeParametersInt[5];
-    sscanf(executeParametersChar, "%d %d %d %d %d", &executeParametersInt[0], &executeParametersInt[1], &executeParametersInt[2], &executeParametersInt[3], &executeParametersInt[4]);
+    char *ptr = executeParametersChar;
 
-    /*
     for (int i = 0; i < 5; i++) {
-        int testValue = executeParametersChar[i] - '0';
-        if (1 <= testValue && testValue <= 3) {
-            executeParametersInt[i] = testValue;
-        } else {
-            executeParametersInt[i] = (int) executeParametersChar[i];
-        }
+        executeParametersInt[i] = (int) strtol(ptr, &ptr, 10);
     }
-     */
 
     setExecuteParameters(instruction, executeParametersInt);
 }
 
 void formatParameter(char *strParameter, int *intParameter) {
+    int base;
     if (strParameter[0] == '0' && strParameter[1] == 'x') {
-        *intParameter = strtol(strParameter, NULL, 16);
+        base = 16;
     } else {
-        sscanf(strParameter, "%d", intParameter);
+        base = 10;
     }
+    *intParameter = (int) strtol(strParameter, NULL, base);
 }
 
 void checkRegisterExistence(Instruction *instruction, char *strParameter, int *intParameter) {
@@ -216,10 +206,8 @@ void checkRegisterExistence(Instruction *instruction, char *strParameter, int *i
     if ('a' <= strParameter[0] && strParameter[0] <= 'z') {
         *intParameter = findRegisterNumber(strParameter);
     } else {
-        sscanf(strParameter, "%d", intParameter);
+        *intParameter = (int) strtol(strParameter, NULL, 10);
     }
-
-//    printf("register : %s -> %d\n", strParameter, *intParameter);
 
     if (*intParameter < 0 || 31 < *intParameter) {
         setError(instruction, BAD_REGISTER);

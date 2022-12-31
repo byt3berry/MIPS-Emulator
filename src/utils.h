@@ -9,10 +9,6 @@ void decToBin(int, int, char *);
 
 void binToHex(const char *, char *);
 
-void binToHex2(char *);
-
-void removeChar(char *, char);
-
 void replaceChar(char *, char, char);
 
 void toUpperCase(char *);

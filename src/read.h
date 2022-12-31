@@ -11,8 +11,6 @@ void readAuto(FILE *, FILE *, FILE *);
 
 void readPas(FILE *);
 
-int readLine(FILE *, int, char *, Instruction *, char *);
-
 void getAllInstructions(FILE *, Instruction *[LINES_NUMBER_MAX], int);
 
 void assemble(FILE *, Instruction *[LINES_NUMBER_MAX], int);

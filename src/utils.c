@@ -1,6 +1,6 @@
 #include "utils.h"
 
-/**
+/*
  * It converts a decimal number to a binary number
  * 
  * @param dec the decimal number to convert
@@ -8,13 +8,26 @@
  * @param bin the binary number
  */
 void decToBin(int dec, int nbBits, char *bin) {
-    int decAbs;
+    unsigned int decAbs;
     if (dec < 0) {
         decAbs = -dec;
     } else {
         decAbs = dec;
     }
 
+    int i = nbBits - 1;
+    for (; decAbs > 0; i--) {
+//        sprintf(&bin[i], "%d", decAbs % 2);
+        bin[i] = decAbs % 2 + '0';
+        decAbs /= 2;
+        printf("%c\n", bin[i]);
+    }
+
+    for (; i >= 0; i--) {
+        bin[i] = '0';
+    }
+
+    /*
     char temp[nbBits];
     int i = 0;
 
@@ -32,6 +45,7 @@ void decToBin(int dec, int nbBits, char *bin) {
     for (int j = 0; j < nbBits; j++) {
         bin[j] = temp[nbBits - 1 - j];
     }
+    */
 
     bin[nbBits] = '\0';
 
@@ -40,7 +54,7 @@ void decToBin(int dec, int nbBits, char *bin) {
     }
 }
 
-/**
+/*
  * Calcul le complément à 2 d'un nombre binaire
  * 
  * @param nombre the string to be converted
@@ -59,7 +73,7 @@ void complementA2(char *nombre) {
     }
 }
 
-/**
+/*
  * It takes a string of binary digits and converts it to a string of hexadecimal digits
  * 
  * @param bin the binary string
@@ -68,7 +82,6 @@ void complementA2(char *nombre) {
 void binToHex(const char *bin, char *hex) {
     int temp[8];
     int position;
-    // char nombre_hex_affiche[8] = "";
 
     for (int i = 1; i <= 8; i++) {
         int nombre_stock = 0;
@@ -86,14 +99,14 @@ void binToHex(const char *bin, char *hex) {
     }
 }
 
-/**
+/*
  * It replaces all occurrences of a character in a string with another character
  * 
  * @param string the string to be modified
  * @param suppr the character to be replaced
  * @param add the character to add
  */
-void replaceChar(char *string, char suppr, char add) {
+void replaceChar(char *string, const char suppr, const char add) {
     while (*string != '\0') {
         if (*string == suppr) {
             *string = add;
@@ -102,23 +115,7 @@ void replaceChar(char *string, char suppr, char add) {
     }
 }
 
-/**
- * It removes all occurrences of a character from a string
- * 
- * @param string the string to remove the character from
- * @param suppr the character to be removed
- */
-void removeChar(char *string, char suppr) {
-    for (int i = 0; string[i] != '\0'; i++) {
-        if (string[i] == suppr) {
-            for (int j = i; string[j] != '\0'; j++) {
-                string[j] = string[j + 1];
-            }
-        }
-    }
-}
-
-/**
+/*
  * It takes a string and converts all lowercase letters to uppercase letters
  *
  * @param string The string to be converted to uppercase.
