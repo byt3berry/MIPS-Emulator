@@ -18,23 +18,22 @@ void analyseLine(char *line, Instruction *instruction) {
     int isFound = 0;
 
     while (!feof(file) && !isFound) {
-        char lineTested[100];
-        char *checkError = fgets(lineTested, 100, file);
+        char lineTested[200];
+        char *checkError = fgets(lineTested, 200, file);
         replaceChar(lineTested, '\n', '\0');
 
         if (checkError[0] == '#' || checkError[0] == '\0') {
             continue;
         }
 
-        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters,
-               inputFormat, parametersOrder, executeFunction, executeParameters);
-
-        // TODO: Vérifier les valeurs de executeParameters !!!
+        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
 
         if (strcmp(instruction->operateur, operateur) == 0) {
             isFound = 1;
         }
     }
+    fclose(file);
+
     replaceChar(inputFormat, '+', ' ');
     replaceChar(parametersOrder, '+', ' ');
     replaceChar(executeParameters, '+', ' ');
@@ -44,8 +43,8 @@ void analyseLine(char *line, Instruction *instruction) {
     setNbParametersFromLine(nbParameters, instruction);
     setParametersFromLine(line, inputFormat, instruction);
     setParametersOrderFromLine(parametersOrder, instruction);
-    setExecuteFunctionFromLine(executeFunction, instruction);
-    setExecuteParametersFromLine(executeParameters, instruction);
+//    setExecuteFunctionFromLine(executeFunction, instruction);
+//    setExecuteParametersFromLine(executeParameters, instruction);
 
     // setOperateurFormat(instruction);
     // if (!isError(instruction)) { // s'il n'y a pas d'erreur sur l'opérateur
@@ -57,6 +56,43 @@ void analyseLine(char *line, Instruction *instruction) {
     //         setParametersOrderFromLine(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
     //     }
     // }
+}
+
+void analyseHex(int hex, Instruction *instruction) {
+    int OPcode = hex >> 26 & (int) getLowerBits(6);
+    int maybeFunc = hex & (int) getLowerBits(6);
+
+    FILE *file = fopen("data//data.txt", "r");
+    char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], parametersOrder[15], executeFunction[5], executeParameters[15];
+    int isFound = 0;
+
+    while (!feof(file) && !isFound) {
+        char lineTested[200];
+        char *checkError = fgets(lineTested, 200, file);
+        replaceChar(lineTested, '\n', '\0');
+
+        if (checkError[0] == '#' || checkError[0] == '\0') {
+            continue;
+        }
+
+        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
+
+        int OPcodeOrFuncFound = (int) strtol(OPcodeOrFunc, NULL, 10);
+
+        if ((OPcode == 0 && maybeFunc == OPcodeOrFuncFound) || (OPcode != 0 && OPcode == OPcodeOrFuncFound)) {
+            isFound = 1;
+        }
+
+    }
+    fclose(file);
+
+
+    setOperateur(instruction, operateur);
+    setOperateurFormat(format, instruction);
+    setParametersOrderFromLine(parametersOrder, instruction);
+    setParametersFromHex(hex, instruction);
+    setExecuteFunctionFromLine(executeFunction, instruction);
+    setExecuteParametersFromLine(executeParameters, instruction);
 }
 
 void formatLine(char *line) {
@@ -107,25 +143,25 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
 
     char strParameters[5][100] = {0};
     int intParameters[5] = {0};
-    int nbParameters = sscanf(line, inputFormat, strParameters[0], strParameters[1], strParameters[2],
-                              strParameters[3]);
+    int nbParameters = sscanf(line, inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
 
-
-//    printf("line : %s\n", line);
-//    printf("%s : %s : %s : %s : %s\n", inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
+//    printf("ici\n");
 
     if (instruction->nbParameters != nbParameters - 1) { // si on récupère un mauvais nombre de paramètres
-//        setNOP(instruction);
+//        printf("ici error\n");
         setError(instruction, BAD_NBPARAMETERS);
     } else {
+//        printf("ici pas error\n");
         int format = instruction->format;
+//        printf("error1 : %d\n", instruction->error);
+
 
         if (format == FORMAT_1) {
             // si le paramètre 1 est un immédiat
             formatParameter(strParameters[1], &intParameters[0]);
         } else if (format == FORMAT_2 || format == FORMAT_3 || format == FORMAT_8 || format == FORMAT_9) {
             // si les paramètres 1 et 2 sont des registres et 3 est un immédiat
-            checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);  // +1 pour éliminer le $
+            checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
             checkRegisterExistence(instruction, strParameters[2], &intParameters[1]);
             formatParameter(strParameters[3], &intParameters[2]);
         } else if (format == FORMAT_4) {
@@ -150,17 +186,37 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
             // si le paramètre 1 est un registre
             checkRegisterExistence(instruction, strParameters[1], &intParameters[0]);
         }
+
+//        printf("error2 : %d\n", instruction->error);
     }
-
-//    printf("parametres : %d : %d : %d : %d : %d\n", intParameters[0], intParameters[1], intParameters[2], intParameters[3], intParameters[4]);
-
-//    printf("%s : %s : %s : %s\n", strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
-//    printf("%d : %d : %d : %d\n", intParameters[0], intParameters[1], intParameters[2], intParameters[3]);
-
 
     if (!isError(instruction)) {
         setParameters(instruction, intParameters);
     }
+}
+
+void setParametersFromHex(int hex, Instruction *instruction) {
+    int parameters[4] = {0};
+    int format = instruction->format;
+
+    if (format == 1) {
+        // Type J
+        parameters[0] = hex & (int) getLowerBits(26);
+    } else if (2 <= format && format <= 6) {
+        // Type I
+        // TODO: pour arithmetics1 on recupère pas les bonnes valeurs
+        parameters[0] = hex >> 21 & (int) getLowerBits(5);
+        parameters[1] = hex >> 16 & (int) getLowerBits(5);
+        parameters[2] = hex & (int) getLowerBits(16);
+    } else {
+        // Type R
+        parameters[0] = hex >> 21 & (int) getLowerBits(5);
+        parameters[1] = hex >> 16 & (int) getLowerBits(5);
+        parameters[2] = hex >> 10 & (int) getLowerBits(5);
+        parameters[2] = hex & (int) getLowerBits(5);
+    }
+
+    setParameters(instruction, parameters);
 }
 
 void setParametersOrderFromLine(char *parametersOrderChar, Instruction *instruction) {

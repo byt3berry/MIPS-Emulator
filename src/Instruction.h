@@ -5,7 +5,7 @@
 #include "constantes.h"
 
 typedef struct Instruction {
-    char line[LINES_LENGTHS_MAX];
+    char line[LINES_LENGTHS_MAX];  // TODO : inutile
     char operateur[8];
     int format;
     int OPcodeOrFunc;
@@ -35,15 +35,13 @@ void setExecuteFunction(Instruction *, int);
 
 void setExecuteParameters(Instruction *, const int *);
 
-void setOutputFull(Instruction *, char *);
+void setOutputR(Instruction *, int *);
 
-void setOutputR(Instruction *, char *);
+void setOutputI(Instruction *, int *);
 
-void setOutputI(Instruction *, char *);
+void setOutputJ(Instruction *, int *);
 
-void setOutputJ(Instruction *, char *);
-
-void getOutput(Instruction *, char *);
+void getOutput(Instruction *, int *);
 
 void executeInstruction(Instruction *);
 

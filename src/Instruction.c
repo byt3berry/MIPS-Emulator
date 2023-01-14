@@ -9,8 +9,8 @@
 void printInfos(Instruction *instruction) {
     printf("operateur     : %s\n", instruction->operateur);
     printf("format        : %d\n", instruction->format);
-    printf("OPcodeOrFunc  : %d\n", instruction->OPcodeOrFunc);
-    printf("nbParameters  : %d\n", instruction->nbParameters);
+//    printf("OPcodeOrFunc  : %d\n", instruction->OPcodeOrFunc);
+//    printf("nbParameters  : %d\n", instruction->nbParameters);
     printf("Ordre         : %d %d %d %d\n", instruction->parametersOrder[0], instruction->parametersOrder[1], instruction->parametersOrder[2], instruction->parametersOrder[3]);
     printf("x1            : %d\n", instruction->parameters[0]);
     printf("x2            : %d\n", instruction->parameters[1]);
@@ -24,7 +24,7 @@ void printInfos(Instruction *instruction) {
     printf("error         : %d\n", instruction->error);
 }
 
-void setLine(Instruction *instruction, char *line){
+void setLine(Instruction *instruction, char *line) {
     strcpy(instruction->line, line);
 }
 
@@ -61,26 +61,25 @@ void setParametersOrder(Instruction *instruction, const int *parametersOrder) {
     }
 }
 
-void setExecuteFunction(Instruction *instruction, int executeFunction) {
-    printf("%d\n", executeFunction);
+void setExecuteFunction(Instruction *instruction, const int executeFunction) {
     if (executeFunction < 0) return;
     instruction->executeFunction = executeFunctions[executeFunction];
 }
 
 void setExecuteParameters(Instruction *instruction, const int *executeParameters) {
     for (int i = 0; i < 5; i++) {
-        int index_ = executeParameters[i];
-//        printf("index : %d\n", index_);
-        if (index_ == '~') {
+        int index = executeParameters[i];
+        if (index == '~') {
             instruction->executeParameters[i] = 0;
         } else {
-            instruction->executeParameters[i] = index_;
+            instruction->executeParameters[i] = index;
         }
     }
 }
 
-void setOutputR(Instruction *instruction, char *output) {
+void setOutputR(Instruction *instruction, int *output) {
     int parameters[4];
+    long OPcode, x1, x2, x3, x4, func;
 
     for (int i = 0; i < 4; i++) {
         int index = instruction->parametersOrder[i];
@@ -93,21 +92,19 @@ void setOutputR(Instruction *instruction, char *output) {
         }
     }
 
-    char OPcode[OPCODE_FUNC_SIZE + 1], func[OPCODE_FUNC_SIZE + 1];
-    char x1[REGISTER_SIZE + 1], x2[REGISTER_SIZE + 1], x3[REGISTER_SIZE + 1], x4[REGISTER_SIZE + 1];
+    OPcode = 0 << 26;
+    x1 = parameters[0] << 21 & getUpperBits(5, 26);
+    x2 = parameters[1] << 16 & getUpperBits(5, 21);
+    x3 = parameters[2] << 11 & getUpperBits(5, 16);
+    x4 = parameters[3] << 6 & getUpperBits(5, 11);
+    func = instruction->OPcodeOrFunc & getLowerBits(6);
 
-    decToBin(0, OPCODE_FUNC_SIZE, OPcode);
-    decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, func);
-    decToBin(parameters[0], REGISTER_SIZE, x1);
-    decToBin(parameters[1], REGISTER_SIZE, x2);
-    decToBin(parameters[2], REGISTER_SIZE, x3);
-    decToBin(parameters[3], REGISTER_SIZE, x4);
-
-    sprintf(output, "%s%s%s%s%s%s", OPcode, x1, x2, x3, x4, func);
+    *output = (int) (OPcode + x1 + x2 + x3 + x4 + func);
 }
 
-void setOutputI(Instruction *instruction, char *output) {
+void setOutputI(Instruction *instruction, int *output) {
     int parameters[3];
+    long OPcode, x1, x2, x3;
 
     for (int i = 0; i < 3 && instruction->parametersOrder[i] != '~'; i++) {
         int index = instruction->parametersOrder[i];
@@ -120,29 +117,23 @@ void setOutputI(Instruction *instruction, char *output) {
         }
     }
 
-    char OPcode[OPCODE_FUNC_SIZE + 1];
-    char x1[REGISTER_SIZE + 1], x2[REGISTER_SIZE + 1], x3[I_IMMEDIATE_SIZE + 1];
-
-    decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, OPcode);
-    decToBin(parameters[0], REGISTER_SIZE, x1);
-    decToBin(parameters[1], REGISTER_SIZE, x2);
-    decToBin(parameters[2], I_IMMEDIATE_SIZE, x3);
-
-    sprintf(output, "%s%s%s%s", OPcode, x1, x2, x3);
+    OPcode = instruction->OPcodeOrFunc << 26 & getUpperBits(6, 32);
+    x1 = parameters[0] << 21 & getUpperBits(5, 26);
+    x2 = parameters[1] << 16 & getUpperBits(5, 21);
+    x3 = parameters[2] & getLowerBits(16);
+    *output = (int) (OPcode + x1 + x2 + x3);
 }
 
-void setOutputJ(Instruction *instruction, char *output) {
-    char OPcode[OPCODE_FUNC_SIZE + 1];
-    char x[J_TARGET_SIZE + 1];
+void setOutputJ(Instruction *instruction, int *output) {
+    long OPcode, x;
 
-    decToBin(instruction->OPcodeOrFunc, OPCODE_FUNC_SIZE, OPcode);
-    decToBin(instruction->parameters[0], J_TARGET_SIZE, x);
+    OPcode = instruction->OPcodeOrFunc << 26 & getUpperBits(6, 32);
+    x = instruction->parameters[0] & getLowerBits(26);
 
-    sprintf(output, "%s%s", OPcode, x);
-
+    *output = (int) (OPcode + x);
 }
 
-void setOutputFull(Instruction *instruction, char *output) {
+void getOutput(Instruction *instruction, int *output) {
     int format = instruction->format;
 
     if (format == FORMAT_1) {
@@ -153,12 +144,7 @@ void setOutputFull(Instruction *instruction, char *output) {
         setOutputR(instruction, output);
     }
 
-}
-
-void getOutput(Instruction *instruction, char *output) {
-    char instructionBin[BINARY_CODE_SIZE + 1];
-    setOutputFull(instruction, instructionBin);
-    binToHex(instructionBin, output);
+//    printf("instrAssemble : %032b\n", *output);
 }
 
 void executeInstruction(Instruction *instruction) {
@@ -198,6 +184,9 @@ void showError(Instruction *instruction) {
             break;
         case BAD_REGISTER:
             printf("Le(s) registre(s) entré(s) ne correspond(ent) n'existe(nt) pas\n");
+            break;
+        default:
+            printf("Autre erreur ????\n");
             break;
     }
 }
