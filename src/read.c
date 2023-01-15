@@ -17,7 +17,15 @@ void readInteractif() {
     while (checkError != NULL && strcmp(line, "EXIT\n") != 0) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
 
-        int isError = getAllInstructionsInConsole(line, instruction);
+        replaceChar(line, '\n', '\0');
+        replaceChar(line, '\r', '\0');
+        replaceChar(line, '#', '\0');
+
+        if (line[0] == '\0') {
+            continue;
+        }
+
+        int isError = analyseLine(line, instruction);
 
         if (!isError) {
             int instructionAssemble;
@@ -33,7 +41,6 @@ void readInteractif() {
         printf("\n");
         checkError = fgets(line, LINES_LENGTHS_MAX - 1, stdin);
     }
-
 }
 
 void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
@@ -99,22 +106,6 @@ int getAllInstructionsInFile(FILE *file, Instruction *instructions[LINES_NUMBER_
     }
 
     return 0;
-}
-
-int getAllInstructionsInConsole(char *line, Instruction *instruction) {
-    replaceChar(line, '\n', '\0');
-    replaceChar(line, '\r', '\0');
-    replaceChar(line, '#', '\0');
-
-    /* Si la ligne est nulle est ou un commentaire */
-    if (line == NULL || line[0] == '\0') {
-        return -1;
-    }
-
-    int isError = analyseLine(line, instruction);
-
-    return isError;
-
 }
 
 void assemble(FILE *fichierAssemble, Instruction *instructions[LINES_NUMBER_MAX], int index) {

@@ -13,8 +13,6 @@ void readPas(FILE *);
 
 int getAllInstructionsInFile(FILE *, Instruction *[LINES_NUMBER_MAX], int);
 
-int getAllInstructionsInConsole(char *, Instruction *);
-
 void assemble(FILE *, Instruction *[LINES_NUMBER_MAX], int);
 
 int execute(Instruction *[LINES_NUMBER_MAX], int);
