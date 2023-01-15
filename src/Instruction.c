@@ -9,11 +9,11 @@
 Instruction *nextInstruction = NULL;
 
 void printInfos(Instruction *instruction) {
-//    printf("operateur     : %s\n", instruction->operateur);
-//    printf("format        : %d\n", instruction->format);
-//    printf("OPcodeOrFunc  : %d\n", instruction->OPcodeOrFunc);
-//    printf("nbParameters  : %d\n", instruction->nbParameters);
-//    printf("Ordre         : %d %d %d %d\n", instruction->parametersOrder[0], instruction->parametersOrder[1], instruction->parametersOrder[2], instruction->parametersOrder[3]);
+    printf("operateur     : %s\n", instruction->operateur);
+    printf("format        : %d\n", instruction->format);
+    printf("OPcodeOrFunc  : %d\n", instruction->OPcodeOrFunc);
+    printf("nbParameters  : %d\n", instruction->nbParameters);
+    printf("Ordre         : %d %d %d %d\n", instruction->parametersOrder[0], instruction->parametersOrder[1], instruction->parametersOrder[2], instruction->parametersOrder[3]);
     printf("parameters1   : %d\n", instruction->parameters[0]);
     printf("parameters2   : %d\n", instruction->parameters[1]);
     printf("parameters3   : %d\n", instruction->parameters[2]);
@@ -166,7 +166,7 @@ void setNOP(Instruction *instruction) {
 
 void setError(Instruction *instruction, int error) {
     instruction->error = error;
-//    showError(instruction);
+    showError(instruction);
 }
 
 int isError(Instruction *instruction) {

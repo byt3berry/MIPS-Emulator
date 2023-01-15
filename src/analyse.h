@@ -8,9 +8,7 @@
 #endif
 
 
-void analyseLine(char *, Instruction *);
-
-void analyseHex(int, Instruction *);
+int analyseLine(char *, Instruction *);
 
 void setOperateurFromLine(char *, Instruction *);
 

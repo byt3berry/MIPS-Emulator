@@ -47,7 +47,14 @@ void jump(const int *executeParameters, const int *parameters) {
         offset = 2;
     }
 
-    executeInstruction(nextInstruction);
+    if (nextInstruction != NULL) {
+        int instructionAssemble;
+        getOutput(nextInstruction, &instructionAssemble);
+        printf("%08X\n", instructionAssemble);
+        printf("%s\n", nextInstruction->line);
+        executeInstruction(nextInstruction);
+    }
+
 
     setValueToRegister(PC, PCupper | (target << offset));
 }
@@ -88,7 +95,14 @@ void branch(const int *executeParameters, const int *parameters) {
             break;
     }
 
-    executeInstruction(nextInstruction);
+
+    if (nextInstruction != NULL) {
+        int instructionAssemble;
+        getOutput(nextInstruction, &instructionAssemble);
+        printf("%08X\n", instructionAssemble);
+        printf("%s\n", nextInstruction->line);
+        executeInstruction(nextInstruction);
+    }
 
     if (result) {
         incrementPC(offset);
