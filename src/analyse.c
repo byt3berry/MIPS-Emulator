@@ -43,8 +43,8 @@ void analyseLine(char *line, Instruction *instruction) {
     setNbParametersFromLine(nbParameters, instruction);
     setParametersFromLine(line, inputFormat, instruction);
     setParametersOrderFromLine(parametersOrder, instruction);
-//    setExecuteFunctionFromLine(executeFunction, instruction);
-//    setExecuteParametersFromLine(executeParameters, instruction);
+    setExecuteFunctionFromLine(executeFunction, instruction);
+    setExecuteParametersFromLine(executeParameters, instruction);
 
     // setOperateurFormat(instruction);
     // if (!isError(instruction)) { // s'il n'y a pas d'erreur sur l'opérateur
@@ -56,43 +56,6 @@ void analyseLine(char *line, Instruction *instruction) {
     //         setParametersOrderFromLine(instruction);  // si pas d'erreur sur l'opérateur alors pas d'erreur ici
     //     }
     // }
-}
-
-void analyseHex(int hex, Instruction *instruction) {
-    int OPcode = hex >> 26 & (int) getLowerBits(6);
-    int maybeFunc = hex & (int) getLowerBits(6);
-
-    FILE *file = fopen("data//data.txt", "r");
-    char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], parametersOrder[15], executeFunction[5], executeParameters[15];
-    int isFound = 0;
-
-    while (!feof(file) && !isFound) {
-        char lineTested[200];
-        char *checkError = fgets(lineTested, 200, file);
-        replaceChar(lineTested, '\n', '\0');
-
-        if (checkError[0] == '#' || checkError[0] == '\0') {
-            continue;
-        }
-
-        sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
-
-        int OPcodeOrFuncFound = (int) strtol(OPcodeOrFunc, NULL, 10);
-
-        if ((OPcode == 0 && maybeFunc == OPcodeOrFuncFound) || (OPcode != 0 && OPcode == OPcodeOrFuncFound)) {
-            isFound = 1;
-        }
-
-    }
-    fclose(file);
-
-
-    setOperateur(instruction, operateur);
-    setOperateurFormat(format, instruction);
-    setParametersOrderFromLine(parametersOrder, instruction);
-    setParametersFromHex(hex, instruction);
-    setExecuteFunctionFromLine(executeFunction, instruction);
-    setExecuteParametersFromLine(executeParameters, instruction);
 }
 
 void formatLine(char *line) {

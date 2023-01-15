@@ -17,6 +17,8 @@ typedef struct Instruction {
     int error;
 } Instruction;
 
+extern Instruction *nextInstruction;
+
 void setLine(Instruction *, char *);
 
 void setOperateur(Instruction *, char *);

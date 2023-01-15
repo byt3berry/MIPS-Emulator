@@ -1,5 +1,5 @@
 #include "execute.h"
-//#include "Instruction.h"
+#include "Instruction.h"
 #include "registers.h"
 #include "constantes.h"
 #include "utils.h"
@@ -38,12 +38,16 @@ void jump(const int *executeParameters, const int *parameters) {
     if (isRegister) {
         getValueFromRegister(parameters[target - 1], &target);
     } else if (link) {
-        setValueToRegister(31, PCvalue);
+        setValueToRegister(31, PCvalue + 8);
+        target = parameters[target - 1] - 1;
         offset = 2;
     } else {
         PCupper = getPCupper(PCvalue);
+        target = parameters[target - 1] - 1;
         offset = 2;
     }
+
+    executeInstruction(nextInstruction);
 
     setValueToRegister(PC, PCupper | (target << offset));
 }
@@ -53,7 +57,13 @@ void branch(const int *executeParameters, const int *parameters) {
     int x1, x2, condition, offset;
 
     getValueFromRegister(parameters[executeParameters[0] - 1], &x1);
-    getValueFromRegister(parameters[executeParameters[1] - 1], &x2);
+
+    if (executeParameters[1] == 0) {
+        x2 = executeParameters[1];
+    } else {
+        getValueFromRegister(parameters[executeParameters[1] - 1], &x2);
+    }
+
     condition = executeParameters[2];
     offset = parameters[executeParameters[3] - 1];
 
@@ -78,8 +88,12 @@ void branch(const int *executeParameters, const int *parameters) {
             break;
     }
 
+    executeInstruction(nextInstruction);
+
     if (result) {
         incrementPC(offset);
+    } else {
+        incrementPC(1);
     }
 }
 

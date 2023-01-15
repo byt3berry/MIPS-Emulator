@@ -6,22 +6,24 @@
 #include "constantes.h"
 
 
+Instruction *nextInstruction = NULL;
+
 void printInfos(Instruction *instruction) {
-    printf("operateur     : %s\n", instruction->operateur);
-    printf("format        : %d\n", instruction->format);
+//    printf("operateur     : %s\n", instruction->operateur);
+//    printf("format        : %d\n", instruction->format);
 //    printf("OPcodeOrFunc  : %d\n", instruction->OPcodeOrFunc);
 //    printf("nbParameters  : %d\n", instruction->nbParameters);
-    printf("Ordre         : %d %d %d %d\n", instruction->parametersOrder[0], instruction->parametersOrder[1], instruction->parametersOrder[2], instruction->parametersOrder[3]);
-    printf("x1            : %d\n", instruction->parameters[0]);
-    printf("x2            : %d\n", instruction->parameters[1]);
-    printf("x3            : %d\n", instruction->parameters[2]);
-    printf("x4            : %d\n", instruction->parameters[3]);
-    printf("y1            : %d\n", instruction->executeParameters[0]);
-    printf("y2            : %d\n", instruction->executeParameters[1]);
-    printf("y3            : %d\n", instruction->executeParameters[2]);
-    printf("y4            : %d\n", instruction->executeParameters[3]);
-    printf("y5            : %d\n", instruction->executeParameters[4]);
-    printf("error         : %d\n", instruction->error);
+//    printf("Ordre         : %d %d %d %d\n", instruction->parametersOrder[0], instruction->parametersOrder[1], instruction->parametersOrder[2], instruction->parametersOrder[3]);
+    printf("parameters1   : %d\n", instruction->parameters[0]);
+    printf("parameters2   : %d\n", instruction->parameters[1]);
+    printf("parameters3   : %d\n", instruction->parameters[2]);
+    printf("parameters4   : %d\n", instruction->parameters[3]);
+    printf("exePara1      : %d\n", instruction->executeParameters[0]);
+    printf("exePara2      : %d\n", instruction->executeParameters[1]);
+    printf("exePara3      : %d\n", instruction->executeParameters[2]);
+    printf("exePara4      : %d\n", instruction->executeParameters[3]);
+    printf("exePara5      : %d\n", instruction->executeParameters[4]);
+//    printf("error         : %d\n", instruction->error);
 }
 
 void setLine(Instruction *instruction, char *line) {
