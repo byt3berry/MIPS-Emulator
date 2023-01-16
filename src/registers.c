@@ -5,7 +5,9 @@
 int registers[35] = {0};
 
 void setValueToRegister(const int registerNumber, const int source) {
-    registers[registerNumber] = source;
+    if (registerNumber != 0) {  // on ne peut pas modifier le registre $0
+        registers[registerNumber] = source;
+    }
 }
 
 void getValueFromRegister(const int registerNumber, int *destination) {

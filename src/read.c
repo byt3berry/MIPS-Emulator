@@ -130,6 +130,7 @@ int execute(Instruction *instructions[LINES_NUMBER_MAX], int index, int verboseM
     PCvalue /= 4;
 
     while (PCvalue < LINES_NUMBER_MAX && instructions[PCvalue] != NULL) {
+        // si l'instruction est un jump ou un branch, il aura accès à l'instruction suivante pour le delay slot
         nextInstruction = instructions[PCvalue + 1];
         executeInstruction(instructions[PCvalue]);
         nextInstruction = NULL;

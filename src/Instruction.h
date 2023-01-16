@@ -48,7 +48,7 @@ void setOutput(Instruction *);
 
 int getOutput(Instruction *);
 
-void executeInstruction(Instruction *);
+int executeInstruction(Instruction *);
 
 int isJumpOrBranch(Instruction *);
 

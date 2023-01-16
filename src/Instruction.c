@@ -154,10 +154,13 @@ int getOutput(Instruction *instruction) {
     return instruction->outputHex;
 }
 
-void executeInstruction(Instruction *instruction) {
+int executeInstruction(Instruction *instruction) {
+    int isError = 0;
     if (instruction->executeFunction != NULL) {
-        instruction->executeFunction(instruction->executeParameters, instruction->parameters);
+        isError = instruction->executeFunction(instruction->executeParameters, instruction->parameters);
     }
+
+    return isError;
 }
 
 int isJumpOrBranch(Instruction *instruction) {

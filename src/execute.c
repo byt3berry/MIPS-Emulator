@@ -19,8 +19,6 @@ ExecuteFunctions executeFunctions[11] = {
         memoryAccess
 };
 
-// TODO: Interdire la modification de $0
-
 // parameters = [target, link, isRegister]
 int jump(const int *executeParameters, const int *parameters) {
     int target, link, isRegister;
