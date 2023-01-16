@@ -56,7 +56,6 @@ int analyseLine(char *line, Instruction *instruction) {
         }
     }
 
-
     return isError(instruction);
 }
 

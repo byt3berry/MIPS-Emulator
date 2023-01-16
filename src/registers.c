@@ -24,11 +24,15 @@ void incrementPC(const int offset) {
 }
 
 void showRegistersStates() {
-    for (int i = 0; i < 35; i++) {
+    for (int i = 0; i < 32; i++) {
         if (registers[i] != 0) {
-            printf("register %d : %d\n", i, registers[i]);
+            printf("$%02d : %d\n", i, registers[i]);
         }
     }
+
+    printf("HI:%d\n", registers[HI]);
+    printf("LO:%d\n", registers[LO]);
+    printf("PC:%d\n", registers[PC]);
 }
 
 void writeFinalStateRegisters(FILE *fichierFinal) {

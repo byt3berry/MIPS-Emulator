@@ -46,27 +46,12 @@
 #define BAD_OPERATEUR    1
 #define BAD_NBPARAMETERS 2
 #define BAD_REGISTER     3
-#define OVERFLOW         4
+#define OVERFLOW_PARAM   4
+#define OVERFLOW_RESULT  5
+#define BAD_ADDRESS      6
 
 /* * * * * ERRORS * * * * */
 /* * * * * *  * * * * * * */
-
-
-/* * * * * * * * * * */
-/* EXECUTE FUNCTIONS */
-#define JUMP       0
-#define BRANCH     1
-#define SHIFT_LEFT 2
-#define ADD        3
-#define LOGICAL    4
-#define MOVE_FROM  5
-#define ROTATE     6
-#define DIVIDE     7
-#define MULTIPLY   8
-#define MEMORY     9
-
-/* EXECUTE FUNCTIONS */
-/* * * * * * * * * * */
 
 
 /* * * * * * */

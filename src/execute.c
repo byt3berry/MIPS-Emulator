@@ -16,14 +16,13 @@ ExecuteFunctions executeFunctions[11] = {
         rotate,
         divide,
         multiply,
-        memoryAccess,
-        nothing
+        memoryAccess
 };
 
 // TODO: Interdire la modification de $0
 
 // parameters = [target, link, isRegister]
-void jump(const int *executeParameters, const int *parameters) {
+int jump(const int *executeParameters, const int *parameters) {
     int target, link, isRegister;
 
     target = executeParameters[0];
@@ -48,19 +47,16 @@ void jump(const int *executeParameters, const int *parameters) {
     }
 
     if (nextInstruction != NULL) {
-        int instructionAssemble;
-        getOutput(nextInstruction, &instructionAssemble);
-        printf("%08X\n", instructionAssemble);
-        printf("%s\n", nextInstruction->line);
         executeInstruction(nextInstruction);
     }
 
-
     setValueToRegister(PC, PCupper | (target << offset));
+
+    return NO_ERROR;
 }
 
 // parameters = [x1, x2, condition, offset]
-void branch(const int *executeParameters, const int *parameters) {
+int branch(const int *executeParameters, const int *parameters) {
     int x1, x2, condition, offset;
 
     getValueFromRegister(parameters[executeParameters[0] - 1], &x1);
@@ -97,10 +93,6 @@ void branch(const int *executeParameters, const int *parameters) {
 
 
     if (nextInstruction != NULL) {
-        int instructionAssemble;
-        getOutput(nextInstruction, &instructionAssemble);
-        printf("%08X\n", instructionAssemble);
-        printf("%s\n", nextInstruction->line);
         executeInstruction(nextInstruction);
     }
 
@@ -109,10 +101,12 @@ void branch(const int *executeParameters, const int *parameters) {
     } else {
         incrementPC(1);
     }
+
+    return NO_ERROR;
 }
 
 // parameters = [x1, x2, x3, isReverse]
-void shiftLeft(const int *executeParameters, const int *parameters) {
+int shiftLeft(const int *executeParameters, const int *parameters) {
     int x1, x2, x3, isReverse;
 
     x1 = parameters[executeParameters[0] - 1];
@@ -125,7 +119,7 @@ void shiftLeft(const int *executeParameters, const int *parameters) {
     if (x3 == -16) {
         shift = 16;
     } else {
-        shift = x3;
+        shift = parameters[x3 - 1];
         getValueFromRegister(x2, &x2);
     }
 
@@ -134,10 +128,12 @@ void shiftLeft(const int *executeParameters, const int *parameters) {
     } else {
         setValueToRegister(x1, x2 << shift);
     }
+
+    return NO_ERROR;
 }
 
 // parameters = [x1, x2, x3, isSub, isImmediate]
-void add(const int *executeParameters, const int *parameters) {
+int add(const int *executeParameters, const int *parameters) {
     int x1, x2, x3, isSub, isImmediate;
 
     x1 = parameters[executeParameters[0] - 1];
@@ -153,11 +149,17 @@ void add(const int *executeParameters, const int *parameters) {
 
     x3 = (isSub) ? -x3 : x3;
 
+    if ((long) x2 + (long) x3 != x2 + x3) {
+        return OVERFLOW_RESULT;
+    }
+
     setValueToRegister(x1, x2 + x3);
+
+    return NO_ERROR;
 }
 
 // parameters = [x1, x2, x3, operation]
-void logical(const int *executeParameters, const int *parameters) {
+int logical(const int *executeParameters, const int *parameters) {
     int x1, x2, x3, operation;
 
     x1 = parameters[executeParameters[0] - 1];
@@ -185,10 +187,12 @@ void logical(const int *executeParameters, const int *parameters) {
     }
 
     setValueToRegister(x1, result);
+
+    return NO_ERROR;
 }
 
 // parameters = [x, HIorLO]
-void moveFrom(const int *executeParameters, const int *parameters) {
+int moveFrom(const int *executeParameters, const int *parameters) {
     int x, HIorLO;
 
     x = parameters[executeParameters[0] - 1];
@@ -203,10 +207,12 @@ void moveFrom(const int *executeParameters, const int *parameters) {
     }
 
     setValueToRegister(x, result);
+
+    return NO_ERROR;
 }
 
 // parameters = [x1, x2, offset]
-void rotate(const int *executeParameters, const int *parameters) {
+int rotate(const int *executeParameters, const int *parameters) {
     int x1, x2, offset;
 
     x1 = parameters[executeParameters[0] - 1];
@@ -229,10 +235,12 @@ void rotate(const int *executeParameters, const int *parameters) {
     int lowerNbitsShifted = lowerNbits << (32 - x2);
 
     setValueToRegister(x1, lowerNbitsShifted | upperNbitsShifted);
+
+    return NO_ERROR;
 }
 
 // parameters = [x1, x2]
-void divide(const int *executeParameters, const int *parameters) {
+int divide(const int *executeParameters, const int *parameters) {
     int x1, x2;
 
     getValueFromRegister(parameters[executeParameters[0] - 1], &x1);
@@ -240,10 +248,12 @@ void divide(const int *executeParameters, const int *parameters) {
 
     setValueToRegister(HI, x1 % x2);
     setValueToRegister(LO, x1 / x2);
+
+    return NO_ERROR;
 }
 
 // parameters = [x1, x2]
-void multiply(const int *executeParameters, const int *parameters) {
+int multiply(const int *executeParameters, const int *parameters) {
     int x1, x2;
 
     getValueFromRegister(parameters[executeParameters[0] - 1], &x1);
@@ -257,16 +267,22 @@ void multiply(const int *executeParameters, const int *parameters) {
 
     setValueToRegister(LO, (int) (result & lower32bits));
     setValueToRegister(HI, (int) ((result & upper32bits) >> 32));
+
+    return NO_ERROR;
 }
 
 // parameters = [x1, offset, x2, LorS]
-void memoryAccess(const int *executeParameters, const int *parameters) {
+int memoryAccess(const int *executeParameters, const int *parameters) {
     int x1, offset, x2, LorS;
 
     x1 = parameters[executeParameters[0] - 1];
     offset = parameters[executeParameters[1] - 1];
     getValueFromRegister(parameters[executeParameters[2] - 1], &x2);
     LorS = executeParameters[3];
+
+    if ((x2 + offset) % 4 != 0) {
+        return BAD_ADDRESS;
+    }
 
     int value;
 
@@ -282,10 +298,7 @@ void memoryAccess(const int *executeParameters, const int *parameters) {
         default:
             break;
     }
+
+    return NO_ERROR;
 }
 
-// parameters = [rien]
-void nothing(const int *executeParameters, const int *parameters) {
-    int rien = executeParameters[parameters[0]];
-    incrementPC(rien);
-}

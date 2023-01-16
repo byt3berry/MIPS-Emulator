@@ -12,6 +12,7 @@ typedef struct Instruction {
     int nbParameters;
     int parameters[4];
     int parametersOrder[4];
+    int outputHex;
     ExecuteFunctions executeFunction;
     int executeParameters[5];
     int error;
@@ -37,15 +38,19 @@ void setExecuteFunction(Instruction *, int);
 
 void setExecuteParameters(Instruction *, const int *);
 
-void setOutputR(Instruction *, int *);
+void setOutputR(Instruction *);
 
-void setOutputI(Instruction *, int *);
+void setOutputI(Instruction *);
 
-void setOutputJ(Instruction *, int *);
+void setOutputJ(Instruction *);
 
-void getOutput(Instruction *, int *);
+void setOutput(Instruction *);
+
+int getOutput(Instruction *);
 
 void executeInstruction(Instruction *);
+
+int isJumpOrBranch(Instruction *);
 
 void printInfos(Instruction *);
 

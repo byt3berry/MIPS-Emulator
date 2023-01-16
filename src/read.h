@@ -15,7 +15,7 @@ int getAllInstructionsInFile(FILE *, Instruction *[LINES_NUMBER_MAX], int);
 
 void assemble(FILE *, Instruction *[LINES_NUMBER_MAX], int);
 
-int execute(Instruction *[LINES_NUMBER_MAX], int);
+int execute(Instruction *[LINES_NUMBER_MAX], int, int);
 
 void freeAll(Instruction *[LINES_NUMBER_MAX]);
 

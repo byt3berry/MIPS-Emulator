@@ -163,7 +163,7 @@ mémoire ? Quels choix avec-vous faits ?
   - [ ] Implémenté l'émulation de toutes les instructions gérées par le rendu 2.
   - [ ] Implémenté l'émulation de toutes les instructions.
   - [ ] Tous vos tests qui passent.
-  - [ ] Vérifié que vous tests couvrent toutes les instructions émulées.
+  - [ ] Vérifié que vos tests couvrent toutes les instructions émulées.
   - [ ] Testé les cas particuliers : valeurs négatives, overflows...
   - [ ] Testé les cas d'erreur : division par zéro, sauts invalides...
   - [ ] Un port fonctionnel de DOOM pour votre émulateur.

@@ -28,9 +28,8 @@ void readInteractif() {
         int isError = analyseLine(line, instruction);
 
         if (!isError) {
-            int instructionAssemble;
-            getOutput(instruction, &instructionAssemble);
-            printf("%08X\n", instructionAssemble);
+            setOutput(instruction);
+            printf("%08X\n", getOutput(instruction));
 
             executeInstruction(instruction);
             incrementPC(1);
@@ -48,25 +47,28 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
 
     int isError = getAllInstructionsInFile(progAsembleur, instructions, 0);
 
-    if (!isError) {
-        assemble(fichierAssemble, instructions, -1);
-        execute(instructions, -1);
-        writeFinalStateRegisters(fichierFinal);
-        freeAll(instructions);
-    }
+    if (isError) return;
+
+    assemble(fichierAssemble, instructions, -1);
+    execute(instructions, -1, 0);
+    writeFinalStateRegisters(fichierFinal);
+    showRegistersStates();
+    freeAll(instructions);
 }
 
 void readPas(FILE *progAsembleur) {
     Instruction *instructions[LINES_NUMBER_MAX] = {0};
-    getAllInstructionsInFile(progAsembleur, instructions, 0);
+    int isError = getAllInstructionsInFile(progAsembleur, instructions, 0);
 
-    int index = 0;
+    if (isError) return;
+
+    assemble(NULL, instructions, -1);
+
     int isEndUser = 0;
     int isEndFile = 0;
 
     while (!isEndUser && !isEndFile) {
-        assemble(NULL, instructions, index);
-        isEndFile = execute(instructions, 0);
+        isEndFile = execute(instructions, 0, 1);
 
         char temp[50];
         getchar();
@@ -77,7 +79,6 @@ void readPas(FILE *progAsembleur) {
     }
 }
 
-// TODO : A refractoriser
 int getAllInstructionsInFile(FILE *file, Instruction *instructions[LINES_NUMBER_MAX], int index) {
     while (!feof(file)) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
@@ -114,28 +115,36 @@ void assemble(FILE *fichierAssemble, Instruction *instructions[LINES_NUMBER_MAX]
             continue;
         }
 
-        int instructionAssemble;
-        getOutput(instructions[i], &instructionAssemble);  // TODO: stocker l'output dans la struct ?
+        setOutput(instructions[i]);
 
-        if (fichierAssemble == NULL) {
-            printf("%08X\n", instructionAssemble);
-        } else {
-            fprintf(fichierAssemble, "%08X\n", instructionAssemble);
+        if (fichierAssemble != NULL) {
+            fprintf(fichierAssemble, "%08X\n", getOutput(instructions[i]));
         }
 
     }
 }
 
-int execute(Instruction *instructions[LINES_NUMBER_MAX], int index) {
+int execute(Instruction *instructions[LINES_NUMBER_MAX], int index, int verboseMode) {
     int PCvalue;
     getValueFromRegister(PC, &PCvalue);
     PCvalue /= 4;
 
     while (PCvalue < LINES_NUMBER_MAX && instructions[PCvalue] != NULL) {
-        printf("%s\n", instructions[PCvalue]->line);
         nextInstruction = instructions[PCvalue + 1];
         executeInstruction(instructions[PCvalue]);
         nextInstruction = NULL;
+
+        if (verboseMode) {
+            printf("%s\n", instructions[PCvalue]->line);
+            printf("%08X\n", getOutput(instructions[PCvalue]));
+
+            if (isJumpOrBranch(instructions[PCvalue])) {
+                printf("DelaySlot :\n");
+                printf("    %s\n", instructions[PCvalue + 1]->line);
+                printf("    %08X\n", getOutput(instructions[PCvalue + 1]));
+            }
+            printf("\n");
+        }
 
         incrementPC(1);
         getValueFromRegister(PC, &PCvalue);

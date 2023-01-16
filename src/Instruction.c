@@ -64,8 +64,11 @@ void setParametersOrder(Instruction *instruction, const int *parametersOrder) {
 }
 
 void setExecuteFunction(Instruction *instruction, const int executeFunction) {
-    if (executeFunction < 0) return;
-    instruction->executeFunction = executeFunctions[executeFunction];
+    if (0 <= executeFunction && executeFunction <= 9) {
+        instruction->executeFunction = executeFunctions[executeFunction];
+    } else {
+        instruction->executeFunction = NULL;
+    }
 }
 
 void setExecuteParameters(Instruction *instruction, const int *executeParameters) {
@@ -79,7 +82,7 @@ void setExecuteParameters(Instruction *instruction, const int *executeParameters
     }
 }
 
-void setOutputR(Instruction *instruction, int *output) {
+void setOutputR(Instruction *instruction) {
     int parameters[4];
     long OPcode, x1, x2, x3, x4, func;
 
@@ -101,10 +104,10 @@ void setOutputR(Instruction *instruction, int *output) {
     x4 = parameters[3] << 6 & getUpperBits(5, 11);
     func = instruction->OPcodeOrFunc & getLowerBits(6);
 
-    *output = (int) (OPcode + x1 + x2 + x3 + x4 + func);
+    instruction->outputHex = (int) (OPcode + x1 + x2 + x3 + x4 + func);
 }
 
-void setOutputI(Instruction *instruction, int *output) {
+void setOutputI(Instruction *instruction) {
     int parameters[3];
     long OPcode, x1, x2, x3;
 
@@ -123,45 +126,48 @@ void setOutputI(Instruction *instruction, int *output) {
     x1 = parameters[0] << 21 & getUpperBits(5, 26);
     x2 = parameters[1] << 16 & getUpperBits(5, 21);
     x3 = parameters[2] & getLowerBits(16);
-    *output = (int) (OPcode + x1 + x2 + x3);
+    instruction->outputHex = (int) (OPcode + x1 + x2 + x3);
 }
 
-void setOutputJ(Instruction *instruction, int *output) {
+void setOutputJ(Instruction *instruction) {
     long OPcode, x;
 
     OPcode = instruction->OPcodeOrFunc << 26 & getUpperBits(6, 32);
     x = instruction->parameters[0] & getLowerBits(26);
 
-    *output = (int) (OPcode + x);
+    instruction->outputHex = (int) (OPcode + x);
 }
 
-void getOutput(Instruction *instruction, int *output) {
+void setOutput(Instruction *instruction) {
     int format = instruction->format;
 
     if (format == FORMAT_1) {
-        setOutputJ(instruction, output);
+        setOutputJ(instruction);
     } else if (FORMAT_2 <= format && format <= FORMAT_6) {
-        setOutputI(instruction, output);
+        setOutputI(instruction);
     } else {
-        setOutputR(instruction, output);
+        setOutputR(instruction);
     }
+}
 
-//    printf("instrAssemble : %032b\n", *output);
+int getOutput(Instruction *instruction) {
+    return instruction->outputHex;
 }
 
 void executeInstruction(Instruction *instruction) {
-    instruction->executeFunction(instruction->executeParameters, instruction->parameters);
+    if (instruction->executeFunction != NULL) {
+        instruction->executeFunction(instruction->executeParameters, instruction->parameters);
+    }
 }
 
-void setNOP(Instruction *instruction) {
-    int zeroArray[4] = {0};
+int isJumpOrBranch(Instruction *instruction) {
+    int format = instruction->format;
 
-    setOperateur(instruction, "NOP\0");
-    setFormat(instruction, 13);
-    setNbParameters(instruction, 0);
-    setParameters(instruction, zeroArray);
-    setOPcodeOrFunc(instruction, 0);
-    setParametersOrder(instruction, zeroArray);
+    if (format == 1 || format == 3 || format == 5 || format == 12) {
+        return 1;
+    }
+
+    return 0;
 }
 
 void setError(Instruction *instruction, int error) {
@@ -176,7 +182,6 @@ int isError(Instruction *instruction) {
 void showError(Instruction *instruction) {
     switch (instruction->error) {
         case NO_ERROR:
-            printf("Aucune erreur détéctée !!\n");
             break;
         case BAD_OPERATEUR:
             printf("L'opérateur entré n'existe pas\n");
@@ -186,6 +191,15 @@ void showError(Instruction *instruction) {
             break;
         case BAD_REGISTER:
             printf("Le(s) registre(s) entré(s) ne correspond(ent) n'existe(nt) pas\n");
+            break;
+        case OVERFLOW_PARAM:
+            printf("La valeur immédiate entrée est trop grande (>32bits)");
+            break;
+        case OVERFLOW_RESULT:
+            printf("Le résultat immédiate entrée est trop grande (>32bits)");
+            break;
+        case BAD_ADDRESS:
+            printf("L'adresse entrée doit être un multiple de 4");
             break;
         default:
             printf("Autre erreur ????\n");

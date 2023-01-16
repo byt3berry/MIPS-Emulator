@@ -1,19 +1,21 @@
 // Projet MIPS 2022-2023
-// Auteurs: Cocagne_Strainovic
+// Auteurs : Cocagne_Strainovic
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "fonctionModes.h"
-#include "Instruction.h"
-#include "utils.h"
 
 // TODO: verifier que les erreurs soient bien checkées pour le nouveau code
 // TODO: bug programme si un caractere n'est ni une lettre, ni un nombre, ni un $ ou une ,
 // TODO: fonction getUpperBits et getLowerBits : return long -> int ?
 
 int main(int argc, char **argv) {
+    int x = 5;
+    long y = 5;
+
+    printf("%d\n", x == y);
+
+
     switch (argc) {
         case 1:
             printf("* * * * * * * * * * * * Mode Interactif * * * * * * * * * * * *\n\n");
