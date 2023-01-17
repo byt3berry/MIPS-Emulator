@@ -140,18 +140,19 @@ int add(const int *executeParameters, const int *parameters) {
     isSub = executeParameters[3];
     isImmediate = executeParameters[4];
 
-
     if (!isImmediate) {
         getValueFromRegister(x3, &x3);
     }
 
     x3 = (isSub) ? -x3 : x3;
 
-    if ((long) x2 + (long) x3 != x2 + x3) {
-        return OVERFLOW_RESULT;
+    if (((double) x2 + (double) x3) == (double) (x2 + x3)) {  // si overflow on ne change pas le registre
+        /*
+         * (double) x2 + (double) x3 est le resultat de la somme sur 64 bits
+         * (double) (x2 + x3) est le resultat étendu sur 64 bits
+         */
+        setValueToRegister(x1, x2 + x3);
     }
-
-    setValueToRegister(x1, x2 + x3);
 
     return NO_ERROR;
 }
@@ -299,4 +300,3 @@ int memoryAccess(const int *executeParameters, const int *parameters) {
 
     return NO_ERROR;
 }
-

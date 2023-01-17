@@ -182,6 +182,8 @@ void formatParameter(char *strParameter, int *intParameter) {
     int base;
     if (strParameter[0] == '0' && strParameter[1] == 'x') {
         base = 16;
+    } else if (strParameter[0] == '0' && strParameter[1] == 'b') {
+        base = 2;
     } else {
         base = 10;
     }
