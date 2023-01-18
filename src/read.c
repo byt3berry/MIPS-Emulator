@@ -40,6 +40,7 @@ void readInteractif() {
         printf("\n");
         checkError = fgets(line, LINES_LENGTHS_MAX - 1, stdin);
     }
+
 }
 
 void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {

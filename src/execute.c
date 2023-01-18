@@ -216,9 +216,8 @@ int rotate(const int *executeParameters, const int *parameters) {
 
     x1 = parameters[executeParameters[0] - 1];
     getValueFromRegister(parameters[executeParameters[1] - 1], &x2);
-    offset = executeParameters[2] % 32;  // une rotation de 32 + n bits équivaut à une rotation de n bits
+    offset = parameters[executeParameters[2] - 1] % 32;  // une rotation de 32 + n bits équivaut à une rotation de n bits
 
-    // on va effectuer une rotation vers la gauche pour simplifier le code
     /*
      * Exemple pour rotate 0b10010 de 3 bits vers la droite : (exemple sur 5 bits pour simplifier)
      * upperNbits = 0b10010 & 0b11000 = 0b10000
@@ -231,7 +230,7 @@ int rotate(const int *executeParameters, const int *parameters) {
     int upperNbits = x2 & (int) getUpperBits(32 - offset, 32);
     int lowerNbits = x2 & (int) getLowerBits(offset);
     int upperNbitsShifted = upperNbits >> offset;
-    int lowerNbitsShifted = lowerNbits << (32 - x2);
+    int lowerNbitsShifted = lowerNbits << (32 - offset);
 
     setValueToRegister(x1, lowerNbitsShifted | upperNbitsShifted);
 

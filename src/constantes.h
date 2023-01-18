@@ -62,8 +62,8 @@
 /* REGISTERS */
 /* * * * * * */
 
-#define MEMORY_SIZE 200
-#define LINES_LENGTHS_MAX 500
+#define MEMORY_SIZE 200  // on pourra stocker 200 adresses différentes dans la mémoire
+#define LINES_LENGTHS_MAX 200
 #define LINES_NUMBER_MAX 500
 
 #endif
