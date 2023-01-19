@@ -9,6 +9,7 @@ ADD $2, $0, $8  # u_(n+1) <- u_(n+2)
 ADDI $4, $4, 1
 
 BNE $3, $4, -5  # si on a le terme voulu
+NOP
 
 ADD $5, $0, $2  # on place le resultat dans $5
 
@@ -22,6 +23,7 @@ ADD $5, $0, $2  # on place le resultat dans $5
 # 00081020
 # 20840001
 # 1464FFFB
+# 00000000
 # 00022820
 
 # EXPECTED_FINAL_STATE

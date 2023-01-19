@@ -89,5 +89,4 @@ int executeInstruction(Instruction *);
 int isJumpOrBranch(Instruction *);
 
 
-
 #endif
