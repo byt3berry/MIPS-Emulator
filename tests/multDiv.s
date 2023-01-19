@@ -1,3 +1,6 @@
+# Projet MIPS 2022-2023
+# Auteurs : Cocagne_Strainovic
+
 ADDI $1, $zero, 0xFFFF
 SLL $2, $1, 16  # $2 <- 0xFFFF0000 (négatif)
 ADDI $3, $zero, 123456789  # $3 <- 123456789

@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -6,6 +9,8 @@
 
 
 void replaceChar(char *, char, char);
+
+void addChar(char *, int, char);
 
 void toUpperCase(char *);
 

@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #ifndef INSTRUCTION_H
 #define INSTRUCTION_H
 
@@ -5,7 +8,7 @@
 #include "constantes.h"
 
 typedef struct Instruction {
-    char line[LINES_LENGTHS_MAX];  // TODO : inutile
+    char line[LINES_LENGTHS_MAX];
     char operateur[8];
     int format;
     int OPcodeOrFunc;

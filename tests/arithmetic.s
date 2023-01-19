@@ -1,3 +1,6 @@
+# Projet MIPS 2022-2023
+# Auteurs : Cocagne_Strainovic
+
 ADDI $5, $0, 5
 ADDI $2, $0, 11
 ADD $7, $5, $2
@@ -7,6 +10,7 @@ DIV $5, $2
 MFHI $9
 MFLO $10
 MULT $5, $2
+
 
 # EXPECTED_ASSEMBLY
 # 20050005

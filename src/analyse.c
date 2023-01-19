@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +11,7 @@
 
 
 int analyseLine(char *line, Instruction *instruction) {
+    printf("ici : %s\n", line);
     // on récupère toutes les infos de l'instruction
     setLine(instruction, line);
     formatLine(line);
@@ -69,14 +73,17 @@ void setOperateurFromLine(char *line, Instruction *instruction) {
     char operateur[8];  // stock l'adresse de début de l'opétateur
     char *tempOP = operateur;
     char *tempLine = line;
+    int index = 0;
 
-    while (*tempLine != '\0' && *tempLine != ' ') { // tant qu'il n'y a pas d'espace ou de retour à la ligne
+    while (*tempLine != '\0' && *tempLine != ' ' && *tempLine != '$') { // tant qu'il n'y a pas d'espace ou de retour à la ligne
         *tempOP = *tempLine;
         tempOP++;
         tempLine++;
+        index++;
     }
     *tempOP = '\0';
 
+    addChar(line, index, ' ');
     toUpperCase(operateur);
     setOperateur(instruction, operateur);
 }

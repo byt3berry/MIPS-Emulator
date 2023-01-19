@@ -1,3 +1,6 @@
+# Projet MIPS 2022-2023
+# Auteurs : Cocagne_Strainovic
+
 # On va échanger les valeurs de 2 registres en passant par la mémoire
 
 ADDI $t1, $zero, 42  # premier registre à inverser

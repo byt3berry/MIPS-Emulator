@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #ifndef FONCTION_MODES_H
 #define FONCTION_MODES_H
 

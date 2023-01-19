@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #ifndef MEMORY_H
 #define MEMORY_H
 
@@ -14,7 +17,5 @@ extern memoryElement memory[MEMORY_SIZE];
 void setValueToMemory(int, int);
 
 void getValueFromMemory(int, int *);
-
-void showMemoryStates();
 
 #endif

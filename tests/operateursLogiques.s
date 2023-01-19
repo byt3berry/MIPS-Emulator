@@ -1,3 +1,6 @@
+# Projet MIPS 2022-2023
+# Auteurs : Cocagne_Strainovic
+
 ADDI $1, $0, 0b1001011011
 ADDI $2, $0, 0b0110000111
 

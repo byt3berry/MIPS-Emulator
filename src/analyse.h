@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #include <stdio.h>
 
 #ifndef INSTRUCTION_H_
@@ -21,8 +24,6 @@ void setOperateurOPcodeOrFunc(char *, Instruction *);
 void setNbParametersFromLine(char *, Instruction *);
 
 void setParametersFromLine(char *, char *, Instruction *);
-
-void setParametersFromHex(int, Instruction *);
 
 void setParametersOrderFromLine(char *, Instruction *);
 

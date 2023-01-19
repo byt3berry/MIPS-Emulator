@@ -1,3 +1,6 @@
+# Projet MIPS 2022-2023
+# Auteurs : Cocagne_Strainovic
+
 # Dans ce fichier nous allons coder un programme qui va compter le nombre de caractères 's'
 # dans la chaine de caractères "l'esisar fait mips"
 # Puisque nous n'avons pas les labels et les directives

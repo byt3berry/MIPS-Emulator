@@ -1,9 +1,11 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "fonctionModes.h"
 #include "read.h"
-#include "registers.h"
 
 
 void modeInteractif() {

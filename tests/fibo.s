@@ -1,3 +1,6 @@
+# Projet MIPS 2022-2023
+# Auteurs : Cocagne_Strainovic
+
 ADDI $1, $0, 1  # terme u_n de fibonacci
 ADDI $2, $0, 1  # terme u_(n+1) de fibonacci
 ADDI $3, $0, 7  # terme final souhaité

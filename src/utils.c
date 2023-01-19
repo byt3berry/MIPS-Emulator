@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #include "utils.h"
 
 /*
@@ -13,6 +16,17 @@ void replaceChar(char *string, const char suppr, const char add) {
             *string = add;
         }
         string++;
+    }
+}
+
+void addChar(char *string, const int index, const char add) {
+    char temp1 = add;
+    char temp2;
+
+    for(int i = 0; temp1 != '\0'; i++) {
+        temp2 = string[index + i];
+        string[index + i] = temp1;
+        temp1 = temp2;
     }
 }
 

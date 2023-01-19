@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #ifndef CONSTANTES_C_
 #define CONSTANTES_C_
 
@@ -20,7 +23,6 @@
 #define FORMAT_10 10
 #define FORMAT_11 11
 #define FORMAT_12 12
-#define FORMAT_13 13
 
 /* INSTRUCTIONS FORMATS */
 /* * * * * * * * * * *  */
@@ -47,8 +49,8 @@
 #define BAD_NBPARAMETERS 2
 #define BAD_REGISTER     3
 #define OVERFLOW_PARAM   4
-#define OVERFLOW_RESULT  5
-#define BAD_ADDRESS      6
+#define BAD_ADDRESS      5
+#define PAS_A_PAS        6
 
 /* * * * * ERRORS * * * * */
 /* * * * * *  * * * * * * */

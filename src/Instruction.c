@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #include <stdio.h>
 #include <string.h>
 
@@ -84,11 +87,17 @@ void setOutputR(Instruction *instruction) {
         }
     }
 
-    OPcode = 0 << 26;
-    x1 = parameters[0] << 21 & getUpperBits(5, 26);
-    x2 = parameters[1] << 16 & getUpperBits(5, 21);
-    x3 = parameters[2] << 11 & getUpperBits(5, 16);
-    x4 = parameters[3] << 6 & getUpperBits(5, 11);
+    int OPcodeShift = OPCODE_FUNC_SIZE + 4 * REGISTER_SIZE;
+    int x1Shift = OPCODE_FUNC_SIZE + 3 * REGISTER_SIZE;
+    int x2Shift = OPCODE_FUNC_SIZE + 2 * REGISTER_SIZE;
+    int x3Shift = OPCODE_FUNC_SIZE + REGISTER_SIZE;
+    int x4Shift = OPCODE_FUNC_SIZE;
+
+    OPcode = 0 << OPcodeShift;
+    x1 = parameters[0] << x1Shift & getUpperBits(5, 26);
+    x2 = parameters[1] << x2Shift & getUpperBits(5, 21);
+    x3 = parameters[2] << x3Shift & getUpperBits(5, 16);
+    x4 = parameters[3] << x4Shift & getUpperBits(5, 11);
     func = getOPcode(instruction) & getLowerBits(6);
 
     instruction->outputHex = (int) (OPcode + x1 + x2 + x3 + x4 + func);
@@ -111,10 +120,15 @@ void setOutputI(Instruction *instruction) {
         }
     }
 
-    OPcode = getOPcode(instruction) << 26 & getUpperBits(6, 32);
-    x1 = parameters[0] << 21 & getUpperBits(5, 26);
-    x2 = parameters[1] << 16 & getUpperBits(5, 21);
+    int OPcodeShift = 2 * REGISTER_SIZE + I_IMMEDIATE_SIZE;
+    int x1Shift = REGISTER_SIZE + I_IMMEDIATE_SIZE;
+    int x2Shift = I_IMMEDIATE_SIZE;
+
+    OPcode = getOPcode(instruction) << OPcodeShift & getUpperBits(6, 32);
+    x1 = parameters[0] << x1Shift & getUpperBits(5, 26);
+    x2 = parameters[1] << x2Shift & getUpperBits(5, 21);
     x3 = parameters[2] & getLowerBits(16);
+
     instruction->outputHex = (int) (OPcode + x1 + x2 + x3);
 }
 
@@ -122,7 +136,9 @@ void setOutputJ(Instruction *instruction) {
     long OPcode, x;
     int *instrParameters = getParameters(instruction);
 
-    OPcode = getOPcode(instruction) << 26 & getUpperBits(6, 32);
+    int OPcodeShift = J_TARGET_SIZE;
+
+    OPcode = getOPcode(instruction) << OPcodeShift & getUpperBits(6, 32);
     x = instrParameters[0] & getLowerBits(26);
 
     instruction->outputHex = (int) (OPcode + x);
@@ -225,11 +241,11 @@ void showError(Instruction *instruction) {
         case OVERFLOW_PARAM:
             printf("La valeur immédiate entrée est trop grande (>32bits)");
             break;
-        case OVERFLOW_RESULT:
-            printf("Le résultat immédiate entrée est trop grande (>32bits)");
-            break;
         case BAD_ADDRESS:
             printf("L'adresse entrée doit être un multiple de 4");
+            break;
+        case PAS_A_PAS:
+            printf("Cet opérateur n'est pas autorisé en mode Pas à Pas\n");
             break;
         default:
             printf("Autre erreur ????\n");

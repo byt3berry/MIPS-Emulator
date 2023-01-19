@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #include "registers.h"
 #include "constantes.h"
 #include "utils.h"

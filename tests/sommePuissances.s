@@ -1,3 +1,6 @@
+# Projet MIPS 2022-2023
+# Auteurs : Cocagne_Strainovic
+
 # Dans ce fichier nous allons compter le nombre de puissances de 2 dans un nombre
 # Exemple dans 1234 = 0b10011010010 le résultat est 5 car il y a 5 fois le chiffre 1 dans sa verison binaire
 # Pour cela nous allons utiliser ROTR, AND et une boucle

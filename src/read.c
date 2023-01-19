@@ -1,3 +1,6 @@
+// Projet MIPS 2022-2023
+// Auteurs : Cocagne_Strainovic
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,7 +28,13 @@ void readInteractif() {
             continue;
         }
 
-        int isError = analyseLine(line, instruction);
+        analyseLine(line, instruction);
+
+        if (isJumpOrBranch(instruction)) {
+            setError(instruction, PAS_A_PAS);
+        }
+
+        int isError = getError(instruction);
 
         if (!isError) {
             setOutput(instruction);
@@ -40,7 +49,6 @@ void readInteractif() {
         printf("\n");
         checkError = fgets(line, LINES_LENGTHS_MAX - 1, stdin);
     }
-
 }
 
 void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
@@ -96,7 +104,7 @@ int getAllInstructionsInFile(FILE *file, Instruction *instructions[LINES_NUMBER_
         if (checkError == NULL || checkError[0] == '\0') {
             index--;
         } else {
-            isError = analyseLine(line, instruction);  // TODO: detecte pas quand c'est pas un opérateur valide
+            isError = analyseLine(line, instruction);
             instructions[index] = instruction;
         }
 
