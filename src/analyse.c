@@ -180,14 +180,16 @@ void setExecuteParametersFromLine(char *executeParametersChar, Instruction *inst
 
 void formatParameter(char *strParameter, int *intParameter) {
     int base;
+    int offset = 0; // utile seulement pour convertir depuis binaire
     if (strParameter[0] == '0' && strParameter[1] == 'x') {
         base = 16;
     } else if (strParameter[0] == '0' && strParameter[1] == 'b') {
         base = 2;
+        offset = 2;
     } else {
         base = 10;
     }
-    *intParameter = (int) strtol(strParameter, NULL, base);
+    *intParameter = (int) strtol(strParameter + offset, NULL, base);
 }
 
 void checkRegisterExistence(Instruction *instruction, char *strParameter, int *intParameter) {

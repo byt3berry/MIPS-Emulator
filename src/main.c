@@ -2,6 +2,7 @@
 // Auteurs : Cocagne_Strainovic
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "fonctionModes.h"
 
@@ -10,12 +11,6 @@
 // TODO: fonction getUpperBits et getLowerBits : return long -> int ?
 
 int main(int argc, char **argv) {
-    int x = 5;
-    long y = 5;
-
-    printf("%d\n", x == y);
-
-
     switch (argc) {
         case 1:
             printf("* * * * * * * * * * * * Mode Interactif * * * * * * * * * * * *\n\n");
