@@ -51,7 +51,7 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
     if (isError) return;
 
     assemble(fichierAssemble, instructions, -1);
-    execute(instructions, -1, 1);
+    execute(instructions, -1, 0);
     writeFinalStateRegisters(fichierFinal);
     showRegistersStates();
     freeAll(instructions);
@@ -146,6 +146,8 @@ int execute(Instruction *instructions[LINES_NUMBER_MAX], int index, int verboseM
                 printf("    %08X\n", getOutput(instructions[PCvalue + 1]));
             }
             printf("\n");
+
+            showRegistersStates();
         }
 
         incrementPC(1);

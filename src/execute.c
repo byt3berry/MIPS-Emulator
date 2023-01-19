@@ -229,8 +229,8 @@ int rotate(const int *executeParameters, const int *parameters) {
 
     int upperNbits = x2 & (int) getUpperBits(32 - offset, 32);
     int lowerNbits = x2 & (int) getLowerBits(offset);
-    int upperNbitsShifted = upperNbits >> offset;
-    int lowerNbitsShifted = lowerNbits << (32 - offset);
+    int upperNbitsShifted = (upperNbits >> offset) & (int) getLowerBits(32 - offset);
+    int lowerNbitsShifted = (lowerNbits << (32 - offset)) & (int) getUpperBits(offset, 32);
 
     setValueToRegister(x1, lowerNbitsShifted | upperNbitsShifted);
 

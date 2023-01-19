@@ -2,7 +2,6 @@
 // Auteurs : Cocagne_Strainovic
 
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "fonctionModes.h"
 
