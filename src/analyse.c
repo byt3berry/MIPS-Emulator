@@ -28,7 +28,7 @@ int analyseLine(char *line, Instruction *instruction) {
 
         sscanf(lineTested, "%s ; %s ; %s ; %s ; %s ; %s ; %s ; %s ;", operateur, format, OPcodeOrFunc, nbParameters, inputFormat, parametersOrder, executeFunction, executeParameters);
 
-        if (strcmp(instruction->operateur, operateur) == 0) {
+        if (strcmp(getOperateur(instruction), operateur) == 0) {
             isFound = 1;
         }
     }
@@ -36,7 +36,7 @@ int analyseLine(char *line, Instruction *instruction) {
 
     if (isFound == 0) {
         setError(instruction, BAD_OPERATEUR);
-        return isError(instruction);
+        return getError(instruction);
     }
 
     replaceChar(inputFormat, '+', ' ');
@@ -45,18 +45,18 @@ int analyseLine(char *line, Instruction *instruction) {
 
     setOperateurFormat(format, instruction);
 
-    if (!isError(instruction)) { // s'il n'y a pas d'erreur sur l'opérateur
+    if (!getError(instruction)) { // s'il n'y a pas d'erreur sur l'opérateur
         setOperateurOPcodeOrFunc(OPcodeOrFunc, instruction);
         setNbParametersFromLine(nbParameters, instruction);
         setParametersFromLine(line, inputFormat, instruction);
-        if (!isError(instruction)) {  // s'il n'y a pas d'erreur sur les paramètres
+        if (!getError(instruction)) {  // s'il n'y a pas d'erreur sur les paramètres
             setParametersOrderFromLine(parametersOrder, instruction);
             setExecuteFunctionFromLine(executeFunction, instruction);
             setExecuteParametersFromLine(executeParameters, instruction);
         }
     }
 
-    return isError(instruction);
+    return getError(instruction);
 }
 
 void formatLine(char *line) {
@@ -109,10 +109,10 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
     int intParameters[5] = {0};
     int nbParameters = sscanf(line, inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
 
-    if (instruction->nbParameters != nbParameters - 1) { // si on récupère un mauvais nombre de paramètres
+    if (nbParameters - 1 != getNbParameters(instruction)) { // si on récupère un mauvais nombre de paramètres
         setError(instruction, BAD_NBPARAMETERS);
     } else {
-        int format = instruction->format;
+        int format = getFormat(instruction);
 
         if (format == FORMAT_1) {
             // si le paramètre 1 est un immédiat
@@ -146,7 +146,7 @@ void setParametersFromLine(char *line, char *inputFormat, Instruction *instructi
         }
     }
 
-    if (!isError(instruction)) {
+    if (!getError(instruction)) {
         setParameters(instruction, intParameters);
     }
 }

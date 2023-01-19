@@ -51,7 +51,7 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
     if (isError) return;
 
     assemble(fichierAssemble, instructions, -1);
-    execute(instructions, -1, 0);
+    execute(instructions, -1, 1);
     writeFinalStateRegisters(fichierFinal);
     showRegistersStates();
     freeAll(instructions);
@@ -137,12 +137,12 @@ int execute(Instruction *instructions[LINES_NUMBER_MAX], int index, int verboseM
         nextInstruction = NULL;
 
         if (verboseMode) {
-            printf("%s\n", instructions[PCvalue]->line);
+            printf("%s\n", getLine(instructions[PCvalue]));
             printf("%08X\n", getOutput(instructions[PCvalue]));
 
             if (isJumpOrBranch(instructions[PCvalue])) {
                 printf("DelaySlot :\n");
-                printf("    %s\n", instructions[PCvalue + 1]->line);
+                printf("    %s\n", getLine(instructions[PCvalue + 1]));
                 printf("    %08X\n", getOutput(instructions[PCvalue + 1]));
             }
             printf("\n");

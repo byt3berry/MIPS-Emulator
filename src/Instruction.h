@@ -20,6 +20,9 @@ typedef struct Instruction {
 
 extern Instruction *nextInstruction;
 
+
+// Setters
+
 void setLine(Instruction *, char *);
 
 void setOperateur(Instruction *, char *);
@@ -46,18 +49,45 @@ void setOutputJ(Instruction *);
 
 void setOutput(Instruction *);
 
+void setError(Instruction *, int);
+
+
+// Getters
+
+char *getLine(Instruction *);
+
+char *getOperateur(Instruction *);
+
+int getFormat(Instruction *);
+
+int getOPcode(Instruction *);
+
+int getNbParameters(Instruction *);
+
+int *getParameters(Instruction *);
+
+int *getParametersOrder(Instruction *);
+
 int getOutput(Instruction *);
+
+int *getExecuteParameters(Instruction *);
+
+int getError(Instruction *);
+
+
+// Debug
+
+void printInfos(Instruction *);
+
+void showError(Instruction *);
+
+
+// Autre
 
 int executeInstruction(Instruction *);
 
 int isJumpOrBranch(Instruction *);
 
-void printInfos(Instruction *);
 
-void setError(Instruction *, int);
-
-int isError(Instruction *);
-
-void showError(Instruction *);
 
 #endif

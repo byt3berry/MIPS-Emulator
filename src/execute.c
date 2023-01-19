@@ -278,7 +278,7 @@ int memoryAccess(const int *executeParameters, const int *parameters) {
     getValueFromRegister(parameters[executeParameters[2] - 1], &x2);
     LorS = executeParameters[3];
 
-    if ((x2 + offset) % 4 != 0) {
+    if (((x2 + offset) & 0b11) != 0) {
         return BAD_ADDRESS;
     }
 

@@ -110,7 +110,7 @@ de lecture
 fonction d'analyse
  - "analyse.h" : "analyseLine" récupère les différents paramètres de chaque
 instruction : opérateur, OPcode, registres ou immédiats
- - "Instruction.h" : "setOutputFull" appelle les fonctions qui vont générer le code
+ - "Instruction.h" : "setOutput" appelle les fonctions qui vont générer le code
 hexadécimal de l'instruction en distinguant le format (R, I ou J)
  - "execute.h" : Pas encore implémenté, on aura une fonction qui déterminera 
 l'opération à effectuer sur les registres : addition, soustraction, ...
