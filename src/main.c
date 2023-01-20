@@ -2,19 +2,9 @@
 // Auteurs : Cocagne_Strainovic
 
 #include <stdio.h>
-#include "utils.h"
 #include "fonctionModes.h"
 
-// TODO: verifier que les erreurs soient bien checkées pour le nouveau code
-// TODO: bug programme si un caractere n'est ni une lettre, ni un nombre, ni un $ ou une ,
-
 int main(int argc, char **argv) {
-    char test[50] = "HelloWorld!";
-    addChar(test, 5, ' ');
-    printf("%s\n", test);
-
-
-
     switch (argc) {
         case 1:
             printf("* * * * * * * * * * * * Mode Interactif * * * * * * * * * * * *\n\n");
