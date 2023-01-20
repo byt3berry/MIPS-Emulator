@@ -16,8 +16,9 @@
 void readInteractif() {
     char line[LINES_LENGTHS_MAX];
     char *checkError = fgets(line, LINES_LENGTHS_MAX - 1, stdin);
+    int isError = NO_ERROR;
 
-    while (checkError != NULL && strcmp(line, "EXIT\n") != 0) {
+    while (checkError != NULL && strcmp(line, "EXIT\n") != 0 && isError == NO_ERROR) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
 
         replaceChar(line, '\n', '\0');
@@ -34,7 +35,7 @@ void readInteractif() {
             setError(instruction, PAS_A_PAS);
         }
 
-        int isError = getError(instruction);
+        isError = getError(instruction);  // erreur pendant l'assemblage
 
         if (!isError) {
             setOutput(instruction);
@@ -44,10 +45,15 @@ void readInteractif() {
             incrementPC(1);
         }
 
+        isError = getError(instruction);  // erreur pendant l'execution
+
         free(instruction);
 
         printf("\n");
-        checkError = fgets(line, LINES_LENGTHS_MAX - 1, stdin);
+
+        if (!isError) {
+            checkError = fgets(line, LINES_LENGTHS_MAX - 1, stdin);
+        }
     }
 }
 
@@ -137,12 +143,18 @@ int execute(Instruction *instructions[LINES_NUMBER_MAX], int index, int verboseM
     int PCvalue;
     getValueFromRegister(PC, &PCvalue);
     PCvalue /= 4;
+    int isError = NO_ERROR;
 
-    while (PCvalue < LINES_NUMBER_MAX && instructions[PCvalue] != NULL) {
+    while (PCvalue < LINES_NUMBER_MAX && instructions[PCvalue] != NULL && isError == NO_ERROR) {
         // si l'instruction est un jump ou un branch, il aura accès à l'instruction suivante pour le delay slot
         nextInstruction = instructions[PCvalue + 1];
         executeInstruction(instructions[PCvalue]);
+        isError = getError(instructions[PCvalue]);
         nextInstruction = NULL;
+
+        if (isJumpOrBranch(instructions[PCvalue])) {
+            isError += getError(instructions[PCvalue + 1]);
+        }
 
         if (verboseMode) {
             printf("%s\n", getLine(instructions[PCvalue]));
@@ -157,6 +169,7 @@ int execute(Instruction *instructions[LINES_NUMBER_MAX], int index, int verboseM
 
             showRegistersStates();
         }
+
 
         incrementPC(1);
         getValueFromRegister(PC, &PCvalue);

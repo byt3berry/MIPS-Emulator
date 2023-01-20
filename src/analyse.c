@@ -11,7 +11,6 @@
 
 
 int analyseLine(char *line, Instruction *instruction) {
-    printf("ici : %s\n", line);
     // on récupère toutes les infos de l'instruction
     setLine(instruction, line);
     formatLine(line);

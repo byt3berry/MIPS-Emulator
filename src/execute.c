@@ -48,7 +48,8 @@ int jump(const int *executeParameters, const int *parameters) {
     }
 
     if (nextInstruction != NULL) {
-        executeInstruction(nextInstruction);
+        int isError = executeInstruction(nextInstruction);
+        setError(nextInstruction, isError);
     }
 
     setValueToRegister(PC, PCupper | (target << offset));
@@ -94,7 +95,8 @@ int branch(const int *executeParameters, const int *parameters) {
 
 
     if (nextInstruction != NULL) {
-        executeInstruction(nextInstruction);
+        int isError = executeInstruction(nextInstruction);
+        setError(nextInstruction, isError);
     }
 
     if (result) {
@@ -246,6 +248,10 @@ int divide(const int *executeParameters, const int *parameters) {
 
     getValueFromRegister(parameters[executeParameters[0] - 1], &x1);
     getValueFromRegister(parameters[executeParameters[1] - 1], &x2);
+
+    if (x2 == 0) {
+        return DIVISION_BY_ZERO;
+    }
 
     setValueToRegister(HI, x1 % x2);
     setValueToRegister(LO, x1 / x2);

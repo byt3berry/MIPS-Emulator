@@ -222,7 +222,7 @@ void printInfos(Instruction *instruction) {
     printf("exePara3      : %d\n", instruction->executeParameters[2]);
     printf("exePara4      : %d\n", instruction->executeParameters[3]);
     printf("exePara5      : %d\n", instruction->executeParameters[4]);
-//    printf("error         : %d\n", instruction->error);
+    printf("error         : %d\n", instruction->error);
 }
 
 void showError(Instruction *instruction) {
@@ -244,6 +244,9 @@ void showError(Instruction *instruction) {
         case BAD_ADDRESS:
             printf("L'adresse entrée doit être un multiple de 4");
             break;
+        case DIVISION_BY_ZERO:
+            printf("Vous essayez de diviser par 0\n");
+            break;
         case PAS_A_PAS:
             printf("Cet opérateur n'est pas autorisé en mode Pas à Pas\n");
             break;
@@ -262,6 +265,8 @@ int executeInstruction(Instruction *instruction) {
     if (instruction->executeFunction != NULL) {
         isError = executeFunction(getExecuteParameters(instruction), getParameters(instruction));
     }
+
+    setError(instruction, isError);
 
     return isError;
 }

@@ -50,7 +50,8 @@
 #define BAD_REGISTER     3
 #define OVERFLOW_PARAM   4
 #define BAD_ADDRESS      5
-#define PAS_A_PAS        6
+#define DIVISION_BY_ZERO 6
+#define PAS_A_PAS        7
 
 /* * * * * ERRORS * * * * */
 /* * * * * *  * * * * * * */
