@@ -69,7 +69,7 @@ ADDI $4, $zero, 115  # $4 stock le code ASCII de 's'
 
 LW $5, 0($3)  # $5 stock le code ASCII à l'adresse $3
 
-BEQ $5, $zero, 5  # si on est à la fin de la chaine on arrete
+BEQ $5, $zero, 6  # si on est à la fin de la chaine on arrete
 NOP
 
 BNE $4, $5, 2  # si les codes ASCII sont différent on passe à la lettre suivante
@@ -78,7 +78,7 @@ NOP
 ADDI $2, $2, 1
 
 J 41  # on retourne au début de la 'boucle'
-ADDI $3, $3, 4  # on saute à l'adresse suivante
+ADDI $3, $3, 4  # on saute à l'adresse suivante, on utilise le delay slot
 
 # EXPECTED_ASSEMBLY
 # 2001006C
@@ -123,7 +123,7 @@ ADDI $3, $3, 4  # on saute à l'adresse suivante
 # 00001820
 # 20040073
 # 8C650000
-# 10A00005
+# 10A00006
 # 00000000
 # 14850002
 # 00000000
@@ -134,6 +134,6 @@ ADDI $3, $3, 4  # on saute à l'adresse suivante
 # EXPECTED_FINAL_STATE
 # $01:0
 # $02:3
-# $03:76
+# $03:72
 # $04:115
 # $05:0
