@@ -4,7 +4,7 @@
 #ifndef EXECUTE_H
 #define EXECUTE_H
 
-typedef int (*ExecuteFunctions) (const int *, const int *);
+typedef int (*ExecuteFunctions)(const int *, const int *);
 
 extern ExecuteFunctions executeFunctions[];
 
