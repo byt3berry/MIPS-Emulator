@@ -60,11 +60,11 @@ void readInteractif() {
 void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
     Instruction *instructions[LINES_NUMBER_MAX] = {0};
 
-    int isError = getAllInstructionsInFile(progAsembleur, instructions, 0);
+    int isError = getAllInstructionsInFile(progAsembleur, instructions);
 
     if (isError) return;
 
-    assemble(fichierAssemble, instructions, -1);
+    assemble(fichierAssemble, instructions);
     execute(instructions, -1, 0);
     writeFinalStateRegisters(fichierFinal);
     showRegistersStates();
@@ -73,11 +73,11 @@ void readAuto(FILE *progAsembleur, FILE *fichierAssemble, FILE *fichierFinal) {
 
 void readPas(FILE *progAsembleur) {
     Instruction *instructions[LINES_NUMBER_MAX] = {0};
-    int isError = getAllInstructionsInFile(progAsembleur, instructions, 0);
+    int isError = getAllInstructionsInFile(progAsembleur, instructions);
 
     if (isError) return;
 
-    assemble(NULL, instructions, -1);
+    assemble(NULL, instructions);
 
     int isEndUser = 0;
     int isEndFile = 0;
@@ -88,25 +88,28 @@ void readPas(FILE *progAsembleur) {
         char temp[50];
         getchar();
         int check = scanf("%[^\n]", temp);
+        toUpperCase(temp);
         if (check != 0 && strcmp(temp, "EXIT") == 0) {
             isEndUser = 1;
         }
     }
 }
 
-int getAllInstructionsInFile(FILE *file, Instruction *instructions[LINES_NUMBER_MAX], int index) {
+int getAllInstructionsInFile(FILE *file, Instruction *instructions[LINES_NUMBER_MAX]) {
+    int index = 0;
+
     while (!feof(file)) {
         Instruction *instruction = (Instruction *) malloc(sizeof(Instruction));
         setError(instruction, 0);
         char line[LINES_LENGTHS_MAX];
         char *checkError = fgets(line, LINES_LENGTHS_MAX - 1, file);
-        int isError;
+        int isError = NO_ERROR;
 
         replaceChar(line, '\n', '\0');
         replaceChar(line, '\r', '\0');
         replaceChar(line, '#', '\0');
 
-        /* Si la ligne est nulle est ou un commentaire */
+        /* Si la ligne est nulle est ou un commentaire, on fait comme si on n'avait pas vu la ligne */
         if (checkError == NULL || checkError[0] == '\0') {
             index--;
         } else {
@@ -121,15 +124,11 @@ int getAllInstructionsInFile(FILE *file, Instruction *instructions[LINES_NUMBER_
         }
     }
 
-    return 0;
+    return NO_ERROR;
 }
 
-void assemble(FILE *fichierAssemble, Instruction *instructions[LINES_NUMBER_MAX], int index) {
+void assemble(FILE *fichierAssemble, Instruction *instructions[LINES_NUMBER_MAX]) {
     for (int i = 0; i < LINES_NUMBER_MAX && instructions[i] != NULL; i++) {
-        if (index != -1 && i != index) {
-            continue;
-        }
-
         setOutput(instructions[i]);
 
         if (fichierAssemble != NULL) {
@@ -146,7 +145,7 @@ int execute(Instruction *instructions[LINES_NUMBER_MAX], int index, int verboseM
     int isError = NO_ERROR;
 
     while (PCvalue < LINES_NUMBER_MAX && instructions[PCvalue] != NULL && isError == NO_ERROR) {
-        // si l'instruction est un jump ou un branch, il aura accès à l'instruction suivante pour le delay slot
+        // si l'instruction est un jump ou un branch, elle aura accès à l'instruction suivante pour le delay slot
         nextInstruction = instructions[PCvalue + 1];
         executeInstruction(instructions[PCvalue]);
         isError = getError(instructions[PCvalue]);
@@ -166,10 +165,7 @@ int execute(Instruction *instructions[LINES_NUMBER_MAX], int index, int verboseM
                 printf("    %08X\n", getOutput(instructions[PCvalue + 1]));
             }
             printf("\n");
-
-            showRegistersStates();
         }
-
 
         incrementPC(1);
         getValueFromRegister(PC, &PCvalue);

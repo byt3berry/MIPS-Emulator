@@ -65,8 +65,13 @@
 /* REGISTERS */
 /* * * * * * */
 
-#define MEMORY_SIZE 200  // on pourra stocker 200 adresses différentes dans la mémoire
-#define LINES_LENGTHS_MAX 200
-#define LINES_NUMBER_MAX 500
+/*
+ * On pourra stocker 300 adresses différentes dans la mémoire
+ * La mémoire ne fait donc pas 4Go
+ * Mais 300 adresses nous semble parfaitement sufissant pour notre utilisation
+ */
+#define MEMORY_SIZE 300
+#define LINES_LENGTHS_MAX 300  // les lignes récupérées devront faire maximum 300 caractères
+#define LINES_NUMBER_MAX 500  // le programme devra contenir maximum 500 instructions
 
 #endif

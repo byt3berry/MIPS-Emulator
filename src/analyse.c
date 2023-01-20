@@ -13,13 +13,14 @@
 int analyseLine(char *line, Instruction *instruction) {
     // on récupère toutes les infos de l'instruction
     setLine(instruction, line);
-    formatLine(line);
+    line = formatLine(line);
     setOperateurFromLine(line, instruction);
 
     FILE *file = fopen("data//data.txt", "r");
     char operateur[10], format[3], OPcodeOrFunc[10], nbParameters[10], inputFormat[20], parametersOrder[15], executeFunction[5], executeParameters[15];
     int isFound = 0;
 
+    // On cherche la bonne ligne sur laquelle récupérer les infos sur l'opérateur
     while (!feof(file) && !isFound) {
         char lineTested[200];
         char *checkError = fgets(lineTested, 200, file);
@@ -37,11 +38,16 @@ int analyseLine(char *line, Instruction *instruction) {
     }
     fclose(file);
 
-    if (isFound == 0) {
+    if (isFound == 0) {  // si on ne trouve pas l'opérateur dans la liste, pas besoin de continuer
         setError(instruction, BAD_OPERATEUR);
         return getError(instruction);
     }
 
+    /*
+     * Dans le fichier, on a remplacé les espaces par des +
+     * Car avec sscanf, la lecture s'arrête à chaque espace
+     * Donc il faut supprimer tous ces +
+     */
     replaceChar(inputFormat, '+', ' ');
     replaceChar(parametersOrder, '+', ' ');
     replaceChar(executeParameters, '+', ' ');
@@ -62,19 +68,33 @@ int analyseLine(char *line, Instruction *instruction) {
     return getError(instruction);
 }
 
-void formatLine(char *line) {
+char *formatLine(char *line) {
+    // Pour simplifier la lecture, on remplace les caractères gênants par des espaces
     replaceChar(line, '(', ' ');
     replaceChar(line, ')', ' ');
     replaceChar(line, ',', ' ');
+
+    // On supprime aussi tous les espaces en début de ligne
+    while (*line == ' ') {
+        line++;
+    }
+
+    return line;
 }
 
+/**
+ * It takes a line of code, and extracts the operator from it
+ * 
+ * @param line the line of the file we're reading
+ * @param instruction the instruction to set the operator to
+ */
 void setOperateurFromLine(char *line, Instruction *instruction) {
     char operateur[8];  // stock l'adresse de début de l'opétateur
     char *tempOP = operateur;
     char *tempLine = line;
     int index = 0;
 
-    while (*tempLine != '\0' && *tempLine != ' ' && *tempLine != '$') { // tant qu'il n'y a pas d'espace ou de retour à la ligne
+    while (*tempLine != '\0' && *tempLine != ' ' && *tempLine != '$') { // tant qu'il n'y a pas d'espace, de retour à la ligne ou de dollars
         *tempOP = *tempLine;
         tempOP++;
         tempLine++;
@@ -102,17 +122,25 @@ void setNbParametersFromLine(char *nbParametersChar, Instruction *instruction) {
     setNbParameters(instruction, nbParametersInt);
 }
 
+/**
+ * It takes a line of code, an input format, and an instruction, and sets the parameters of the
+ * instruction based on the line of code and the input format
+ * 
+ * @param line the line of the instruction
+ * @param inputFormat the format of the line to be read
+ * @param instruction the instruction to set the parameters of
+ */
 void setParametersFromLine(char *line, char *inputFormat, Instruction *instruction) {
     /*
     Dans les types I, J, et R les instructions recoivent au maximum 3 paramètres
     Dans le type R, le code binaire contient 4 paramètres : rd, rs, rt et sa
-    Mais un des 4 sera nul (le paramètre dépend de l'instruction)
+    Mais un des 4 sera nul (le paramètre nul dépend de l'instruction)
     On ne donne donc pas de valeur à parameters[4] qui sera forcément nul
     Mais parameters[4] sera utile plus tard donc on le garde pour éviter une condition en plus
     */
 
-    char strParameters[5][100] = {0};
-    int intParameters[5] = {0};
+    char strParameters[4][100] = {0};
+    int intParameters[4] = {0};
     int nbParameters = sscanf(line, inputFormat, strParameters[0], strParameters[1], strParameters[2], strParameters[3]);
 
     if (nbParameters - 1 != getNbParameters(instruction)) { // si on récupère un mauvais nombre de paramètres
@@ -187,12 +215,12 @@ void setExecuteParametersFromLine(char *executeParametersChar, Instruction *inst
 void formatParameter(char *strParameter, int *intParameter) {
     int base;
     int offset = 0; // utile seulement pour convertir depuis binaire
-    if (strParameter[0] == '0' && strParameter[1] == 'x') {
+    if (strParameter[0] == '0' && strParameter[1] == 'x') {  // récuperation d'un nomber écrit en hexadécimal
         base = 16;
-    } else if (strParameter[0] == '0' && strParameter[1] == 'b') {
+    } else if (strParameter[0] == '0' && strParameter[1] == 'b') {  // récuperation d'un nomber écrit en binaire
         base = 2;
         offset = 2;
-    } else {
+    } else {  // récuperation d'un nomber écrit en décimal
         base = 10;
     }
     *intParameter = (int) strtol(strParameter + offset, NULL, base);

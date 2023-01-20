@@ -35,9 +35,10 @@ void showRegistersStates() {
         }
     }
 
-    printf("HI:%d\n", registers[HI]);
-    printf("LO:%d\n", registers[LO]);
-    printf("PC:%d\n", registers[PC]);
+    if (registers[HI] || registers[LO]) {
+        printf("HI:%d\n", registers[HI]);
+        printf("LO:%d\n", registers[LO]);
+    }
 }
 
 void writeFinalStateRegisters(FILE *fichierFinal) {

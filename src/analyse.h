@@ -15,7 +15,7 @@ int analyseLine(char *, Instruction *);
 
 void setOperateurFromLine(char *, Instruction *);
 
-void formatLine(char *);
+char *formatLine(char *);
 
 void setOperateurFormat(char *, Instruction *);
 

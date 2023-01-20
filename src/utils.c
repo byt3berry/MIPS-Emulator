@@ -19,6 +19,13 @@ void replaceChar(char *string, const char suppr, const char add) {
     }
 }
 
+/**
+ * It takes a string, an index, and a character, and inserts the character at the index
+ * 
+ * @param string The string to add the character to.
+ * @param index The index of the string where you want to add the character.
+ * @param add The character to add to the string.
+ */
 void addChar(char *string, const int index, const char add) {
     char temp1 = add;
     char temp2;
@@ -30,11 +37,6 @@ void addChar(char *string, const int index, const char add) {
     }
 }
 
-/*
- * It takes a string and converts all lowercase letters to uppercase letters
- *
- * @param string The string to be converted to uppercase.
- */
 void toUpperCase(char *string) {
     for (int i = 0; string[i] != '\0'; i++) {
         if ('a' <= string[i] && string[i] <= 'z') {
@@ -51,8 +53,15 @@ void toLowerCase(char *string) {
     }
 }
 
+/**
+ * It returns a number with the first nLowerBits bits set to 1
+ * 
+ * @param nLowerBits the number of bits you want to get from the lower part of the number
+ * 
+ * @return the binary representation of the number of lower bits.
+ */
 long getLowerBits(const int nLowerBits) {
-    int output = 0b0;
+    int output = 0;
     int puissanceDe2 = 1;
 
     for (int i = 0; i < nLowerBits; i++) {
